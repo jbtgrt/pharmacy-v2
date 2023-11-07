@@ -20,7 +20,9 @@ class CategoryController extends Controller
 
         $categories = Category::all();
 
-        return response($categories);
+        return response([
+            'data' => $categories
+        ]);
     }
 
     /**
@@ -32,7 +34,7 @@ class CategoryController extends Controller
 
         $saveData = [];
 
-        foreach ($data['services'] as $service) {
+        foreach ($data['records'] as $service) {
             $serviceData = $this->createCategory($service);
             $optionsData = [];
 
@@ -45,7 +47,6 @@ class CategoryController extends Controller
             // }
 
             // $serviceData['data'] = '{"options": '.$optionsData.'}';
-            $serviceData['role_id'] = $request->user()->role_id ;
             $saveData[] = $serviceData;
         }
 
@@ -85,7 +86,7 @@ class CategoryController extends Controller
 
         $saveData = [];
 
-        foreach ($data['services'] as $service) {
+        foreach ($data['records'] as $service) {
             $serviceData = $this->createCategory($service);
             $serviceData['id'] = $service['id'];
             $optionsData = [];
@@ -128,9 +129,17 @@ class CategoryController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Category $category)
+    public function destroy($id)
     {
-        //
+        $item = Category::find($id);
+
+        if (!$item) {
+            return response()->json(['message' => 'Item not found'], 404);
+        }
+
+        $item->delete();
+
+        return response()->json(['message' => 'Item deleted'], 200);
     }
 
     /**

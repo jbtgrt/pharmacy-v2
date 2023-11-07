@@ -79,7 +79,7 @@
       <label
         :for="'question_text_' + model.data"
         class="block text-sm font-medium text-gray-700"
-        >Categpory Name</label
+        >Category Name</label
       >
       <input
         type="text"

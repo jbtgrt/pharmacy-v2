@@ -1,19 +1,22 @@
 <script setup>
 import { ref, computed, watch } from 'vue'
 import { useStore } from 'vuex'
-import { mdiMonitorCellphone, mdiTableBorder, mdiTableOff, mdiAccountPlusOutline, mdiAccount, mdiMail, mdiPlus, mdiCheckCircle  } from '@mdi/js'
+import { useRoute } from "vue-router";
+import { mdiTableBorder, mdiPlus  } from '@mdi/js'
 import SectionMain from '@/components/SectionMain.vue'
 import SectionTitleLineWithButton from '@/components/SectionTitleLineWithButton.vue'
 import BaseButton from '@/components/BaseButton.vue'
 import CardBox from '@/components/CardBox.vue'
 import TableCategory from '@/mycomponents/TableCategory.vue'
 
+const route = useRoute();
+
 </script>
 
 <template>
 
     <SectionMain>
-      <SectionTitleLineWithButton :icon="mdiTableBorder" title="Services" main>
+      <SectionTitleLineWithButton :icon="mdiTableBorder" :title="route.meta.title" main>
         <BaseButton
           to="add-category"
           :icon="mdiPlus"

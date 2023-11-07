@@ -120,7 +120,7 @@ const store = createStore({
     },
     updateCategory({ commit }, category) {
       return axiosClient
-        .put(`/category/${category.services[0].id}`, category)
+        .put(`/category/${category.records[0].id}`, category)
         .then((res) => {
           commit("setCategoryList", res.data);
           return res;
@@ -137,6 +137,12 @@ const store = createStore({
           throw err;
         });
     },
+    deleteCategory({ commit }, id) {
+        return axiosClient.delete(`/category/${id}`)
+          .then(response => {
+            commit('filterCategory', id); // Assuming you have a mutation to remove the item from the state
+          });
+      },
     // Product
     getProductList({commit}) {
       return axiosClient.get('/product').then((res) => {
@@ -216,13 +222,16 @@ const store = createStore({
       state.selectedUser = user.current_user[0];
     },
     setCategoryList: (state, categories) => {
-      state.categoryList = categories;
+      state.categoryList = categories.data;
     },
     setSelectedCategory: (state, category) => {
       state.selectedCategory = category.current;
     },
+    filterCategory(state, id) {
+      state.categoryList = state.categoryList.filter(item => item.id !== id);
+    },
     setProductList: (state, categories) => {
-      state.productList = categories;
+      state.productList = categories.data;
     },
     setSelectedProduct: (state, category) => {
       state.selectedCategory = category;

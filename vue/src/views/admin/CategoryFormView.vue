@@ -26,7 +26,7 @@ const store = useStore();
 
 // Create empty survey
 let model = ref({
-  services: []
+  records: []
 });
 
 const addForm = ref(true);
@@ -39,17 +39,14 @@ if (route.params.id) {
   formTitle = 'Update';
 }
 
-const success = ref(false);
-const loading = ref(false);
 let errors = ref('');
-let message = ''; 
 
 // Watch to current survey data change and when this happens we update local model
 watch(
   () => store.state.selectedCategory,
   (newVal, oldVal) => {
     model.update = true ;
-    model.value.services = [{
+    model.value.records = [{
           ...JSON.parse(JSON.stringify(newVal))
         }];
   }
@@ -71,11 +68,11 @@ function addService(index) {
     data: { options: [] },
   };
 
-  model.value.services.splice(index, 0, newService);
+  model.value.records.splice(index, 0, newService);
 }
 
-function deleteService(services) {
-  model.value.services = model.value.services.filter((q) => q !== services);
+function deleteService(records) {
+  model.value.records = model.value.records.filter((q) => q !== records);
 }
 
 function serviceChange(service) {
@@ -83,7 +80,7 @@ function serviceChange(service) {
   if (service.data.options) {
     service.data.options = [...service.data.options];
   }
-  model.value.services = model.value.services.map((q) => {
+  model.value.records = model.value.records.map((q) => {
     if (q.id === service.id) {
       return JSON.parse(JSON.stringify(service));
     }
@@ -94,26 +91,16 @@ function serviceChange(service) {
 function submit() {
  if (route.params.id) {
   store.dispatch("updateCategory", { ...model.value }).then(({ data }) => {
-    success.value = true;
-    errors.value = '';
-    // router.push("/admin/category");
+    router.push({name: "admin-category"});
   })
   .catch(err => {
-    loading.value = false;
-    success.value = false;
     errors.value = err.response.data.errors;
   });
 } else {
   store.dispatch("saveCategory", { ...model.value }).then(({ data }) => {
-    success.value = true;
-    errors.value = '';
-    model.value =  {
-        services: []
-      };
+    router.push({name: "admin-category"});
   })
   .catch(err => {
-    loading.value = false;
-    success.value = false;
     errors.value = err.response.data.errors;
   });
 }
@@ -135,12 +122,6 @@ const notification = computed(() => store.state.notification)
           </div>
           <template #right>
             <BaseButton :icon="mdiClose" small rounded-full color="white" @click="errors = ''" />
-          </template>
-        </NotificationBar>
-        <NotificationBar v-if="success" color="success" :icon="mdiCheckCircle" :outline="notificationsOutline">
-          <b>Success state</b>. {{message}}
-          <template #right>
-            <BaseButton :icon="mdiClose" small rounded-full color="white" @click="success = false" />
           </template>
         </NotificationBar>
           
@@ -172,11 +153,11 @@ const notification = computed(() => store.state.notification)
                 </button>
                 <!--/ Add new question -->
               </h3>
-              <div v-if="!model.services.length" class="text-center text-gray-600">
-                You don't have any service created
+              <div v-if="!model.records.length" class="text-center text-gray-600">
+                You don't have any categories created
               </div>
             </div>
-            <div v-for="(service, index) in model.services" :key="service.id">
+            <div v-for="(service, index) in model.records" :key="service.id">
               <CategoryEditor
                 :service="service"
                 :index="index"

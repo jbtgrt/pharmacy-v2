@@ -22,7 +22,7 @@ class StoreCategoryRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'services' => 'array|required' // Check if 'data' is an array and is required
+            'records' => 'array|required' // Check if 'data' is an array and is required
         ];
     }
 }

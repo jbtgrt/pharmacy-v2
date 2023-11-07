@@ -1,7 +1,7 @@
 <script setup>
 import { computed, ref, watchEffect } from 'vue'
 import { useStore } from 'vuex'
-import { mdiEye, mdiTrashCan, mdiAccountEdit, mdiMagnify, mdiAsterisk   } from '@mdi/js'
+import { mdiEye, mdiTrashCan, mdiAccountEdit, mdiMagnify, mdiAsterisk    } from '@mdi/js'
 import CardBoxModal from '@/components/CardBoxModal.vue'
 import TableCheckboxCell from '@/components/TableCheckboxCell.vue'
 import BaseLevel from '@/components/BaseLevel.vue'
@@ -88,6 +88,10 @@ const servicesPaginated = computed(() => {
   return filteredItems.value.slice(perPage.value * currentPage.value, perPage.value * (currentPage.value + 1));
 });
 
+const deleteItem = (id) => {
+      store.dispatch("deleteCategory", id);
+    }
+
 </script>
 
 <template>
@@ -137,6 +141,7 @@ const servicesPaginated = computed(() => {
           <BaseButtons type="justify-start lg:justify-end" no-wrap>
             <BaseButton color="info" :icon="mdiEye" small @click="showRecord(isModalActive = true, selectedRecord = services)" />
             <BaseButton color="success" :icon="mdiAccountEdit" small :to="`/admin/edit-category/${services.id}`" />
+            <BaseButton color="danger" :icon="mdiTrashCan " small @click="deleteItem(services.id)" />
           </BaseButtons>
         </td>
       </tr>
