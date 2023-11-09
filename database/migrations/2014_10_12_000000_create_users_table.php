@@ -25,7 +25,9 @@ return new class extends Migration
             $table->enum('account_status', ['active', 'inactive'])->default('active');
             $table->boolean('locked')->default(false);
             $table->rememberToken();
-            $table->timestamps();
+            
+            $table->timestamp('created_at')->default(now());
+            $table->timestamp('updated_at')->nullable();
         });
     }
 

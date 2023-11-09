@@ -1,0 +1,57 @@
+<script setup>
+import { ref, computed, watchEffect } from 'vue'
+import { useStore } from 'vuex'
+import { useRoute } from "vue-router";
+import { mdiTableBorder, mdiPlus  } from '@mdi/js'
+import SectionMain from '@/components/SectionMain.vue'
+import SectionTitleLineWithButton from '@/components/SectionTitleLineWithButton.vue'
+import BaseButton from '@/components/BaseButton.vue'
+import BaseButtons from '@/components/BaseButtons.vue'
+import CardBox from '@/components/CardBox.vue'
+import TableProduct from '@/mycomponents/TableProduct.vue'
+
+import CardBoxComponentEmpty from '@/components/CardBoxComponentEmpty.vue'
+
+const route = useRoute();
+const store = useStore();
+
+const items = computed(() => store.state.productList);
+
+const showtable = ref(true);
+watchEffect(()=> {
+  showtable.value = items.value.length > 0 ? true : false;
+});
+
+</script>
+
+<template>
+
+    <SectionMain>
+      <SectionTitleLineWithButton :icon="mdiTableBorder" :title="route.meta.title" main>
+        <BaseButtons>
+          <BaseButton
+            to="supply-product"
+            :icon="mdiPlus"
+            label="Add Supply"
+            color="contrast"
+            rounded-full
+            small
+          />
+          <BaseButton
+            to="add-product"
+            :icon="mdiPlus"
+            label="Add Product"
+            color="contrast"
+            rounded-full
+            small
+          />
+        </BaseButtons>
+      </SectionTitleLineWithButton>
+
+      <CardBox class="mb-6" has-table>
+        <TableProduct v-if="showtable" checkable/>
+        <CardBoxComponentEmpty v-else />
+      </CardBox>
+
+    </SectionMain>
+</template>

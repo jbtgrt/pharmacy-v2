@@ -55,32 +55,11 @@ class User extends Authenticatable
         'password' => 'hashed',
     ];
 
-    public function supplierProducts()
+
+    public function role()
     {
-        return $this->hasMany(SupplierProduct::class);
+        return $this->belongsTo(Role::class);
     }
-
-    public function sellerproducts()
-    {
-        return $this->hasMany(SellerProduct::class);
-    }
-
-    public function sellerOrders()
-    {
-        return $this->hasMany(SellerOrder::class);
-    }
-
-    public function sellerStocks()
-    {
-        return $this->hasMany(SellerStock::class);
-    }
-
-    public function supplierStocks()
-    {
-        return $this->hasMany(SupplierStock::class);
-    }
-
-
 
 
 }

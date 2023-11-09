@@ -1,5 +1,5 @@
 <script setup>
-import { ref, computed, watch } from 'vue'
+import { ref, computed, watchEffect } from 'vue'
 import { useStore } from 'vuex'
 import { useRoute } from "vue-router";
 import { mdiTableBorder, mdiPlus  } from '@mdi/js'
@@ -9,8 +9,16 @@ import BaseButton from '@/components/BaseButton.vue'
 import CardBox from '@/components/CardBox.vue'
 import TableCategory from '@/mycomponents/TableCategory.vue'
 
-const route = useRoute();
+import CardBoxComponentEmpty from '@/components/CardBoxComponentEmpty.vue'
 
+const route = useRoute();
+const store = useStore();
+
+const items = computed(() => store.state.categoryList);
+const showtable = ref(true);
+watchEffect(()=> {
+  showtable.value = items.value.length > 0 ? true : false;
+});
 </script>
 
 <template>
@@ -28,7 +36,8 @@ const route = useRoute();
       </SectionTitleLineWithButton>
 
       <CardBox class="mb-6" has-table>
-        <TableCategory />
+        <TableCategory v-if="showtable"/>
+        <CardBoxComponentEmpty v-else />
       </CardBox>
 
     </SectionMain>

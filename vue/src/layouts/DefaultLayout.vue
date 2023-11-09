@@ -53,6 +53,9 @@ if(store.state.refresh) {
   store.dispatch('getUser');
   store.dispatch("getUserList");
   store.dispatch("getCategoryList");
+  store.dispatch("getProductList");
+  store.dispatch("getBrandList");
+  store.dispatch("getUnitList");
   store.commit("stopRefresh")
 }
 

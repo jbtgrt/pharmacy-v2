@@ -15,6 +15,8 @@ class DatabaseSeeder extends Seeder
         $this->call(RolesTableSeeder::class);
         $this->call(UsersTableSeeder::class);
         $this->call(CategoriesTableSeeder::class);
+        $this->call(BrandsTableSeeder::class);
+        $this->call(UnitsTableSeeder::class);
     }
 }
 
@@ -25,3 +27,9 @@ class DatabaseSeeder extends Seeder
 // php artisan make:controller SupplierStockController --model=SupplierStock --api --requests
 // php artisan make:controller SellerStockController --model=SellerStock --api --requests
 // php artisan make:controller CategoryController --model=Category --api --requests
+// php artisan make:controller ProductController --model=Product --api --requests
+// php artisan make:controller BrandController --model=Brand --api --requests
+// php artisan make:controller UnitController --model=Unit --api --requests
+// php artisan make:controller ProductSupplyController --model=ProductSupply --api --requests
+
+// php artisan make:resource ProductResource

@@ -290,7 +290,7 @@ class UserController extends Controller
         }
 
 
-        $dir = 'images/';
+        $dir = 'images/avatars/';
         $file = Str::random() . '.' . $type;
         $absolutePath = public_path($dir);
         $relativePath = $dir . $file;

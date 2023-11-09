@@ -15,19 +15,22 @@ class CategoriesTableSeeder extends Seeder
     public function run()
     {
         DB::table('categories')->insert([
-            'category_name' => 'Health Care',
-            'data'=> '[]',
-            'description' => ''
+            'category_name' => 'Shampoo'
         ]);
         DB::table('categories')->insert([
-            'category_name' => 'Digestive Health',
-            'data'=> '[]',
-            'description' => ''
+            'category_name' => 'Vitamin'
         ]);
         DB::table('categories')->insert([
-            'category_name' => 'Shampoo',
-            'data'=> '[]',
-            'description' => ''
+            'category_name' => 'Drops'
+        ]);
+        DB::table('categories')->insert([
+            'category_name' => 'Aerosol'
+        ]);
+        DB::table('categories')->insert([
+            'category_name' => 'Cream'
+        ]);
+        DB::table('categories')->insert([
+            'category_name' => 'Ointment'
         ]);
     }
 }

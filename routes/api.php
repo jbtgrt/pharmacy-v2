@@ -6,6 +6,9 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\ProductController;
+use App\Http\Controllers\BrandController;
+use App\Http\Controllers\UnitController;
 
 /*
 |--------------------------------------------------------------------------
@@ -31,6 +34,10 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::resource('/user', UserController::class); 
 
     Route::resource('/category', CategoryController::class); 
+    Route::resource('/product', ProductController::class); 
+    Route::resource('/brand', BrandController::class); 
+    Route::resource('/unit', UnitController::class); 
+    Route::resource('/supply', UnitController::class); 
 
 
 });

@@ -9,20 +9,21 @@ class Category extends Model
 {
     use HasFactory;
 
+    public $timestamps = true;
+
     /**
      * The attributes that are mass assignable.
      *
      * @var array<int, string>
      */
     protected $fillable = [
-        'role_id',
         'category_name',
-        'data',
-        'description'
+        'description',
+        'created_at'
     ];
 
-    public function role()
+    public function product()
     {
-        return $this->belongsTo(Role::class);
+        return $this->hasMany(Product::class);
     }
 }

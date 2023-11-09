@@ -15,6 +15,9 @@ import UserView from '@/views/admin/UserView.vue'
 import UserForm from '@/views/admin/UserForm.vue'
 import CategoryView from '@/views/admin/CategoryView.vue'
 import CategoryFormView from '@/views/admin/CategoryFormView.vue'
+import ProductView from '@/views/admin/ProductView.vue'
+import ProductFormView from '@/views/admin/ProductFormView.vue'
+import SupplyProductFormView from '@/views/admin/SupplyProductFormView.vue'
 import ReportsView from '@/views/admin/ReportsView.vue'
 
 // Staff Dashboard
@@ -98,6 +101,39 @@ const routes = [
         path: "/admin/edit-category/:id", 
         name: "admin-edit-category", 
         component: CategoryFormView 
+      },
+      // Products
+      {
+        meta: {
+          title: 'Product',
+        },
+        path: '/admin/product',
+        name: 'admin-product',
+        component: ProductView
+      },
+      {
+        meta: {
+          title: 'Add Product'
+        },
+        path: '/admin/add-product',
+        name: 'admin-add-product',
+        component: ProductFormView
+      },
+      {
+        meta: {
+          title: 'Supply Product'
+        },
+        path: '/admin/supply-product',
+        name: 'admin-supply-product',
+        component: SupplyProductFormView
+      },
+      { 
+        meta: {
+          title: 'Edit Product'
+        },
+        path: "/admin/edit-product/:id", 
+        name: "admin-edit-product", 
+        component: ProductFormView 
       },
       {
         meta: {

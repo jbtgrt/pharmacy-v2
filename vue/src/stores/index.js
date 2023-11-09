@@ -20,6 +20,12 @@ const store = createStore({
     selectedCategory: [],
     productList: [],
     selectedProduct: [],
+    checkedProducts: [],
+    productSupplyList: [],
+    selectedProductSupply: [],
+    brandList: [],
+    unitList: [],
+
     
   },
   actions: {
@@ -150,21 +156,18 @@ const store = createStore({
       });
     },
     saveProduct({commit}, product) {
-      let response;
-      if(product.id){
-        response = axiosClient
-          .put(`/product/${product.id}`, product)
-          .then((res) => {
-            commit("setProductList", res.data);
-              return res;
-          });
-      } else {
-        response = axiosClient.post("/product", product).then((res) => {
-          commit("setUserList", res.data);
+      return axiosClient.post("/product", product).then((res) => {
+          commit("setProductList", res.data);
           return res;
         });
-      }
-      return response;
+    },
+    updateProduct({ commit }, product) {
+      return axiosClient
+        .put(`/product/${product.records[0].id}`, product)
+        .then((res) => {
+          commit("setProductList", res.data);
+          return res;
+        });
     },
     editProduct({ commit }, id) {
       return axiosClient
@@ -177,12 +180,62 @@ const store = createStore({
           throw err;
         });
     },
-    sendNotification({}) {
-       return axiosClient
-          .post(`/send-sms`)
-          .then((res) => {
-            return res;
+    deleteProduct({ commit }, id) {
+      return axiosClient.delete(`/product/${id}`)
+        .then(response => {
+          commit('filterSupply', id); // Assuming you have a mutation to remove the item from the state
+        });
+    },
+    //  Supply
+    getSupplyList({commit}) {
+      return axiosClient.get('/supply').then((res) => {
+        commit("setSupplyList", res.data);
+      });
+    },
+    saveSupply({commit}, supply) {
+      return axiosClient.post("/supply", supply).then((res) => {
+          commit("setSupplyList", res.data);
+          return res;
+        });
+    },
+    updateSupply({ commit }, supply) {
+      return axiosClient
+        .put(`/supply/${supply.records[0].id}`, supply)
+        .then((res) => {
+          commit("setSupplyList", res.data);
+          return res;
+        });
+    },
+    editSupply({ commit }, id) {
+      return axiosClient
+        .get(`/supply/${id}`)
+        .then((res) => {
+          commit("setSelectedSupply", res.data);
+          return res;
         })
+        .catch((err) => {
+          throw err;
+        });
+    },
+    // Brand
+     getBrandList({commit}) {
+      return axiosClient.get('/brand').then((res) => {
+        commit("setBrandList", res.data);
+      });
+    },
+    // Unit
+    getUnitList({commit}) {
+      return axiosClient.get('/unit').then((res) => {
+        commit("setUnitList", res.data);
+      });
+    },
+    // Notification
+    sendNotification({}) {
+      return axiosClient
+        .post(`/send-sms`)
+        .then((res) => {
+          return res;
+      })
     },
     
   },
@@ -206,6 +259,7 @@ const store = createStore({
     setRole: (state, role) => {
       state.user.role = role;
     },
+    // User Mutation
     setUser: (state, user) => {
       state.user.data = user;
       sessionStorage.setItem('ROLE', user.role.toLowerCase());
@@ -221,6 +275,7 @@ const store = createStore({
     setSelectedUser: (state, user) => {
       state.selectedUser = user.current_user[0];
     },
+    // Category Mutation
     setCategoryList: (state, categories) => {
       state.categoryList = categories.data;
     },
@@ -230,11 +285,37 @@ const store = createStore({
     filterCategory(state, id) {
       state.categoryList = state.categoryList.filter(item => item.id !== id);
     },
-    setProductList: (state, categories) => {
-      state.productList = categories.data;
+    // Product Mutation
+    setProductList: (state, products) => {
+      state.productList = products.data;
     },
-    setSelectedProduct: (state, category) => {
-      state.selectedCategory = category;
+    setSelectedProduct: (state, product) => {
+      state.selectedProduct = product.current[0];
+    },
+    filterProduct(state, id) {
+      state.productList = state.productList.filter(item => item.id !== id);
+    },
+    setCheckProductList: (state, products) => {
+      console.log(products)
+      state.checkedProducts = products;
+    },
+    // Product Supply
+    setSupplyList: (state, supplies) => {
+      state.productSupplyList = supplies.data;
+    },
+    setSelectedSupply: (state, supply) => {
+      state.selectedProductSupply = supply.current[0];
+    },
+    filterSupply(state, id) {
+      state.productSupplyList = state.selectedProductSupply.filter(item => item.id !== id);
+    },
+    // Brand
+    setBrandList: (state, brands) => {
+      state.brandList = brands.data;
+    },
+    // Unit
+    setUnitList: (state, units) => {
+      state.unitList = units.data;
     },
     
     
@@ -245,3 +326,31 @@ const store = createStore({
 });
 
 export default store;
+
+// [
+//     { id: 1, label: 'Tablet'},
+//     { id: 2, label: 'Capsule'},
+//     { id: 3, label: 'Liquid (mL)'},
+//     { id: 4, label: 'Drops'},
+//     { id: 5, label: 'Injection (mL)'},
+//     { id: 6, label: 'Aerosol'},
+//     { id: 7, label: 'Cream'},
+//     { id: 8, label: 'Ointment'},
+//     { id: 9, label: 'Lotion'},
+//     { id: 10, label: 'Suppository'},
+//     { id: 11, label: 'Syrup'},
+//     { id: 12, label: 'Powder (g or mg)'},
+//     { id: 13, label: 'Suspension (mL)'},
+//     { id: 14, label: 'Inhaler'},
+//     { id: 15, label: 'Dermal Patch'},
+//     { id: 16, label: 'Nebulizer Solution'},
+//     { id: 17, label: 'Vial'},
+//     { id: 18, label: 'Dental Paste'},
+//     { id: 19, label: 'Dental Gel'},
+//     { id: 20, label: 'Eye Ointment'},
+//     { id: 21, label: 'Nasal Spray'},
+//     { id: 22, label: 'Dropper Bottle'},
+//     { id: 23, label: 'Oral Solution'},
+//     { id: 24, label: 'Dial-a-Dose Syringe'}
+
+//   ],

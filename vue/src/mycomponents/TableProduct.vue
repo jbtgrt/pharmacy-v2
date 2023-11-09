@@ -1,7 +1,7 @@
 <script setup>
-import { computed, ref, watchEffect } from 'vue'
+import { computed, ref, watchEffect, watch } from 'vue'
 import { useStore } from 'vuex'
-import { mdiEye, mdiTrashCan, mdiAccountEdit, mdiMagnify, mdiAsterisk   } from '@mdi/js'
+import { mdiEye, mdiTrashCan, mdiAccountEdit, mdiMagnify, mdiAsterisk    } from '@mdi/js'
 import CardBoxModal from '@/components/CardBoxModal.vue'
 import TableCheckboxCell from '@/components/TableCheckboxCell.vue'
 import BaseLevel from '@/components/BaseLevel.vue'
@@ -9,9 +9,11 @@ import BaseButtons from '@/components/BaseButtons.vue'
 import BaseButton from '@/components/BaseButton.vue'
 import UserAvatar from '@/components/UserAvatar.vue'
 import UserCard from '@/components/UserCard.vue'
-import SelectedUserCard from '@/components/SelectedUserCard.vue'
 import FormField from '@/components/FormField.vue'
 import FormControl from '@/components/FormControl.vue'
+
+import SelectedProductCard from '@/mycomponents/SelectedProductCard.vue'
+
 
 
 defineProps({
@@ -42,10 +44,11 @@ const selectOptions = [
 const perPage = ref(5)
 const currentPage = ref(0)
 const searchQuery = ref('');
-const selectedRole = ref('');
+const selectedRows = ref('');
 const filteredItems = ref([]);
 const pageList = ref([]);
 const numPages = ref(7);
+const checkedRows = ref([])
 
 // const numPages = computed(() => Math.ceil(items.value.length / perPage.value));
 const calculateNumPages = computed(() => Math.ceil(items.value.length / perPage.value));
@@ -63,10 +66,11 @@ const pagesList = computed(() => {
 
 // Add a watcher to update the filtered items when searchQuery or selectedRole changes
 watchEffect(() => {
+
   // Filter items based on searchQuery and selectedRole
   filteredItems.value = items.value.filter((user) => {
     return (
-      (user.category_name.toLowerCase().includes(searchQuery.value.toLowerCase()) ||
+      (user.product_name.toLowerCase().includes(searchQuery.value.toLowerCase()) ||
        user.description.toLowerCase().includes(searchQuery.value.toLowerCase()))
     );
   });
@@ -81,6 +85,8 @@ watchEffect(() => {
   for (let i = 0; i < numPages.value; i++) {
     pageList.value.push(i);
   }
+
+
 });
 
 // // Update the servicesPaginated computed property to use filteredItems
@@ -88,19 +94,52 @@ const servicesPaginated = computed(() => {
   return filteredItems.value.slice(perPage.value * currentPage.value, perPage.value * (currentPage.value + 1));
 });
 
+const deleteItem = (id) => {
+      store.dispatch("deleteProduct", id);
+    }
+
+// const newCheck = ref([]);
+// watch(
+//   () => store.state.checkedProducts,
+//   (newVal, oldVal) => {
+//     newCheck.value = {
+//           ...JSON.parse(JSON.stringify(newVal))
+//         };
+//   }
+// );
+
+
+const remove = (arr, cb) => {
+  const newArr = []
+
+  arr.forEach((item) => {
+    if (!cb(item)) {
+      newArr.push(item)
+    }
+  })
+
+  return newArr
+}
+
+const checked = (isChecked, client) => {
+  if (isChecked) {
+    checkedRows.value.push(client)
+    store.commit("setCheckProductList", checkedRows.value);
+  } else {
+    checkedRows.value = remove(checkedRows.value, (row) => row.id === client.id)
+  }
+}
+
+
 </script>
 
-<template>
+<template> {{newCheck}}
 
-  <CardBoxModal v-model="isModalActive" title="Details" >
-    <p>{{selectedRecord.category_name}}</p>
-    <p>{{selectedRecord.description}}</p>
-    <div v-if="selectedRecord.type === 'select'">
-      
-    </div>
+  <CardBoxModal v-model="isModalActive" title="Product Details" classValue="flex overflow-x-auto shadow-lg max-h-modal w-11/12 md:w-3/5 lg:w-2/5 xl:w-7/12 z-50" >
+    <SelectedProductCard :product="selectedRecord" class="mb-6" />
   </CardBoxModal>
-
-  <section class="p-4">
+  
+  <section class="p-4"> 
     <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
       <div class="xl:flex xl:flex-wrap lg:flex lg:flex-wrap " >
         <FormField class="md:w-6/12 lg:w-4/12  xl:w-2/6 xl:mr-2 lg:mr-2">
@@ -119,24 +158,47 @@ const servicesPaginated = computed(() => {
     <thead>
       <tr>
         <th v-if="checkable" />
-        <th>Service</th>
+        <th />
+        <th>ID</th>
+        <th>Brand Name</th>
+        <th>Category</th>
+        <th>Brand</th>
+        <th>Unit</th>
         <th>Description</th>
+
         <th />
       </tr>
     </thead>
     <tbody>
-      <tr v-for="services in servicesPaginated" :key="services.id">
-        <TableCheckboxCell v-if="checkable" @checked="checked($event, services)" />
-        <td data-label="Title">
-          {{ services.category_name }}
+      <tr v-for="record in servicesPaginated" :key="record.id">
+        <TableCheckboxCell v-if="checkable" @checked="checked($event, record.id)" />
+        <td class="border-b-0 lg:w-6 before:hidden">
+          <UserAvatar :username="record.product_name" :avatar="record.image" class="w-24 h-24 mx-auto lg:w-6 lg:h-6" />
         </td>
-        <td data-label="Description">
-          {{ services.description }}
+        <td data-label="Brand Name">
+          {{ record.id }}
         </td>
+        <td data-label="Brand Name">
+          {{ record.product_name }}
+        </td>
+        <td data-label="Category">
+          {{ record.category_name }}
+        </td>
+         <td data-label="Category">
+          {{ record.brand_name }}
+        </td>
+         <td data-label="Category">
+          {{ record.unit_name }}
+        </td>
+         <td data-label="Description">
+          {{ record.description }}
+        </td>
+       
         <td class="before:hidden lg:w-1 whitespace-nowrap">
           <BaseButtons type="justify-start lg:justify-end" no-wrap>
-            <BaseButton color="info" :icon="mdiEye" small @click="showRecord(isModalActive = true, selectedRecord = services)" />
-            <BaseButton color="success" :icon="mdiAccountEdit" small :to="`/admin/edit-service/${services.id}`" />
+            <BaseButton color="info" :icon="mdiEye" small @click="showRecord(isModalActive = true, selectedRecord = record)" />
+            <BaseButton color="success" :icon="mdiAccountEdit" small :to="`/admin/edit-product/${record.id}`" />
+            <BaseButton color="danger" :icon="mdiTrashCan " small @click="deleteItem(record.id)" />
           </BaseButtons>
         </td>
       </tr>

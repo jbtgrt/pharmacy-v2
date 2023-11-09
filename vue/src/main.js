@@ -23,7 +23,9 @@ if (typeof localStorage !== 'undefined') {
 }
 
 // Create Vue app
-createApp(App).use(store).use(router).use(pinia).mount('#app')
+const app = createApp(App).use(store).use(router).use(pinia)
+// app.config.globalProperties.baseURL = 'http://IPv4:80'; 
+app.mount('#app')
 
 // Dark mode
 // Uncomment, if you'd like to restore persisted darkMode setting, or use `prefers-color-scheme: dark`. Make sure to uncomment localStorage block in src/stores/darkMode.js

@@ -64,8 +64,7 @@ function addService(index) {
     id: uuidv4(),
     type: "select",
     category_name: "",
-    description: null,
-    data: { options: [] },
+    description: '',
   };
 
   model.value.records.splice(index, 0, newService);
@@ -77,9 +76,6 @@ function deleteService(records) {
 
 function serviceChange(service) {
 
-  if (service.data.options) {
-    service.data.options = [...service.data.options];
-  }
   model.value.records = model.value.records.map((q) => {
     if (q.id === service.id) {
       return JSON.parse(JSON.stringify(service));
@@ -111,7 +107,7 @@ const notification = computed(() => store.state.notification)
 </script>
 
 <template>
-    <SectionMain>
+    <SectionMain> {{model}}
       <SectionTitleLineWithButton :icon="mdiPlusBox " :title="route.meta.title" main>
       </SectionTitleLineWithButton>    
         <NotificationBar v-if="Object.keys(errors).length" color="danger" :icon="mdiAlertCircle" :outline="notificationsOutline">

@@ -107,7 +107,7 @@ const usersPaginated = computed(() => {
 </script>
 
 <template>
-  <CardBoxModal v-if="selectedRecord.value != null" v-model="isModalActive" title="User Details" >
+  <CardBoxModal v-if="selectedRecord.value != null" v-model="isModalActive" title="User Details" classValue="flex overflow-x-auto shadow-lg max-h-modal w-11/12 md:w-3/5 lg:w-2/5 xl:w-4/12 z-50">
     <SelectedUserCard :user="selectedRecord" class="mb-6" />
   </CardBoxModal>
 

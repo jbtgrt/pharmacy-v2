@@ -34,6 +34,16 @@ export default [
     label: 'Category'
   },
   {
+    to: '/admin/product',
+    icon: mdiAccountGroupOutline,
+    label: 'Product'
+  },
+  {
+    to: '/admin/supply-product',
+    icon: mdiAccountGroupOutline,
+    label: 'Supply'
+  },
+  {
     label: 'Tree View',
     icon: mdiViewList,
     menu: [

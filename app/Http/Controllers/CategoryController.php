@@ -36,17 +36,7 @@ class CategoryController extends Controller
 
         foreach ($data['records'] as $service) {
             $serviceData = $this->createCategory($service);
-            $optionsData = [];
 
-            // foreach ($service['data']['options'] as $option) {
-            //     $optionsData[] = $this->createServiceOption($option);
-            // }
-
-            // if (is_array($optionsData)) {
-            //     $optionsData = json_encode($optionsData);
-            // }
-
-            // $serviceData['data'] = '{"options": '.$optionsData.'}';
             $saveData[] = $serviceData;
         }
 
@@ -90,16 +80,6 @@ class CategoryController extends Controller
             $serviceData = $this->createCategory($service);
             $serviceData['id'] = $service['id'];
             $optionsData = [];
-
-            // foreach ($service['data']['options'] as $option) {
-            //     $optionsData[] = $this->createServiceOption($option);
-            // }
-
-            // if (is_array($optionsData)) {
-            //     $optionsData = json_encode($optionsData);
-            // }
-
-            // $serviceData['data'] = '{"options": '.$optionsData.'}';
             $saveData[] = $serviceData;
         }
 
@@ -152,13 +132,9 @@ class CategoryController extends Controller
      */
     private function createCategory($data)
     {
-        if (is_array($data['data'])) {
-            $data['data'] = json_encode($data['data']);
-        }
         $validator = Validator::make($data, [
             'category_name' => 'required|string',
-            'description' => 'nullable|string',
-            'data' => 'present'
+            'description' => 'nullable|string'
         ]);
 
         return $validator->validated();
