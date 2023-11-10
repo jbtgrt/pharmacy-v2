@@ -16,16 +16,31 @@ class Product extends Model
      */
     protected $fillable = [
         'category_id',
+        'brand_id',
+        'unit_id',
         'product_name',
-        'name',
         'description',
         'image_url',
-        'expires_at',
         'status'
     ];
 
     public function category()
     {
         return $this->belongsTo(Category::class);
+    }
+
+    public function brand()
+    {
+        return $this->belongsTo(Brand::class);
+    }
+
+    public function unit()
+    {
+        return $this->belongsTo(Unit::class);
+    }
+
+    public function productSupply()
+    {
+        return $this->hasMany(ProductSupply::class);
     }
 }

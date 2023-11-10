@@ -158,6 +158,7 @@ const store = createStore({
     saveProduct({commit}, product) {
       return axiosClient.post("/product", product).then((res) => {
           commit("setProductList", res.data);
+          commit("setCheckProductList", res.data.product_ids);
           return res;
         });
     },
@@ -193,6 +194,7 @@ const store = createStore({
       });
     },
     saveSupply({commit}, supply) {
+      console.log(supply);
       return axiosClient.post("/supply", supply).then((res) => {
           commit("setSupplyList", res.data);
           return res;
@@ -296,7 +298,6 @@ const store = createStore({
       state.productList = state.productList.filter(item => item.id !== id);
     },
     setCheckProductList: (state, products) => {
-      console.log(products)
       state.checkedProducts = products;
     },
     // Product Supply

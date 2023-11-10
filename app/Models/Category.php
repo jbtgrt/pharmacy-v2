@@ -17,9 +17,7 @@ class Category extends Model
      * @var array<int, string>
      */
     protected $fillable = [
-        'category_name',
-        'description',
-        'created_at'
+        'category_name'
     ];
 
     public function product()

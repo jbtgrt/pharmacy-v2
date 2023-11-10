@@ -60,7 +60,7 @@ const checkedProducts = computed(() => store.state.checkedProducts);
 
 if (checkedProducts.value.length) {
    for (const item of checkedProducts.value) {
-      model.value.records.push({ product_id: item });
+      model.value.records.push({ id: uuidv4(), product_id: item.id, category_id: item.category_id, brand_id: item.brand_id, unit_id: item.unit_id, product_name: item.product_name, unit_name: item.unit_name, product_cost: '' });
     }
 }
 
@@ -69,22 +69,19 @@ if (checkedProducts.value.length) {
 import SupplyProductEditor from "@/mycomponents/editor/SupplyProductEditor.vue";
 
 
-function addService(index) {
+function addService(index, data) {
   const newService = {
     id: uuidv4(),
-    category_id: '',
-    brand_id: '',
-    product_name: '',
+    product_id: data.product_id,
+    category_id: data.category_id,
+    brand_id: data.brand_id,
+    unit_id: data.unit_id,
+    product_name: data.product_name,
+    unit_name: data.unit_name,
     product_code: '',
-    product_price: 0,
-    product_cost: 0,
-    product_unit_id: '',
-    supply_unit_id: '',
-    sale_unit_id: '',
-    stock: 0,
-    image_url: '',
-    description: '',
-    expires_at: ''
+    product_cost: '',
+    expires_at: '',
+    description: ''
   };
 
   model.value.records.splice(index, 0, newService);
@@ -95,7 +92,6 @@ function deleteService(records) {
 }
 
 function serviceChange(service) {
-
   model.value.records = model.value.records.map((q) => {
     if (q.id === service.id) {
       return JSON.parse(JSON.stringify(service));
@@ -106,15 +102,15 @@ function serviceChange(service) {
 
 function submit() {
  if (route.params.id) {
-  store.dispatch("updateProduct", { ...model.value }).then(({ data }) => {
-    router.push({name: "admin-product"});
+  store.dispatch("updateSupply", { ...model.value }).then(({ data }) => {
+    router.push({name: "admin-supply"});
   })
   .catch(err => {
     errors.value = err.response.data.errors;
   });
 } else {
-  store.dispatch("saveProduct", { ...model.value }).then(({ data }) => {
-    router.push({name: "admin-product"});
+  store.dispatch("saveSupply", { ...model.value }).then(({ data }) => {
+    router.push({name: "admin-supply"});
   })
   .catch(err => {
     errors.value = err.response.data.errors;
@@ -127,44 +123,30 @@ const notification = computed(() => store.state.notification)
 
 // Scanner
 
-import ImageBarcodeReader from "@/mycomponents/scanner/ImageBarcodeReader.vue";
-import StreamBarcodeReader from "@/mycomponents/scanner/StreamBarcodeReader.vue";
+// import ImageBarcodeReader from "@/mycomponents/scanner/ImageBarcodeReader.vue";
+// import StreamBarcodeReader from "@/mycomponents/scanner/StreamBarcodeReader.vue";
 
-let decodedText = null;
+// let decodedText = null;
 
-const handleDecode = (text) => {
-  decodedText = text;
-  // You can do something with the decoded text here
-};
+// const handleDecode = (text) => {
+//   decodedText = text;
+//   // You can do something with the decoded text here
+// };
 
-const handleResult = (result) => {
-  // Handle the result object if needed
-};
+// const handleResult = (result) => {
+//   // Handle the result object if needed
+// };
 
-const handleLoaded = () => {
-  // Handle the "loaded" event if needed
-};
+// const handleLoaded = () => {
+//   // Handle the "loaded" event if needed
+// };
 
 </script>
 
 <template>
     <SectionMain> 
-      <!-- <StreamBarcodeReader /> -->
-     <!--  <ImageBarcodeReader
-        @decode="onDecode"
-        @error="onError"
-    ></ImageBarcodeReader> -->
-
-    <div>
-      <!-- Include the stream-barcode-reader component and listen for its events -->
-      <!-- <StreamBarcodeReader @decode="handleDecode" @result="handleResult" @loaded="handleLoaded"></StreamBarcodeReader> -->
-
-      <!-- Display the result in your main component -->
-      <div v-if="decodedText">
-        <p>Decoded Text: {{ decodedText }}</p>
-      </div>
-    </div>
-    {{checkedProducts }}
+    <!-- <br /> -->
+    {{model}}
       <SectionTitleLineWithButton :icon="mdiPlusBox " :title="route.meta.title" main>
       </SectionTitleLineWithButton>    
         <NotificationBar v-if="Object.keys(errors).length" color="danger" :icon="mdiAlertCircle" :outline="notificationsOutline">
@@ -181,10 +163,10 @@ const handleLoaded = () => {
         <CardBox is-form @submit.prevent="submit">
           <div class="px-4 py-5 bg-white space-y-6 sm:p-6">
             <div v-if="addForm" >
-              <h3 class="text-2xl font-semibold flex items-center justify-between">
-                Product  
+             <!--  <h3 class="text-2xl font-semibold flex items-center justify-between">
+                Product   -->
                 <!-- Add new question -->
-                <button
+                <!-- <button
                   type="button"
                   @click="addService()"
                   class="flex items-center text-sm py-1 px-4 rounded-sm text-white bg-gray-600 hover:bg-gray-700"
@@ -202,11 +184,11 @@ const handleLoaded = () => {
                     />
                   </svg>
                   Add Product
-                </button>
+                </button> -->
                 <!--/ Add new question -->
-              </h3>
+              <!-- </h3> -->
               <div v-if="!model.records.length" class="text-center text-gray-600">
-                You don't have any products created
+                You don't have any supply products created
               </div>
             </div>
             <div v-for="(service, index) in model.records" :key="service.id">

@@ -17,6 +17,7 @@ import CategoryView from '@/views/admin/CategoryView.vue'
 import CategoryFormView from '@/views/admin/CategoryFormView.vue'
 import ProductView from '@/views/admin/ProductView.vue'
 import ProductFormView from '@/views/admin/ProductFormView.vue'
+import SupplyProductView from '@/views/admin/SupplyProductView.vue'
 import SupplyProductFormView from '@/views/admin/SupplyProductFormView.vue'
 import ReportsView from '@/views/admin/ReportsView.vue'
 
@@ -119,14 +120,6 @@ const routes = [
         name: 'admin-add-product',
         component: ProductFormView
       },
-      {
-        meta: {
-          title: 'Supply Product'
-        },
-        path: '/admin/supply-product',
-        name: 'admin-supply-product',
-        component: SupplyProductFormView
-      },
       { 
         meta: {
           title: 'Edit Product'
@@ -134,6 +127,23 @@ const routes = [
         path: "/admin/edit-product/:id", 
         name: "admin-edit-product", 
         component: ProductFormView 
+      },
+      // Supply
+      {
+        meta: {
+          title: 'Supply Product',
+        },
+        path: '/admin/supply',
+        name: 'admin-supply',
+        component: SupplyProductView
+      },
+      {
+        meta: {
+          title: 'Supply Product'
+        },
+        path: '/admin/supply-product',
+        name: 'admin-supply-product',
+        component: SupplyProductFormView
       },
       {
         meta: {

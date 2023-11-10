@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Str;
 use Illuminate\Validation\Rule;
+use DB;
 
 class ProductController extends Controller
 {
@@ -46,14 +47,43 @@ class ProductController extends Controller
             $saveData[] = $serviceData;
         }
 
-        Product::insert($saveData);
+        $insertedData = [];
+
+        foreach ($saveData as $data) {
+            $insertedIds['id'] = DB::table('products')->insertGetId($data);
+
+           // Get a specific supplier by its ID
+            $product = Product::find($insertedIds['id']);
+
+            // Access the related products using the "products" method
+            $unit = $product->unit;
+
+            $insertedData[] = [
+                'id' => $insertedIds['id'],
+                'category_id' => DB::table('products')->select('category_id')->where('id', $insertedIds['id'])->first()->category_id,
+                'brand_id' => DB::table('products')->select('brand_id')->where('id', $insertedIds['id'])->first()->brand_id,
+                'unit_id' => DB::table('products')->select('unit_id')->where('id', $insertedIds['id'])->first()->unit_id,
+                'product_name' => DB::table('products')->select('product_name')->where('id', $insertedIds['id'])->first()->product_name,
+                'unit_name' => $unit->unit_name
+            ];
+        }
 
         $products = $this->allProducts();
 
         return response([
             'message' => 'The product was successfully added.',
-            'data' => ProductResource::collection($products)
+            'data' => ProductResource::collection($products),
+            'product_ids' => $insertedData
         ]);
+
+        // $product = Product::find($productId);
+
+        // if (!$product) {
+        //     return response()->json(['message' => 'Product not found'], 404);
+        // }
+
+        // // Access the associated category using the 'category' relationship
+        // $category = $product->category;
     }
 
     /**

@@ -106,7 +106,7 @@ function submit() {
   });
 } else {
   store.dispatch("saveProduct", { ...model.value }).then(({ data }) => {
-    router.push({name: "admin-product"});
+    router.push({name: "admin-supply-product"});
   })
   .catch(err => {
     errors.value = err.response.data.errors;

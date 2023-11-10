@@ -39,7 +39,7 @@ export default [
     label: 'Product'
   },
   {
-    to: '/admin/supply-product',
+    to: '/admin/supply',
     icon: mdiAccountGroupOutline,
     label: 'Supply'
   },

@@ -14,8 +14,6 @@ import FormControl from '@/components/FormControl.vue'
 
 import SelectedProductCard from '@/mycomponents/SelectedProductCard.vue'
 
-
-
 defineProps({
   checkable: Boolean
 })
@@ -26,14 +24,13 @@ const isModalActive = ref(false)
 const isModalEdit = ref(false)
 const isModalDangerActive = ref(false)
 
-const items = computed(() => store.state.productList);
+const items = computed(() => store.state.productSupplyList);
 
 const selectedRecord = ref({});
 
 function showRecord(client) {
   
 }
-
 
 const selectOptions = [
   { id: 5, label: '5 per page' },
@@ -94,35 +91,35 @@ const servicesPaginated = computed(() => {
   return filteredItems.value.slice(perPage.value * currentPage.value, perPage.value * (currentPage.value + 1));
 });
 
-const deleteItem = (id) => {
-      store.dispatch("deleteProduct", id);
-    }
+// const deleteItem = (id) => {
+//       store.dispatch("deleteProduct", id);
+//     }
 
-const remove = (arr, cb) => {
-  const newArr = []
+// const remove = (arr, cb) => {
+//   const newArr = []
 
-  arr.forEach((item) => {
-    if (!cb(item)) {
-      newArr.push(item)
-    }
-  })
+//   arr.forEach((item) => {
+//     if (!cb(item)) {
+//       newArr.push(item)
+//     }
+//   })
 
-  return newArr
-}
+//   return newArr
+// }
 
-const checked = (isChecked, client) => {
-  if (isChecked) {
-    checkedRows.value.push({id: client.id, category_id: client.category_id, brand_id: client.brand_id, unit_id: client.unit_id,  product_name: client.product_name, unit_name: client.unit_name})
-  } else {
-    checkedRows.value = remove(checkedRows.value, (row) => row.id === client.id)
-  }
-  store.commit("setCheckProductList", checkedRows.value);
-}
+// const checked = (isChecked, client) => {
+//   if (isChecked) {
+//     checkedRows.value.push({id: client.id, product_name: client.product_name, unit_name: client.unit_name})
+//   } else {
+//     checkedRows.value = remove(checkedRows.value, (row) => row.id === client.id)
+//   }
+//   store.commit("setCheckProductList", checkedRows.value);
+// }
 
 
 </script>
 
-<template> {{checkedRows}}
+<template>
 
   <CardBoxModal v-model="isModalActive" title="Product Details" classValue="flex overflow-x-auto shadow-lg max-h-modal w-11/12 md:w-3/5 lg:w-2/5 xl:w-7/12 z-50" >
     <SelectedProductCard :product="selectedRecord" class="mb-6" />
@@ -149,7 +146,7 @@ const checked = (isChecked, client) => {
         <th v-if="checkable" />
         <th />
         <th>ID</th>
-        <th>Brand Name</th>
+        <th>Product Name</th>
         <th>Category</th>
         <th>Brand</th>
         <th>Unit</th>
@@ -168,7 +165,7 @@ const checked = (isChecked, client) => {
           {{ record.id }}
         </td>
         <td data-label="Brand Name">
-          {{ record.product_name }}
+          {{ record.product_name }} {{record.image}}
         </td>
         <td data-label="Category">
           {{ record.category_name }}
@@ -179,10 +176,20 @@ const checked = (isChecked, client) => {
          <td data-label="Category">
           {{ record.unit_name }}
         </td>
-         <td data-label="Description">
-          {{ record.description }}
+        <td data-label="Description">
+          {{ record.product_cost }}
         </td>
-       
+        <td data-label="Description">
+          {{ record.quantity }}
+        </td>
+        <td data-label="Description">
+          {{ record.product_code }}
+        </td>
+        <td data-label="Expires At">
+          {{ record.expires_at }}
+        </td>
+
+         
         <td class="before:hidden lg:w-1 whitespace-nowrap">
           <BaseButtons type="justify-start lg:justify-end" no-wrap>
             <BaseButton color="info" :icon="mdiEye" small @click="showRecord(isModalActive = true, selectedRecord = record)" />

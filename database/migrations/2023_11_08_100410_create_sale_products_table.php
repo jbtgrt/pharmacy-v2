@@ -14,8 +14,11 @@ return new class extends Migration
         Schema::create('sale_products', function (Blueprint $table) {
             $table->id();
             $table->foreignIdFor(\App\Models\Product::class, 'product_id');
-            $table->double('sale_price');
+            $table->foreignIdFor(\App\Models\Category::class, 'category_id');
+            $table->foreignIdFor(\App\Models\Brand::class, 'brand_id');
+            $table->foreignIdFor(\App\Models\Unit::class, 'unit_id');
 
+            $table->double('sale_price');
             $table->timestamp('created_at')->default(now());
             $table->timestamp('updated_at')->nullable();
         });

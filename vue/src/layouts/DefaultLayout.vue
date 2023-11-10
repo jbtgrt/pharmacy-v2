@@ -56,6 +56,7 @@ if(store.state.refresh) {
   store.dispatch("getProductList");
   store.dispatch("getBrandList");
   store.dispatch("getUnitList");
+  store.dispatch("getSupplyList");
   store.commit("stopRefresh")
 }
 

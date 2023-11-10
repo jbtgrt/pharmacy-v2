@@ -16,12 +16,11 @@ class ProductSupply extends Model
      */
     protected $fillable = [
         'product_id',
-        'product_name',
-        'name',
-        'description',
-        'image_url',
+        'product_code',
+        'product_cost',
+        'quantity',
         'expires_at',
-        'status'
+        'description'
     ];
 
     public function product()

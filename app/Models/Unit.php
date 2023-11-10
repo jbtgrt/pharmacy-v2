@@ -17,4 +17,9 @@ class Unit extends Model
     protected $fillable = [
         'unit_name'
     ];
+
+    public function product()
+    {
+        return $this->hasMany(Product::class);
+    }
 }

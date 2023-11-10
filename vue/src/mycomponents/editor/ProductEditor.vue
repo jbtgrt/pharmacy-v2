@@ -155,6 +155,7 @@
         "
       >
         <option value="">-- select brand --</option>
+        <option key="0" value="0"> No Brand</option>
         <option v-for="brand in brands" :key="brand.id" :value="brand.id">
           {{ upperCaseFirst(brand.brand_name) }}
         </option>

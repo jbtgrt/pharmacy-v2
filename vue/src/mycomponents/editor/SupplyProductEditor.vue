@@ -1,8 +1,8 @@
 <template>
   <!-- Question index -->
   <div class="flex items-center justify-between">
-    <h3 class="text-lg font-bold">
-      {{ index + 1 }}. {{ model.product_name }}
+    <h3 class="text-lg">
+      <span class="font-semibold">{{ index + 1 }}. {{ model.product_name }} </span>
     </h3>
     <div v-if="addForm" class="flex items-center">
       <!-- Add new question -->
@@ -73,20 +73,21 @@
   </div>
   <!--/ Question index -->
 
-  <div class="xl:grid gap-3 xl:grid-cols-12">
+  <div class="xl:grid lg:grid gap-3 xl:grid-cols-12 lg:grid-cols-12">
     <!-- Question -->
     <div class="mt-3 col-span-3">
       <label
-        :for="'question_text_' + model.product_id"
+        :for="'question_text_' + model.unit_name"
         class="block text-sm font-medium text-gray-700"
-        >Product ID</label
+        >Product Unit</label
       >
       <input
         type="text"
-        :name="'question_text_' + model.product_id"
-        v-model="model.product_id"
+        :name="'question_text_' + model.unit_name"
+        v-model="model.unit_name"
         @change="dataChange"
-        :id="'question_text_' + model.product_id"
+        :id="'question_text_' + model.unit_name"
+        disabled
         class="
           mt-1
           focus:ring-indigo-500 focus:border-indigo-500
@@ -103,16 +104,16 @@
     
     <div class="mt-3 col-span-3">
       <label
-        :for="'question_text_' + model.code"
+        :for="'question_text_' + model.product_code"
         class="block text-sm font-medium text-gray-700"
         >Product Code</label
       >
       <input
         type="text"
-        :name="'question_text_' + model.code"
-        v-model="model.code"
+        :name="'question_text_' + model.product_code"
+        v-model="model.product_code"
         @change="dataChange"
-        :id="'question_text_' + model.code"
+        :id="'question_text_' + model.product_code"
         class="
           mt-1
           focus:ring-indigo-500 focus:border-indigo-500
@@ -138,57 +139,6 @@
         v-model="model.product_cost"
         @change="dataChange"
         :id="'question_text_' + model.product_cost"
-        class="
-          mt-1
-          focus:ring-indigo-500 focus:border-indigo-500
-          block
-          w-full
-          shadow-sm
-          sm:text-sm
-          border-gray-300
-          rounded-md
-        "
-      />
-    </div>
-
-
-    <div class="mt-3 col-span-3">
-      <label
-        :for="'question_text_' + model.quantity"
-        class="block text-sm font-medium text-gray-700"
-        >Quantity</label
-      >
-      <input
-        type="text"
-        :name="'question_text_' + model.quantity"
-        v-model="model.quantity"
-        @change="dataChange"
-        :id="'question_text_' + model.quantity"
-        class="
-          mt-1
-          focus:ring-indigo-500 focus:border-indigo-500
-          block
-          w-full
-          shadow-sm
-          sm:text-sm
-          border-gray-300
-          rounded-md
-        "
-      />
-    </div>
-
-    <div class="mt-3 col-span-3">
-      <label
-        :for="'question_text_' + model.quantity"
-        class="block text-sm font-medium text-gray-700"
-        >Quantity</label
-      >
-      <input
-        type="text"
-        :name="'question_text_' + model.quantity"
-        v-model="model.quantity"
-        @change="dataChange"
-        :id="'question_text_' + model.quantity"
         class="
           mt-1
           focus:ring-indigo-500 focus:border-indigo-500
@@ -231,23 +181,8 @@
 
   <div class="xl:grid gap-3 xl:grid-cols-12">
 
-   
-    <div class="mt-3 col-span-4">
-      <label
-        :for="'question_text_' + model.data"
-        class="block text-sm font-medium text-gray-700"
-        >Image</label
-      >
-      <FormField help="Upload image" class="mt-1">
-        <FormFilePicker label="Upload" type="file" @change="onImageChoose" />
-      </FormField>
-      
-    </div>
-    <div  class="mt-3 col-span-2">
-      <img v-if="model.image" class="sm:h-40" :src="model.image">
-    </div>
 
-    <div class="mt-3 pb-6 col-span-6">
+    <div class="mt-3 pb-6 col-span-12">
       <label
         :for="'service_description_' + model.id"
         class="block text-sm font-medium text-gray-700"
@@ -317,20 +252,6 @@ const props = defineProps({
   hasOption: Boolean
 });
 
-// Get question types from vuex
-const categories = computed(() => store.state.categoryList);
-
-const brands = computed(() => store.state.brandList);
-const units = computed(() => store.state.unitList);
-
-const barcodeSymbology = [
-    { id: 1 , label: 'Code 128' },
-    { id: 2 , label: 'Code 39' },
-    { id: 3 , label: 'UPC (Universal Product Code):' },
-    { id: 4 , label: 'EAN (European Article Number)' },
-    { id: 5 , label: 'QR Code (Quick Response Code)' },
-    { id: 6 , label: 'Code 11' }
-  ]
 
 const model = ref(JSON.parse(JSON.stringify(props.service)));
 
@@ -354,7 +275,7 @@ function dataChange() {
 }
 
 function addService() {
-  emit("addService", props.index + 1);
+  emit("addService", props.index + 1,  model.value);
 }
 
 function deleteService() {
