@@ -103,48 +103,6 @@ const routes = [
         name: "admin-edit-category", 
         component: CategoryFormView 
       },
-      // Products
-      {
-        meta: {
-          title: 'Product',
-        },
-        path: '/admin/product',
-        name: 'admin-product',
-        component: ProductView
-      },
-      {
-        meta: {
-          title: 'Add Product'
-        },
-        path: '/admin/add-product',
-        name: 'admin-add-product',
-        component: ProductFormView
-      },
-      { 
-        meta: {
-          title: 'Edit Product'
-        },
-        path: "/admin/edit-product/:id", 
-        name: "admin-edit-product", 
-        component: ProductFormView 
-      },
-      // Supply
-      {
-        meta: {
-          title: 'Supply Product',
-        },
-        path: '/admin/supply',
-        name: 'admin-supply',
-        component: SupplyProductView
-      },
-      {
-        meta: {
-          title: 'Supply Product'
-        },
-        path: '/admin/supply-product',
-        name: 'admin-supply-product',
-        component: SupplyProductFormView
-      },
       {
         meta: {
           title: 'Reports'
@@ -178,22 +136,72 @@ const routes = [
         name: 'staff-profile',
         component: ProfileView
       },
+      // Products
       {
         meta: {
-          title: 'Order Product'
+          title: 'Product',
         },
-        path: '/staff/order-product',
-        name: 'order-product',
-        component: OrderProductView
+        path: '/staff/product',
+        name: 'staff-product',
+        component: ProductView
       },
       {
         meta: {
-          title: 'Transaction'
+          title: 'Add Product'
         },
-        path: '/staff/transaction',
-        name: 'transaction',
-        component: TransactionView
+        path: '/staff/add-product',
+        name: 'staff-add-product',
+        component: ProductFormView
       },
+      { 
+        meta: {
+          title: 'Edit Product'
+        },
+        path: "/staff/edit-product/:id", 
+        name: "staff-edit-product", 
+        component: ProductFormView 
+      },
+      // Supply
+      {
+        meta: {
+          title: 'Supplies',
+        },
+        path: '/staff/supply',
+        name: 'staff-supply',
+        component: SupplyProductView
+      },
+      {
+        meta: {
+          title: 'Add Supply'
+        },
+        path: '/staff/add-supply',
+        name: 'staff-add-supply',
+        component: SupplyProductFormView
+      },
+      { 
+        meta: {
+          title: 'Edit Supply'
+        },
+        path: "/staff/edit-supply/:id", 
+        name: "staff-edit-supply", 
+        component: SupplyProductFormView 
+      },
+      // {
+      //   meta: {
+      //     title: 'Order Product'
+      //   },
+      //   path: '/staff/order-product',
+      //   name: 'order-product',
+      //   component: OrderProductView
+      // },
+      // {
+      //   meta: {
+      //     title: 'Transaction'
+      //   },
+      //   path: '/staff/transaction',
+      //   name: 'transaction',
+      //   component: TransactionView
+      // },
     ],
   },
   {

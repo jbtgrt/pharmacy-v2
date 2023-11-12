@@ -28,24 +28,7 @@ watchEffect(()=> {
 
     <SectionMain>
       <SectionTitleLineWithButton :icon="mdiTableBorder" :title="route.meta.title" main>
-        <BaseButtons>
-          <BaseButton
-            to="supply-product"
-            :icon="mdiPlus"
-            label="Add Supply"
-            color="contrast"
-            rounded-full
-            small
-          />
-          <BaseButton
-            to="add-product"
-            :icon="mdiPlus"
-            label="Add Product"
-            color="contrast"
-            rounded-full
-            small
-          />
-        </BaseButtons>
+    
       </SectionTitleLineWithButton>
 
       <CardBox class="mb-6" has-table>

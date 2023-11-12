@@ -11,17 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('sale_products', function (Blueprint $table) {
+        Schema::create('product_codes', function (Blueprint $table) {
             $table->id();
-            $table->foreignIdFor(\App\Models\Product::class, 'product_id');
-            $table->foreignIdFor(\App\Models\Category::class, 'category_id');
-            $table->foreignIdFor(\App\Models\Brand::class, 'brand_id');
             $table->foreignIdFor(\App\Models\ProductSupply::class, 'supply_id');
-            $table->foreignIdFor(\App\Models\ProductCode::class, 'code_id');
+            $table->string('product_code', 100)->nullable();
 
-            $table->double('sale_price');
-            $table->double('stocks');
-            $table->enum('sale_status', ['stock', 'sold', 'expired'])->default('stock');
             $table->timestamp('created_at')->default(now());
             $table->timestamp('updated_at')->nullable();
         });
@@ -32,6 +26,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('sale_products');
+        Schema::dropIfExists('product_codes');
     }
 };

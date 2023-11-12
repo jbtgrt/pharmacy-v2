@@ -15,12 +15,19 @@ class ProductSupply extends Model
      * @var array<int, string>
      */
     protected $fillable = [
+        'staff_id',
+        'supplier_id',
         'product_id',
-        'product_code',
-        'product_cost',
+        'category_id',
+        'brand_id',
+        'batch_no',
+        'unit_cost',
         'quantity',
+        'total_cost',
+        'date_received',
         'expires_at',
-        'description'
+        'storage_location',
+        'notes'
     ];
 
     public function product()

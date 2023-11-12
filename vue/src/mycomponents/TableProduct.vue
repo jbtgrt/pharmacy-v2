@@ -1,7 +1,7 @@
 <script setup>
 import { computed, ref, watchEffect, watch } from 'vue'
 import { useStore } from 'vuex'
-import { mdiEye, mdiTrashCan, mdiAccountEdit, mdiMagnify, mdiAsterisk    } from '@mdi/js'
+import { mdiEye, mdiTrashCan, mdiAccountEdit, mdiMagnify, mdiAsterisk, mdiPencil } from '@mdi/js'
 import CardBoxModal from '@/components/CardBoxModal.vue'
 import TableCheckboxCell from '@/components/TableCheckboxCell.vue'
 import BaseLevel from '@/components/BaseLevel.vue'
@@ -112,7 +112,7 @@ const remove = (arr, cb) => {
 
 const checked = (isChecked, client) => {
   if (isChecked) {
-    checkedRows.value.push({id: client.id, category_id: client.category_id, brand_id: client.brand_id, unit_id: client.unit_id,  product_name: client.product_name, unit_name: client.unit_name})
+    checkedRows.value.push({id: client.id, category_id: client.category_id, category_name: client.category_name, brand_id: client.brand_id, brand_name: client.brand_name, product_name: client.product_name, batch_no: client.batch_no + 1  })
   } else {
     checkedRows.value = remove(checkedRows.value, (row) => row.id === client.id)
   }
@@ -122,12 +122,12 @@ const checked = (isChecked, client) => {
 
 </script>
 
-<template> {{checkedRows}}
+<template> 
 
   <CardBoxModal v-model="isModalActive" title="Product Details" classValue="flex overflow-x-auto shadow-lg max-h-modal w-11/12 md:w-3/5 lg:w-2/5 xl:w-7/12 z-50" >
     <SelectedProductCard :product="selectedRecord" class="mb-6" />
   </CardBoxModal>
-  
+
   <section class="p-4"> 
     <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
       <div class="xl:flex xl:flex-wrap lg:flex lg:flex-wrap " >
@@ -148,13 +148,16 @@ const checked = (isChecked, client) => {
       <tr>
         <th v-if="checkable" />
         <th />
-        <th>ID</th>
-        <th>Brand Name</th>
+        <th>Category</th>
+        <th>Product Name</th>
+        <th>Brand</th>
+        <!-- <th>Price</th> -->
+        <th>Classification</th>
+        <th>Product Type</th>
+        <th>Formulation</th>
         <th>Category</th>
         <th>Brand</th>
-        <th>Unit</th>
-        <th>Description</th>
-
+        
         <th />
       </tr>
     </thead>
@@ -164,29 +167,36 @@ const checked = (isChecked, client) => {
         <td class="border-b-0 lg:w-6 before:hidden">
           <UserAvatar :username="record.product_name" :avatar="record.image" class="w-24 h-24 mx-auto lg:w-6 lg:h-6" />
         </td>
-        <td data-label="Brand Name">
-          {{ record.id }}
+        <td data-label="Category">
+          {{ record.category_name }}
         </td>
-        <td data-label="Brand Name">
+         <td data-label="Product Name">
           {{ record.product_name }}
+        </td>
+        <td data-label="Brand">
+          {{ record.brand_name }}
+        </td>
+        <td data-label="Classification">
+          {{ record.classification }}
+        </td>
+        <td data-label="Product Type">
+          {{ record.product_type }}
+        </td>
+        <td data-label="Formulation">
+          {{ record.formulation }}
         </td>
         <td data-label="Category">
           {{ record.category_name }}
         </td>
-         <td data-label="Category">
+        <td data-label="Brand">
           {{ record.brand_name }}
         </td>
-         <td data-label="Category">
-          {{ record.unit_name }}
-        </td>
-         <td data-label="Description">
-          {{ record.description }}
-        </td>
+        
        
         <td class="before:hidden lg:w-1 whitespace-nowrap">
           <BaseButtons type="justify-start lg:justify-end" no-wrap>
             <BaseButton color="info" :icon="mdiEye" small @click="showRecord(isModalActive = true, selectedRecord = record)" />
-            <BaseButton color="success" :icon="mdiAccountEdit" small :to="`/admin/edit-product/${record.id}`" />
+            <BaseButton color="success" :icon="mdiPencil " small :to="`/staff/edit-product/${record.id}`" />
             <BaseButton color="danger" :icon="mdiTrashCan " small @click="deleteItem(record.id)" />
           </BaseButtons>
         </td>

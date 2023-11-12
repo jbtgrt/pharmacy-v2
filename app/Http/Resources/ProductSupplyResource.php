@@ -5,6 +5,7 @@ namespace App\Http\Resources;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Nette\Utils\DateTime;
+use Illuminate\Support\Facades\URL;
 
 class ProductSupplyResource extends JsonResource
 {
@@ -23,14 +24,18 @@ class ProductSupplyResource extends JsonResource
             'category_name' => $this->category_name,
             'brand_id' => $this->brand_id,
             'brand_name' => $this->brand_name,
-            'unit_id' => $this->unit_id,
-            'unit_name' => $this->unit_name,
-            'product_code' => $this->product_code,
-            'product_price' => $this->product_price,
+            'supplier_id' => $this->supplier_id,
+            'batch_no' => $this->batch_no,
+            'unit_cost' => $this->unit_cost,
+            'quantity' => $this->quantity,
+            'total_cost' => $this->total_cost,
+            'storage_location' => $this->storage_location,
+            'notes' => $this->notes,
             'product_description' => $this->product_description,
             'purchase_description' => $this->description,
+            'date_received' => $this->date_received,
             'expires_at' => $this->expires_at,
-            'image' => $this->image_url ? URL::to($this->image_url) : 'products/not-available.jpeg',
+            'image' => $this->image_url ? URL::to($this->image_url) : URL::to('images/products/not-available.jpeg'),
             'status' => $this->status,
             'created_at' => (new DateTime($this->created_at))->format('Y-m-d')
         ];

@@ -184,7 +184,7 @@ const store = createStore({
     deleteProduct({ commit }, id) {
       return axiosClient.delete(`/product/${id}`)
         .then(response => {
-          commit('filterSupply', id); // Assuming you have a mutation to remove the item from the state
+          commit('filterProduct', id); // Assuming you have a mutation to remove the item from the state
         });
     },
     //  Supply
@@ -194,7 +194,6 @@ const store = createStore({
       });
     },
     saveSupply({commit}, supply) {
-      console.log(supply);
       return axiosClient.post("/supply", supply).then((res) => {
           commit("setSupplyList", res.data);
           return res;
@@ -217,6 +216,12 @@ const store = createStore({
         })
         .catch((err) => {
           throw err;
+        });
+    },
+    deleteSupply({ commit }, id) {
+      return axiosClient.delete(`/supply/${id}`)
+        .then(response => {
+          commit('filterSupply', id); // Assuming you have a mutation to remove the item from the state
         });
     },
     // Brand

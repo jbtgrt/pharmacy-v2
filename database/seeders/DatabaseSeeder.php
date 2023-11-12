@@ -31,5 +31,6 @@ class DatabaseSeeder extends Seeder
 // php artisan make:controller BrandController --model=Brand --api --requests
 // php artisan make:controller UnitController --model=Unit --api --requests
 // php artisan make:controller ProductSupplyController --model=ProductSupply --api --requests
+// php artisan make:controller ProductCodeController --model=ProductCode --api --requests
 
 // php artisan make:resource ProductResource

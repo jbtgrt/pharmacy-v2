@@ -124,7 +124,7 @@ const servicesPaginated = computed(() => {
   <CardBoxModal v-model="isModalActive" title="Product Details" classValue="flex overflow-x-auto shadow-lg max-h-modal w-11/12 md:w-3/5 lg:w-2/5 xl:w-7/12 z-50" >
     <SelectedProductCard :product="selectedRecord" class="mb-6" />
   </CardBoxModal>
-  
+
   <section class="p-4"> 
     <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
       <div class="xl:flex xl:flex-wrap lg:flex lg:flex-wrap " >
@@ -145,12 +145,17 @@ const servicesPaginated = computed(() => {
       <tr>
         <th v-if="checkable" />
         <th />
-        <th>ID</th>
         <th>Product Name</th>
+        <th>Batch No</th>
+        <th>Unit Cost</th>
+        <th>Quantity</th>
+        <th>Total Cost</th>
+        <th>Date Received</th>
+        <th>Expires At</th>
         <th>Category</th>
         <th>Brand</th>
-        <th>Unit</th>
-        <th>Description</th>
+        
+        <th></th>
 
         <th />
       </tr>
@@ -161,39 +166,40 @@ const servicesPaginated = computed(() => {
         <td class="border-b-0 lg:w-6 before:hidden">
           <UserAvatar :username="record.product_name" :avatar="record.image" class="w-24 h-24 mx-auto lg:w-6 lg:h-6" />
         </td>
-        <td data-label="Brand Name">
-          {{ record.id }}
+        <td data-label="Product Name">
+          {{ record.product_name }}
         </td>
-        <td data-label="Brand Name">
-          {{ record.product_name }} {{record.image}}
+        <td data-label="Batch No">
+          {{ record.batch_no }}
         </td>
-        <td data-label="Category">
-          {{ record.category_name }}
+        <td data-label="Unit Cost">
+          {{ record.unit_cost }}
         </td>
-         <td data-label="Category">
-          {{ record.brand_name }}
-        </td>
-         <td data-label="Category">
-          {{ record.unit_name }}
-        </td>
-        <td data-label="Description">
-          {{ record.product_cost }}
-        </td>
-        <td data-label="Description">
+
+        <td data-label="Quantity">
           {{ record.quantity }}
         </td>
-        <td data-label="Description">
-          {{ record.product_code }}
+        <td data-label="Total Cost">
+          {{ record.total_cost }}
+        </td>
+        <td data-label="Date Received">
+          {{ record.date_received }}
         </td>
         <td data-label="Expires At">
           {{ record.expires_at }}
         </td>
-
+        <td data-label="Category">
+          {{ record.category_name }}
+        </td>
+         <td data-label="Brand">
+          {{ record.brand_name }}
+        </td>
+       
          
         <td class="before:hidden lg:w-1 whitespace-nowrap">
           <BaseButtons type="justify-start lg:justify-end" no-wrap>
             <BaseButton color="info" :icon="mdiEye" small @click="showRecord(isModalActive = true, selectedRecord = record)" />
-            <BaseButton color="success" :icon="mdiAccountEdit" small :to="`/admin/edit-product/${record.id}`" />
+            <BaseButton color="success" :icon="mdiAccountEdit" small :to="`/staff/edit-supply/${record.id}`" />
             <BaseButton color="danger" :icon="mdiTrashCan " small @click="deleteItem(record.id)" />
           </BaseButtons>
         </td>

@@ -19,7 +19,7 @@ const router = useRouter()
 
 
 const user = ref({
-  email: "trishaseco@gmail.com",
+  email: "staff@gmail.com",
   password: "User123#"
 });
 

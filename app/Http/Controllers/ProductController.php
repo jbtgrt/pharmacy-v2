@@ -22,6 +22,13 @@ class ProductController extends Controller
     {
         $products = $this->allProducts();
 
+        foreach ($products as $key => $data) {
+            $products[$key]['batch_no'] = DB::table('product_supplies')
+                ->select('batch_no')
+                ->where('product_id', $data['id'])
+                ->max('batch_no');
+        }
+
         return response([
             'data' => ProductResource::collection($products)
         ]);
@@ -56,15 +63,22 @@ class ProductController extends Controller
             $product = Product::find($insertedIds['id']);
 
             // Access the related products using the "products" method
-            $unit = $product->unit;
+            $category = $product->category;
+            $brand = $product->brand;
+
+
 
             $insertedData[] = [
                 'id' => $insertedIds['id'],
-                'category_id' => DB::table('products')->select('category_id')->where('id', $insertedIds['id'])->first()->category_id,
-                'brand_id' => DB::table('products')->select('brand_id')->where('id', $insertedIds['id'])->first()->brand_id,
-                'unit_id' => DB::table('products')->select('unit_id')->where('id', $insertedIds['id'])->first()->unit_id,
-                'product_name' => DB::table('products')->select('product_name')->where('id', $insertedIds['id'])->first()->product_name,
-                'unit_name' => $unit->unit_name
+                'batch_no' => 1,
+                'category_id' => $category->id,
+                'category_name' => $category->category_name,
+                'brand_id' => $brand->id,
+                'brand_name' => $brand->brand_name,
+                'product_name' => $product->product_name,
+                'product_cost' => 0,
+                'quantity' => 1,
+                'total_cost' => 0
             ];
         }
 
@@ -117,7 +131,7 @@ class ProductController extends Controller
         $saveData = [];
 
         foreach ($data['records'] as $service) {
-            $serviceData = $this->createProduct($service);
+            $serviceData = $this->updateProduct($service, $id);
             $serviceData['id'] = $service['id'];
             if (isset($service['image_url'])) {
                 $relativePath = $this->saveImage($service['image_url']);
@@ -175,9 +189,9 @@ class ProductController extends Controller
         $users = Product::query()
             ->join('categories', 'products.category_id', '=', 'categories.id')
             ->join('brands', 'products.brand_id', '=', 'brands.id')
-            ->join('units', 'products.unit_id', '=', 'units.id')
+            // ->join('units', 'products.unit_id', '=', 'units.id')
             ->orderBy('products.created_at', 'ASC')
-            ->get(['products.*', 'categories.category_name as category_name', 'brands.brand_name as brand_name', 'units.unit_name as unit_name']);
+            ->get(['products.*', 'categories.category_name as category_name', 'brands.brand_name as brand_name']);
 
         return $users;
     }
@@ -186,36 +200,41 @@ class ProductController extends Controller
         $product = Product::query()
             ->join('categories', 'products.category_id', '=', 'categories.id')
             ->join('brands', 'products.brand_id', '=', 'brands.id')
-            ->join('units', 'products.unit_id', '=', 'units.id')
+            // ->join('units', 'products.unit_id', '=', 'units.id')
             ->where('products.id', $id)
             ->orderBy('products.created_at', 'ASC')
-            ->get(['products.*', 'categories.category_name as category_name', 'brands.brand_name as brand_name', 'units.unit_name as unit_name']);
+            ->get(['products.*', 'categories.category_name as category_name', 'brands.brand_name as brand_name']);
 
         return $product;
     }
 
-    /**
-     * Create a question and return
-     *
-     * @param $data
-     * @return mixed
-     * @throws \Illuminate\Validation\ValidationException
-     * @author Jobet Guarte <jobetguartejg@gmail.com>
-     */
     private function createProduct($data)
     {
         $validator = Validator::make($data, [
             'category_id' => 'exists:categories,id',
             'brand_id' => 'exists:brands,id',
-            // 'purchase_unit_id' => 'exists:units,id',
-            'unit_id' => 'exists:units,id',
-            // 'sale_unit_id' => 'exists:units,id',
-            'product_name' => 'required|string',
-            // 'product_code' => 'required|string',
-            // 'product_price' => 'required|numeric',
+            'product_name' => 'required|string|unique:products,product_name',
+            'classification' => 'required|string',
+            'product_type' => 'required|string',
+            'formulation' => 'required|string',
             'description' => 'nullable|string',
-            'image_url' => 'nullable|string'
-            // 'expires_at' => 'nullable|date'
+            'image_url' => 'present'
+        ]);
+
+        return $validator->validated();
+    }
+
+    private function updateProduct($data, $id)
+    {
+        $validator = Validator::make($data, [
+            'category_id' => 'exists:categories,id',
+            'brand_id' => 'exists:brands,id',
+            'product_name' => 'required|string|unique:products,product_name,'.$id,
+            'classification' => 'required|string',
+            'product_type' => 'required|string',
+            'formulation' => 'required|string',
+            'description' => 'nullable|string',
+            'image_url' => 'present'
         ]);
 
         return $validator->validated();

@@ -66,17 +66,11 @@ function addService(index) {
     id: uuidv4(),
     category_id: '',
     brand_id: '',
+    unit_id: '',
     product_name: '',
-    product_code: '',
-    product_price: 0,
-    product_cost: 0,
-    product_unit_id: '',
-    supply_unit_id: '',
-    sale_unit_id: '',
-    stock: 0,
+    price: '',
     image_url: '',
     description: '',
-    expires_at: ''
   };
 
   model.value.records.splice(index, 0, newService);
@@ -99,14 +93,14 @@ function serviceChange(service) {
 function submit() {
  if (route.params.id) {
   store.dispatch("updateProduct", { ...model.value }).then(({ data }) => {
-    router.push({name: "admin-product"});
+    router.push({name: "staff-product"});
   })
   .catch(err => {
     errors.value = err.response.data.errors;
   });
 } else {
   store.dispatch("saveProduct", { ...model.value }).then(({ data }) => {
-    router.push({name: "admin-supply-product"});
+    router.push({name: "staff-add-supply"});
   })
   .catch(err => {
     errors.value = err.response.data.errors;
@@ -134,7 +128,7 @@ const notification = computed(() => store.state.notification)
             <BaseButton :icon="mdiClose" small rounded-full color="white" @click="errors = ''" />
           </template>
         </NotificationBar>
-          
+         <!-- {{model.records}} -->
         <CardBox is-form @submit.prevent="submit">
           <div class="px-4 py-5 bg-white space-y-6 sm:p-6">
             <div v-if="addForm" >

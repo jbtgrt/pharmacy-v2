@@ -15,11 +15,13 @@ return new class extends Migration
             $table->id();
             $table->foreignIdFor(\App\Models\Category::class, 'category_id');
             $table->foreignIdFor(\App\Models\Brand::class, 'brand_id');
-            $table->foreignIdFor(\App\Models\Unit::class, 'unit_id');
+
             $table->string('product_name', 100);
-            
+            $table->string('classification', 50)->nullable();
+            $table->string('product_type', 50)->nullable();
+            $table->string('formulation', 20)->nullable();
             $table->longText('description')->nullable();
-            $table->string('image_url', 255)->nullable();
+            $table->string('image_url', 100)->nullable();
             $table->enum('status', ['active', 'inactive'])->default('active');
 
             $table->timestamp('created_at')->default(now());

@@ -7,6 +7,7 @@ use App\Http\Requests\StoreProductSupplyRequest;
 use App\Http\Requests\UpdateProductSupplyRequest;
 use App\Http\Resources\ProductSupplyResource;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\File;
 use Illuminate\Support\Str;
 use Illuminate\Validation\Rule;
 use DB;
@@ -36,7 +37,9 @@ class ProductSupplyController extends Controller
 
         foreach ($data['records'] as $supply) {
             $validatedData = $this->createProductSupply($supply);
+            $validatedData['staff_id'] = $request->user()->id;
             $saveData[] = $validatedData;
+
         }
 
         ProductSupply::insert($saveData);
@@ -52,17 +55,61 @@ class ProductSupplyController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(ProductSupply $productSupply)
+    public function show($id)
     {
-        //
+        $resource = ProductSupply::find($id);
+
+        if (!$resource) {
+            return response()->json(['message' => 'Product not found'], 404);
+        }
+
+        $product = $this->oneProduct($id);
+
+        return response([
+            'status' => 'Updated',
+            'current' => ProductSupplyResource::collection([$product[0]])
+        ]);
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateProductSupplyRequest $request, ProductSupply $productSupply)
+    public function update(UpdateProductSupplyRequest $request, $id)
     {
-        //
+        $product = ProductSupply::findOrFail($id);
+
+        $data = $request->validated();
+
+        $saveData = [];
+
+        foreach ($data['records'] as $supply) {
+            $validatedData = $this->createProductSupply($supply);
+            $validatedData['id'] = $supply['id'];
+            $validatedData['staff_id'] = $request->user()->id;
+            $saveData[] = $validatedData;
+
+        }
+
+        $updatedData = [];
+
+        foreach ($saveData as $item) {
+            $id = $item['id'];
+
+            // Assuming you have an Eloquent model (e.g., DataModel) that corresponds to the data
+            $model = ProductSupply::find($id);
+
+            if ($model) {
+                $model->update($item);
+                $updatedData[] = $model;
+            }
+        }
+
+        $supplies = $this->allSupplies();
+
+        return response([
+            'message' => 'The supply was successfully added.',
+            'data' => ProductSupplyResource::collection($supplies)
+        ]);
     }
 
     /**
@@ -70,7 +117,15 @@ class ProductSupplyController extends Controller
      */
     public function destroy(ProductSupply $productSupply)
     {
-        //
+        $item = ProductSupply::find($id);
+
+        if (!$item) {
+            return response()->json(['message' => 'Item not found'], 404);
+        }
+
+        $item->delete();
+
+        return response()->json(['message' => 'Item deleted'], 200);
     }
 
     /**
@@ -87,12 +142,16 @@ class ProductSupplyController extends Controller
             'product_id' => 'exists:products,id',
             'category_id' => 'exists:categories,id',
             'brand_id' => 'exists:brands,id',
-            'unit_id' => 'exists:units,id',
-            'product_code' => 'required|string',
-            'product_cost' => 'required|numeric',
-            'quantity' => 'nullable|numeric',
+            'supplier_id' => 'exists:users,id',
+            'batch_no' => 'required|numeric',
+            'unit_cost' => 'required|numeric',
+            'quantity' => 'required|numeric',
+            'total_cost' => 'required|numeric',
+
+            'date_received' => 'nullable|date',
             'expires_at' => 'nullable|date',
-            'description' => 'nullable|string'
+            'storage_location' => 'nullable|string',
+            'notes' => 'nullable|string'
         ]);
 
         return $validator->validated();
@@ -100,16 +159,17 @@ class ProductSupplyController extends Controller
 
     private function allSupplies(){
         $users = ProductSupply::query()
+            ->join('users', 'product_supplies.supplier_id', '=', 'users.id')
             ->join('products', 'product_supplies.product_id', '=', 'products.id')
             ->join('categories', 'product_supplies.category_id', '=', 'categories.id')
             ->join('brands', 'product_supplies.brand_id', '=', 'brands.id')
-            ->join('units', 'product_supplies.unit_id', '=', 'units.id')
+            // ->join('units', 'product_supplies.unit_id', '=', 'units.id')
             ->orderBy('product_supplies.created_at', 'ASC')
             ->get([
                     'product_supplies.*', 
                     'categories.category_name', 
                     'brands.brand_name', 
-                    'units.unit_name', 
+                    // 'units.unit_name', 
                     'products.product_name', 
                     'products.description as product_description', 
                     'products.image_url',
@@ -119,15 +179,23 @@ class ProductSupplyController extends Controller
         return $users;
     }
 
-    // private function oneProduct($id) {
-    //     $product = Product::query()
-    //         ->join('categories', 'products.category_id', '=', 'categories.id')
-    //         ->join('brands', 'products.brand_id', '=', 'brands.id')
-    //         ->join('units', 'products.unit_id', '=', 'units.id')
-    //         ->where('products.id', $id)
-    //         ->orderBy('products.created_at', 'ASC')
-    //         ->get(['products.*', 'categories.category_name as category_name', 'brands.brand_name as brand_name', 'units.unit_name as unit_name']);
+    private function oneProduct($id) {
+        $product = ProductSupply::query()
+             ->join('products', 'product_supplies.product_id', '=', 'products.id')
+            ->join('categories', 'product_supplies.category_id', '=', 'categories.id')
+            ->join('brands', 'product_supplies.brand_id', '=', 'brands.id')
+            ->where('product_supplies.id', $id)
+            ->orderBy('product_supplies.created_at', 'ASC')
+            ->get([
+                    'product_supplies.*', 
+                    'categories.category_name', 
+                    'brands.brand_name', 
+                    'products.product_name', 
+                    'products.description as product_description', 
+                    'products.image_url',
+                    'products.status'
+                ]);
 
-    //     return $product;
-    // }
+        return $product;
+    }
 }

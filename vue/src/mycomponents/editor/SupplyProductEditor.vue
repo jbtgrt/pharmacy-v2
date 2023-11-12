@@ -75,18 +75,178 @@
 
   <div class="xl:grid lg:grid gap-3 xl:grid-cols-12 lg:grid-cols-12">
     <!-- Question -->
-    <div class="mt-3 col-span-3">
+   
+
+    <div v-if="hasOption" class="mt-3 col-span-4">
+      <label for="question_type" class="block text-sm font-medium text-gray-700"
+        >Supplier</label
+      >
+      <select
+        id="question_type"
+        name="question_type"
+        v-model="model.supplier_id"
+        @change="typeChange"
+        class="
+          mt-1
+          block
+          w-full
+          py-2
+          px-3
+          border border-gray-300
+          bg-white
+          rounded-md
+          shadow-sm
+          focus:outline-none focus:ring-indigo-500 focus:border-indigo-500
+          sm:text-sm
+        "
+      >
+        <option value="">-- select supplier --</option>
+        <option v-for="supplier in suppliers" :key="supplier.id" :value="supplier.id">
+          {{ upperCaseFirst(supplier.first_name) }}  {{ upperCaseFirst(supplier.last_name) }}
+        </option>
+      </select>
+    </div>
+    
+    <div class="mt-3 col-span-4">
       <label
-        :for="'question_text_' + model.unit_name"
+        :for="'qty_text_' + model.id"
         class="block text-sm font-medium text-gray-700"
-        >Product Unit</label
+        >Batch No</label
       >
       <input
         type="text"
-        :name="'question_text_' + model.unit_name"
-        v-model="model.unit_name"
+        :name="'qty_text_' + model.id"
+        v-model="model.batch_no"
         @change="dataChange"
-        :id="'question_text_' + model.unit_name"
+        :id="'qty_text_' + model.id"
+        class="
+          mt-1
+          focus:ring-indigo-500 focus:border-indigo-500
+          block
+          w-full
+          shadow-sm
+          sm:text-sm
+          border-gray-300
+          rounded-md
+        "
+      />
+    </div>
+
+    <div class="mt-3 col-span-4">
+      <label
+        :for="'cost_text_' + model.id"
+        class="block text-sm font-medium text-gray-700"
+        >Product Cost</label
+      >
+      <input
+        type="text"
+        :name="'cost_text_' + model.id"
+        v-model="model.unit_cost"
+        @change="dataChange"
+        :id="'cost_text_' + model.id"
+        class="
+          mt-1
+          focus:ring-indigo-500 focus:border-indigo-500
+          block
+          w-full
+          shadow-sm
+          sm:text-sm
+          border-gray-300
+          rounded-md
+        "
+      />
+    </div>
+
+    <div class="mt-3 col-span-4">
+      <label
+        :for="'qty_text_' + model.id"
+        class="block text-sm font-medium text-gray-700"
+        >Quantity</label
+      >
+      <input
+        type="number"
+        :name="'qty_text_' + model.id"
+        v-model="model.quantity"
+        @change="dataChange"
+        :id="'qty_text_' + model.id"
+        min="1"
+        class="
+          mt-1
+          focus:ring-indigo-500 focus:border-indigo-500
+          block
+          w-full
+          shadow-sm
+          sm:text-sm
+          border-gray-300
+          rounded-md
+        "
+      />
+    </div>
+
+
+    <div class="mt-3 col-span-4">
+      <label
+        :for="'expire_text_' + model.id"
+        class="block text-sm font-medium text-gray-700"
+        >Date Received</label
+      >
+      <input
+        type="date"
+        :name="'expire_text_' + model.id"
+        v-model="model.date_received"
+        @change="dataChange"
+        :id="'expire_text_' + model.id"
+        class="
+          mt-1
+          focus:ring-indigo-500 focus:border-indigo-500
+          block
+          w-full
+          shadow-sm
+          sm:text-sm
+          border-gray-300
+          rounded-md
+        "
+      />
+    </div>
+
+    
+     <div class="mt-3 col-span-4">
+      <label
+        :for="'expire_text_' + model.id"
+        class="block text-sm font-medium text-gray-700"
+        >Expires At</label
+      >
+      <input
+        type="date"
+        :name="'expire_text_' + model.id"
+        v-model="model.expires_at"
+        @change="dataChange"
+        :id="'expire_text_' + model.id"
+        class="
+          mt-1
+          focus:ring-indigo-500 focus:border-indigo-500
+          block
+          w-full
+          shadow-sm
+          sm:text-sm
+          border-gray-300
+          rounded-md
+        "
+      />
+    </div>
+
+    <div class="mt-3 col-span-4">
+      <label
+        :for="'question_text_' + model.category_id"
+        class="block text-sm font-medium text-gray-700"
+        >Category</label
+      >
+      <input
+        type="text"
+        :name="'question_text_' + model.category_id"
+        v-model="model.category_name"
+        @change="dataChange"
+        :id="'question_text_' + model.category_id"
         disabled
         class="
           mt-1
@@ -101,19 +261,19 @@
       />
     </div>
 
-    
-    <div class="mt-3 col-span-3">
+    <div class="mt-3 col-span-4">
       <label
-        :for="'question_text_' + model.product_code"
+        :for="'question_text_' + model.brand_id"
         class="block text-sm font-medium text-gray-700"
-        >Product Code</label
+        >Brand</label
       >
       <input
         type="text"
-        :name="'question_text_' + model.product_code"
-        v-model="model.product_code"
+        :name="'question_text_' + model.brand_id"
+        v-model="model.brand_name"
         @change="dataChange"
-        :id="'question_text_' + model.product_code"
+        :id="'question_text_' + model.brand_id"
+        disabled
         class="
           mt-1
           focus:ring-indigo-500 focus:border-indigo-500
@@ -127,61 +287,35 @@
       />
     </div>
 
-    <div class="mt-3 col-span-3">
-      <label
-        :for="'question_text_' + model.product_cost"
-        class="block text-sm font-medium text-gray-700"
-        >Product Cost</label
-      >
-      <input
-        type="text"
-        :name="'question_text_' + model.product_cost"
-        v-model="model.product_cost"
-        @change="dataChange"
-        :id="'question_text_' + model.product_cost"
-        class="
-          mt-1
-          focus:ring-indigo-500 focus:border-indigo-500
-          block
-          w-full
-          shadow-sm
-          sm:text-sm
-          border-gray-300
-          rounded-md
-        "
-      />
-    </div>
+    <div class="mt-3 col-span-4">
+        <label
+          :for="'question_text_' + model.category_id"
+          class="block text-sm font-medium text-gray-700"
+          >Storage Location</label
+        >
+        <input
+          type="text"
+          :name="'question_text_' + model.category_id"
+          v-model="model.storage_location"
+          @change="dataChange"
+          :id="'question_text_' + model.category_id"
+          class="
+            mt-1
+            focus:ring-indigo-500 focus:border-indigo-500
+            block
+            w-full
+            shadow-sm
+            sm:text-sm
+            border-gray-300
+            rounded-md
+          "
+        />
+      </div>
 
-    
-     <div class="mt-3 col-span-3">
-      <label
-        :for="'expire_text_' + model.expires_at"
-        class="block text-sm font-medium text-gray-700"
-        >Expires At</label
-      >
-      <input
-        type="date"
-        :name="'expire_text_' + model.expires_at"
-        v-model="model.expires_at"
-        @change="dataChange"
-        :id="'expire_text_' + model.expires_at"
-        class="
-          mt-1
-          focus:ring-indigo-500 focus:border-indigo-500
-          block
-          w-full
-          shadow-sm
-          sm:text-sm
-          border-gray-300
-          rounded-md
-        "
-      />
-    </div>
+
   </div>
 
   <div class="xl:grid gap-3 xl:grid-cols-12">
-
-
     <div class="mt-3 pb-6 col-span-12">
       <label
         :for="'service_description_' + model.id"
@@ -190,7 +324,7 @@
       >
       <textarea
         :name="'service_description_' + model.id"
-        v-model="model.description"
+        v-model="model.notes"
         @change="dataChange"
         :id="'service_description_' + model.id"
         class="
@@ -206,9 +340,37 @@
         "
       />
     </div>
-   
-
   </div>
+
+  <div class="xl:grid-cols-12">
+    <div class="mt-3 pb-6 xl:w-3/12 ">
+        <label
+          :for="'cost_text_' + model.id"
+          class="block text-sm font-medium text-gray-700"
+          >Total Cost</label
+        >
+        <input
+          type="text"
+          :name="'cost_text_' + model.id"
+          v-model="model.total_cost"
+          @change="dataChange"
+          :id="'cost_text_' + model.id"
+          disabled
+          class="
+            mt-1
+            focus:ring-indigo-500 focus:border-indigo-500
+            block
+            w-full
+            shadow-sm
+            sm:text-sm
+            border-gray-300
+            rounded-md
+          "
+        />
+    </div>
+  </div>
+
+
 
     <BaseDivider />
 </template>
@@ -252,6 +414,7 @@ const props = defineProps({
   hasOption: Boolean
 });
 
+const suppliers = computed(() => store.state.userList.filter(user => user.role === 'Supplier'));
 
 const model = ref(JSON.parse(JSON.stringify(props.service)));
 
@@ -269,8 +432,8 @@ function typeChange() {
 
 // Emit the data change
 function dataChange() {
+  model.value.total_cost = model.value.unit_cost * model.value.quantity;
   const data = model.value;
-
   emit("change", data);
 }
 

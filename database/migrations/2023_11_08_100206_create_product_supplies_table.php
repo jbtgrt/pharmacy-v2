@@ -13,16 +13,21 @@ return new class extends Migration
     {
         Schema::create('product_supplies', function (Blueprint $table) {
             $table->id();
+            $table->foreignIdFor(\App\Models\User::class, 'staff_id');
+            $table->foreignIdFor(\App\Models\User::class, 'supplier_id');
             $table->foreignIdFor(\App\Models\Product::class, 'product_id');
             $table->foreignIdFor(\App\Models\Category::class, 'category_id');
             $table->foreignIdFor(\App\Models\Brand::class, 'brand_id');
-            $table->foreignIdFor(\App\Models\Unit::class, 'unit_id');
 
-            $table->double('product_cost');
-            $table->integer('quantity')->default(1);
+            $table->integer('batch_no');
+            $table->date('date_received');
             $table->date('expires_at');
-            $table->string('product_code', 100)->nullable();
-            $table->longText('description')->nullable();
+            $table->integer('quantity');
+            $table->double('unit_cost');
+            $table->double('total_cost');
+            $table->string('storage_location');
+            $table->longText('notes')->nullable();
+            $table->enum('product_status', ['stock', 'sold', 'expired'])->default('stock');
 
             $table->timestamp('created_at')->default(now());
             $table->timestamp('updated_at')->nullable();

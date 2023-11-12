@@ -43,7 +43,7 @@ const confirmCancel = (mode) => {
   emit(mode)
 }
 
-const confirm = () => confirmCancel('ssd')
+const confirm = () => confirmCancel('confirm')
 
 const cancel = () => confirmCancel('cancel')
 

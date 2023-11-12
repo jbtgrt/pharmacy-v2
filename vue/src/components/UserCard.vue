@@ -33,7 +33,7 @@ const { profile } = defineProps({
         <p>Phone <b>{{profile.phone_number}} </b></p>
         <p>Email <b>{{profile.email}} </b></p>
         <div class="flex justify-center md:block">
-          <PillTag :label="profile.role" color="info" :icon="mdiAccount" /> 
+          <!-- <PillTag :label="role" color="info" :icon="mdiAccount" />  -->
         </div>
       </div>
     </BaseLevel>

@@ -73,35 +73,11 @@
   </div>
   <!--/ Question index -->
 
+
+
   <div class="xl:grid gap-3 xl:grid-cols-12">
-    <!-- Question -->
-    <div class="mt-3 col-span-3">
-      <label
-        :for="'question_text_' + model.product_name"
-        class="block text-sm font-medium text-gray-700"
-        >Product Name</label
-      >
-      <input
-        type="text"
-        :name="'question_text_' + model.product_name"
-        v-model="model.product_name"
-        @change="dataChange"
-        :id="'question_text_' + model.product_name"
-        class="
-          mt-1
-          focus:ring-indigo-500 focus:border-indigo-500
-          block
-          w-full
-          shadow-sm
-          sm:text-sm
-          border-gray-300
-          rounded-md
-        "
-      />
-    </div>
 
-
-    <div v-if="hasOption" class="mt-3 col-span-3">
+    <div v-if="hasOption" class="mt-3 col-span-4">
       <label for="question_type" class="block text-sm font-medium text-gray-700"
         >Category</label
       >
@@ -131,9 +107,9 @@
       </select>
     </div>
 
-    <div v-if="hasOption" class="mt-3 col-span-3">
+    <div v-if="hasOption" class="mt-3 col-span-4">
       <label for="question_type" class="block text-sm font-medium text-gray-700"
-        >Brand</label
+        >Brand Name</label
       >
       <select
         id="question_type"
@@ -162,7 +138,110 @@
       </select>
     </div>
 
-    <div v-if="hasOption" class="mt-3 col-span-3">
+    <!-- Question -->
+    <div class="mt-3 col-span-4">
+      <label
+        :for="'question_text_' + model.product_name"
+        class="block text-sm font-medium text-gray-700"
+        >Product Name</label
+      >
+      <input
+        type="text"
+        :name="'question_text_' + model.product_name"
+        v-model="model.product_name"
+        @change="dataChange"
+        :id="'question_text_' + model.product_name"
+        class="
+          mt-1
+          focus:ring-indigo-500 focus:border-indigo-500
+          block
+          w-full
+          shadow-sm
+          sm:text-sm
+          border-gray-300
+          rounded-md
+        "
+      />
+    </div>
+
+    <div class="mt-3 col-span-4">
+      <label
+        :for="'question_text_' + model.classification"
+        class="block text-sm font-medium text-gray-700"
+        >Classification</label
+      >
+      <input
+        type="text"
+        :name="'question_text_' + model.classification"
+        v-model="model.classification"
+        @change="dataChange"
+        :id="'question_text_' + model.classification"
+        class="
+          mt-1
+          focus:ring-indigo-500 focus:border-indigo-500
+          block
+          w-full
+          shadow-sm
+          sm:text-sm
+          border-gray-300
+          rounded-md
+        "
+      />
+    </div>
+
+    <div class="mt-3 col-span-4">
+      <label
+        :for="'question_text_' + model.product_type"
+        class="block text-sm font-medium text-gray-700"
+        >Product Type</label
+      >
+      <input
+        type="text"
+        :name="'question_text_' + model.product_type"
+        v-model="model.product_type"
+        @change="dataChange"
+        :id="'question_text_' + model.product_type"
+        class="
+          mt-1
+          focus:ring-indigo-500 focus:border-indigo-500
+          block
+          w-full
+          shadow-sm
+          sm:text-sm
+          border-gray-300
+          rounded-md
+        "
+      />
+    </div>
+
+    <div class="mt-3 col-span-4">
+      <label
+        :for="'question_text_' + model.formulation"
+        class="block text-sm font-medium text-gray-700"
+        >Formulation</label
+      >
+      <input
+        type="text"
+        :name="'question_text_' + model.formulation"
+        v-model="model.formulation"
+        @change="dataChange"
+        :id="'question_text_' + model.formulation"
+        class="
+          mt-1
+          focus:ring-indigo-500 focus:border-indigo-500
+          block
+          w-full
+          shadow-sm
+          sm:text-sm
+          border-gray-300
+          rounded-md
+        "
+      />
+    </div>
+
+    
+
+    <!-- <div v-if="hasOption" class="mt-3 col-span-3">
       <label for="question_type" class="block text-sm font-medium text-gray-700"
         >Product Unit</label
       >
@@ -190,26 +269,10 @@
           {{ upperCaseFirst(unit.unit_name) }}
         </option>
       </select>
-    </div>
+    </div> -->
   </div>
 
   <div class="xl:grid gap-3 xl:grid-cols-12">
-
-   
-    <div class="mt-3 col-span-4">
-      <label
-        :for="'question_text_' + model.data"
-        class="block text-sm font-medium text-gray-700"
-        >Image</label
-      >
-      <FormField help="Upload image" class="mt-1">
-        <FormFilePicker label="Upload" type="file" @change="onImageChoose" />
-      </FormField>
-      
-    </div>
-    <div  class="mt-3 col-span-2">
-      <img v-if="model.image" class="sm:h-40" :src="model.image">
-    </div>
 
     <div class="mt-3 pb-6 col-span-6">
       <label
@@ -235,6 +298,22 @@
         "
       />
     </div>
+   
+    <div class="mt-3 col-span-4 overflow-hidden">
+      <label
+        :for="'question_text_' + model.data"
+        class="block text-sm font-medium text-gray-700"
+        >Image</label
+      >
+      <FormField help="Upload image" class="mt-1">
+        <FormFilePicker label="Upload" type="file" @change="onImageChoose" />
+      </FormField>
+      
+    </div>
+    <div  class="mt-3 col-span-2 pt-3">
+      <img v-if="model.image" class="sm:h-30" :src="model.image">
+    </div>
+
    
 
   </div>

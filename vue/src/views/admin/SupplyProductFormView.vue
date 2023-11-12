@@ -36,7 +36,7 @@ let formTitle = 'Submit';
 
 // If the current component is rendered on survey update route we make a request to fetch survey
 if (route.params.id) {
-  store.dispatch("editProduct", route.params.id);
+  store.dispatch("editSupply", route.params.id);
   addForm.value = false;
   formTitle = 'Update';
 }
@@ -45,7 +45,7 @@ let errors = ref('');
 
 // Watch to current survey data change and when this happens we update local model
 watch(
-  () => store.state.selectedProduct,
+  () => store.state.selectedProductSupply,
   (newVal, oldVal) => {
     model.update = true ;
     model.value.records = [{
@@ -54,13 +54,30 @@ watch(
   }
 );
 
-const selected = computed(() => store.state.selectedProduct);
+const selected = computed(() => store.state.selectedProductSupply);
 
 const checkedProducts = computed(() => store.state.checkedProducts);
 
 if (checkedProducts.value.length) {
    for (const item of checkedProducts.value) {
-      model.value.records.push({ id: uuidv4(), product_id: item.id, category_id: item.category_id, brand_id: item.brand_id, unit_id: item.unit_id, product_name: item.product_name, unit_name: item.unit_name, product_cost: '' });
+      model.value.records.push({ 
+        id: uuidv4(), 
+        product_id: item.id, 
+        category_id: item.category_id, 
+        brand_id: item.brand_id, 
+        product_name: item.product_name, 
+        category_name: item.category_name, 
+        brand_name: item.brand_name, 
+        batch_no: item.batch_no,
+        supplier_id: '',
+        unit_cost: 0, 
+        quantity: 1, 
+        total_cost: 0, 
+        date_received: '',
+        expires_at: '',
+        storage_location: '',
+        notes: ''
+      });
     }
 }
 
@@ -72,16 +89,22 @@ import SupplyProductEditor from "@/mycomponents/editor/SupplyProductEditor.vue";
 function addService(index, data) {
   const newService = {
     id: uuidv4(),
+    supplier_id: '',
     product_id: data.product_id,
-    category_id: data.category_id,
-    brand_id: data.brand_id,
-    unit_id: data.unit_id,
     product_name: data.product_name,
-    unit_name: data.unit_name,
-    product_code: '',
-    product_cost: '',
+    category_id: data.category_id,
+    category_name: data.category_name,
+    brand_id: data.brand_id,
+    brand_name: data.brand_name,
+    
+    batch_no: data.batch_no ,
+    date_received: '',
     expires_at: '',
-    description: ''
+    quantity: 1,
+    unit_cost: 0,
+    total_cost: 0,
+    storage_location: '',
+    notes: ''
   };
 
   model.value.records.splice(index, 0, newService);
@@ -102,15 +125,15 @@ function serviceChange(service) {
 
 function submit() {
  if (route.params.id) {
-  store.dispatch("updateSupply", { ...model.value }).then(({ data }) => {
-    router.push({name: "admin-supply"});
+  store.dispatch("updateSupply", { ...model.value }).then(() => {
+    router.push({name: "staff-supply"});
   })
   .catch(err => {
     errors.value = err.response.data.errors;
   });
 } else {
-  store.dispatch("saveSupply", { ...model.value }).then(({ data }) => {
-    router.push({name: "admin-supply"});
+  store.dispatch("saveSupply", { ...model.value }).then(() => {
+    router.push({name: "staff-supply"});
   })
   .catch(err => {
     errors.value = err.response.data.errors;
@@ -120,6 +143,8 @@ function submit() {
 }
 
 const notification = computed(() => store.state.notification)
+
+
 
 // Scanner
 
@@ -145,8 +170,6 @@ const notification = computed(() => store.state.notification)
 
 <template>
     <SectionMain> 
-    <!-- <br /> -->
-    {{model}}
       <SectionTitleLineWithButton :icon="mdiPlusBox " :title="route.meta.title" main>
       </SectionTitleLineWithButton>    
         <NotificationBar v-if="Object.keys(errors).length" color="danger" :icon="mdiAlertCircle" :outline="notificationsOutline">
@@ -159,7 +182,7 @@ const notification = computed(() => store.state.notification)
             <BaseButton :icon="mdiClose" small rounded-full color="white" @click="errors = ''" />
           </template>
         </NotificationBar>
-          
+        {{model}}
         <CardBox is-form @submit.prevent="submit">
           <div class="px-4 py-5 bg-white space-y-6 sm:p-6">
             <div v-if="addForm" >
@@ -209,7 +232,7 @@ const notification = computed(() => store.state.notification)
           <template #footer>
             <BaseButtons type="justify-end">
               <BaseButton type="submit" color="info" :label="formTitle" />
-              <BaseButton color="info" to="/admin/product" label="Cancel" outline />
+              <BaseButton color="info" to="/staff/supply" label="Cancel" outline />
             </BaseButtons>
           </template>
         </CardBox>

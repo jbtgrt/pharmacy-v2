@@ -13,7 +13,7 @@ import {
   mdiReact,
   mdiHistory,
   mdiCalendarArrowRight,
-  mdiAccountGroupOutline 
+  mdiAccountGroupOutline
 } from '@mdi/js'
 
 export default [
@@ -22,10 +22,20 @@ export default [
     icon: mdiMonitor,
     label: 'Dashboard'
   },
+  // {
+  //   to: '/staff/transaction',
+  //   icon: mdiMonitor,
+  //   label: 'Transaction'
+  // },
   {
-    to: '/staff/transaction',
-    icon: mdiMonitor,
-    label: 'Transaction'
+    to: '/staff/product',
+    icon: mdiTable,
+    label: 'Product'
+  },
+  {
+    to: '/staff/supply',
+    icon: mdiTable,
+    label: 'Supply'
   },
   {
     label: 'Tree View',

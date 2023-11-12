@@ -14,7 +14,7 @@ import {
   mdiHistory,
   mdiCalendarArrowRight,
   mdiAccountGroupOutline,
-  mdiShapeOutline 
+  mdiShapeOutline
 } from '@mdi/js'
 
 export default [
@@ -32,16 +32,6 @@ export default [
     to: '/admin/category',
     icon: mdiAccountGroupOutline,
     label: 'Category'
-  },
-  {
-    to: '/admin/product',
-    icon: mdiAccountGroupOutline,
-    label: 'Product'
-  },
-  {
-    to: '/admin/supply',
-    icon: mdiAccountGroupOutline,
-    label: 'Supply'
   },
   {
     label: 'Tree View',
