@@ -33,22 +33,22 @@ export default [
     icon: mdiAccountGroupOutline,
     label: 'Category'
   },
-  {
-    label: 'Tree View',
-    icon: mdiViewList,
-    menu: [
-      {
-        label: 'Link 1',
-        to: '/admin/link-1',
-      },
-      {
-        label: 'Link 2',
-        to: '/admin/link-2',
-      },
-      {
-        label: 'Link 3',
-        to: '/admin/link-3',
-      }
-    ],
-  },
+  // {
+  //   label: 'Tree View',
+  //   icon: mdiViewList,
+  //   menu: [
+  //     {
+  //       label: 'Link 1',
+  //       to: '/admin/link-1',
+  //     },
+  //     {
+  //       label: 'Link 2',
+  //       to: '/admin/link-2',
+  //     },
+  //     {
+  //       label: 'Link 3',
+  //       to: '/admin/link-3',
+  //     }
+  //   ],
+  // },
 ]

@@ -1,5 +1,5 @@
  <script setup>
-import { computed, defineProps } from "vue";
+import { computed } from "vue";
 import { useStore } from "vuex";
 import UserAvatar from '@/components/UserAvatar.vue'
 

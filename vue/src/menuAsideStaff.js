@@ -37,24 +37,24 @@ export default [
     icon: mdiTable,
     label: 'Supply'
   },
-  {
-    label: 'Tree View',
-    icon: mdiViewList,
-    menu: [
-      {
-        label: 'Link 1',
-        to: '/staff/link-1',
-      },
-      {
-        label: 'Link 2',
-        to: '/staff/link-2',
-      },
-      {
-        label: 'Link 3',
-        to: '/staff/link-3',
-      }
-    ],
-  },
+  // {
+  //   label: 'Tree View',
+  //   icon: mdiViewList,
+  //   menu: [
+  //     {
+  //       label: 'Link 1',
+  //       to: '/staff/link-1',
+  //     },
+  //     {
+  //       label: 'Link 2',
+  //       to: '/staff/link-2',
+  //     },
+  //     {
+  //       label: 'Link 3',
+  //       to: '/staff/link-3',
+  //     }
+  //   ],
+  // },
   {
     to: '/staff/order-product',
     icon: mdiMonitor,

@@ -34,7 +34,7 @@ let formTitle = 'Submit';
 
 // If the current component is rendered on survey update route we make a request to fetch survey
 if (route.params.id) {
-  store.dispatch("editCategory", route.params.id);
+  store.dispatch("editProduct", route.params.id);
   addForm.value = false;
   formTitle = 'Update';
 }
@@ -43,7 +43,7 @@ let errors = ref('');
 
 // Watch to current survey data change and when this happens we update local model
 watch(
-  () => store.state.selectedCategory,
+  () => store.state.selectedProduct,
   (newVal, oldVal) => {
     model.update = true ;
     model.value.records = [{
@@ -52,18 +52,24 @@ watch(
   }
 );
 
-const selected = computed(() => store.state.selectedCategory);
+const selected = computed(() => store.state.selectedProduct);
+
+
 
 // next
 
-import CategoryEditor from "@/mycomponents/editor/CategoryEditor.vue";
+import ProductEditor from "@/mycomponents/editor/ProductEditor.vue";
 
 
 function addService(index) {
   const newService = {
     id: uuidv4(),
-    type: "select",
-    category_name: "",
+    category_id: '',
+    brand_id: '',
+    unit_id: '',
+    product_name: '',
+    price: '',
+    image_url: '',
     description: '',
   };
 
@@ -86,15 +92,15 @@ function serviceChange(service) {
 
 function submit() {
  if (route.params.id) {
-  store.dispatch("updateCategory", { ...model.value }).then(({ data }) => {
-    router.push({name: "admin-category"});
+  store.dispatch("updateProduct", { ...model.value }).then(({ data }) => {
+    router.push({name: "staff-product"});
   })
   .catch(err => {
     errors.value = err.response.data.errors;
   });
 } else {
-  store.dispatch("saveCategory", { ...model.value }).then(({ data }) => {
-    router.push({name: "admin-category"});
+  store.dispatch("saveProduct", { ...model.value }).then(({ data }) => {
+    router.push({name: "staff-add-supply"});
   })
   .catch(err => {
     errors.value = err.response.data.errors;
@@ -104,10 +110,12 @@ function submit() {
 }
 
 const notification = computed(() => store.state.notification)
+
+
 </script>
 
 <template>
-    <SectionMain>
+    <SectionMain> 
       <SectionTitleLineWithButton :icon="mdiPlusBox " :title="route.meta.title" main>
       </SectionTitleLineWithButton>    
         <NotificationBar v-if="Object.keys(errors).length" color="danger" :icon="mdiAlertCircle" :outline="notificationsOutline">
@@ -120,13 +128,12 @@ const notification = computed(() => store.state.notification)
             <BaseButton :icon="mdiClose" small rounded-full color="white" @click="errors = ''" />
           </template>
         </NotificationBar>
-          
+         <!-- {{model.records}} -->
         <CardBox is-form @submit.prevent="submit">
           <div class="px-4 py-5 bg-white space-y-6 sm:p-6">
             <div v-if="addForm" >
               <h3 class="text-2xl font-semibold flex items-center justify-between">
-                Category  
-
+                Product  
                 <!-- Add new question -->
                 <button
                   type="button"
@@ -145,20 +152,20 @@ const notification = computed(() => store.state.notification)
                       clip-rule="evenodd"
                     />
                   </svg>
-                  Add Category
+                  Add Product
                 </button>
                 <!--/ Add new question -->
               </h3>
               <div v-if="!model.records.length" class="text-center text-gray-600">
-                You don't have any categories created
+                You don't have any products created
               </div>
             </div>
             <div v-for="(service, index) in model.records" :key="service.id">
-              <CategoryEditor
+              <ProductEditor
                 :service="service"
                 :index="index"
                 :addForm="addForm"
-
+                hasOption
                 @change="serviceChange"
                 @addService="addService"
                 @deleteService="deleteService"
@@ -171,7 +178,7 @@ const notification = computed(() => store.state.notification)
           <template #footer>
             <BaseButtons type="justify-end">
               <BaseButton type="submit" color="info" :label="formTitle" />
-              <BaseButton color="info" to="/admin/category" label="Cancel" outline />
+              <BaseButton color="info" to="/staff/product" label="Cancel" outline />
             </BaseButtons>
           </template>
         </CardBox>

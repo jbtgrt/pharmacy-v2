@@ -1,7 +1,7 @@
 <script setup>
 import { computed, ref, watchEffect, watch } from 'vue'
 import { useStore } from 'vuex'
-import { mdiEye, mdiTrashCan, mdiAccountEdit, mdiMagnify, mdiAsterisk    } from '@mdi/js'
+import { mdiEye, mdiTrashCan, mdiAccountEdit, mdiMagnify, mdiAsterisk, mdiPencil    } from '@mdi/js'
 import CardBoxModal from '@/components/CardBoxModal.vue'
 import TableCheckboxCell from '@/components/TableCheckboxCell.vue'
 import BaseLevel from '@/components/BaseLevel.vue'
@@ -199,7 +199,7 @@ const servicesPaginated = computed(() => {
         <td class="before:hidden lg:w-1 whitespace-nowrap">
           <BaseButtons type="justify-start lg:justify-end" no-wrap>
             <BaseButton color="info" :icon="mdiEye" small @click="showRecord(isModalActive = true, selectedRecord = record)" />
-            <BaseButton color="success" :icon="mdiAccountEdit" small :to="`/staff/edit-supply/${record.id}`" />
+            <BaseButton color="success" :icon="mdiPencil" small :to="`/staff/edit-supply/${record.id}`" />
             <BaseButton color="danger" :icon="mdiTrashCan " small @click="deleteItem(record.id)" />
           </BaseButtons>
         </td>

@@ -15,10 +15,10 @@ import UserView from '@/views/admin/UserView.vue'
 import UserForm from '@/views/admin/UserForm.vue'
 import CategoryView from '@/views/admin/CategoryView.vue'
 import CategoryFormView from '@/views/admin/CategoryFormView.vue'
-import ProductView from '@/views/admin/ProductView.vue'
-import ProductFormView from '@/views/admin/ProductFormView.vue'
-import SupplyProductView from '@/views/admin/SupplyProductView.vue'
-import SupplyProductFormView from '@/views/admin/SupplyProductFormView.vue'
+// import ProductView from '@/views/admin/ProductView.vue'
+// import ProductFormView from '@/views/admin/ProductFormView.vue'
+// import SupplyProductView from '@/views/admin/SupplyProductView.vue'
+// import SupplyProductFormView from '@/views/admin/SupplyProductFormView.vue'
 import ReportsView from '@/views/admin/ReportsView.vue'
 
 // Staff Dashboard
@@ -28,6 +28,10 @@ import StaffHome from '@/views/staff/HomeView.vue'
 import SupplierHome from '@/views/supplier/HomeView.vue'
 import OrderProductView from '@/views/staff/OrderProductView.vue'
 import TransactionView from '@/views/staff/TransactionView.vue'
+import ProductView from '@/views/staff/ProductView.vue'
+import ProductFormView from '@/views/staff/ProductFormView.vue'
+import SupplyProductView from '@/views/staff/SupplyProductView.vue'
+import SupplyProductFormView from '@/views/staff/SupplyProductFormView.vue'
 
 
 const routes = [

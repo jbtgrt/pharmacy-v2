@@ -1,5 +1,5 @@
  <script setup>
-import { computed, ref, defineProps } from 'vue'
+import { computed, ref } from 'vue'
 import { useStore } from "vuex";
 import { useMainStore } from '@/stores/main'
 import { mdiCheckDecagram, mdiAccount } from '@mdi/js'
