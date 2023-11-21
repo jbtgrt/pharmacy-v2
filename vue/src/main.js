@@ -1,6 +1,7 @@
 import { createApp } from 'vue'
 import { createPinia } from 'pinia'
 
+
 import App from './App.vue'
 import store from './stores'
 import router from './router'
@@ -21,6 +22,7 @@ if (typeof localStorage !== 'undefined') {
     darkModeStore.set(true)
   }
 }
+
 
 // Create Vue app
 const app = createApp(App).use(store).use(router).use(pinia)

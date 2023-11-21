@@ -25,6 +25,24 @@ const isModalEdit = ref(false)
 const isModalDangerActive = ref(false)
 
 const items = computed(() => store.state.categoryList);
+const categoryColumns = computed(() => store.state.categoryColumns);
+
+// Loop through each object in newData
+items.value.forEach(item => {
+  const result = item.details_data
+    .map(itemId => categoryColumns.value.find(col => col.id === itemId)) // Map each id to its corresponding categoryColumn
+    .filter(Boolean) // Remove any undefined entries if an id doesn't match any categoryColumn
+    .map(col => col.col_name) // Extract col_name from categoryColumns
+    .join(', '); // Join the col_names with comma and 'and' for the last item
+
+  if (result.includes(', ')) {
+    const lastCommaIndex = result.lastIndexOf(', ');
+    const resultWithAnd = `${result.slice(0, lastCommaIndex)}, and${result.slice(lastCommaIndex + 1)}`;
+    item.details = resultWithAnd;
+  } else {
+    item.details = result;
+  }
+});
 
 const selectedRecord = ref({});
 
@@ -89,22 +107,22 @@ const servicesPaginated = computed(() => {
 });
 
 const deleteItem = (id) => {
-      store.dispatch("deleteCategory", id);
-    }
+  store.dispatch("deleteCategory", id)
+  .then(() => {
+    console.log('success')
+  });
+}
 
 </script>
 
 <template>
-
-  <CardBoxModal v-model="isModalActive" title="Details" classValue="flex overflow-x-auto shadow-lg max-h-modal w-11/12 md:w-3/5 lg:w-2/5 xl:w-4/12 z-50" >
-    <p>{{selectedRecord.category_name}}</p>
-    <p>{{selectedRecord.description}}</p>
+  <CardBoxModal v-model="isModalActive" title="Category Details" classValue="flex overflow-x-auto shadow-lg max-h-modal w-11/12 md:w-3/5 lg:w-2/5 xl:w-4/12 z-50" >
+    <p>Category name: {{selectedRecord.category_name}}</p>
+    <p>Column names: {{selectedRecord.details}}</p>
     <div v-if="selectedRecord.type === 'select'">
-      
     </div>
   </CardBoxModal>
-
-  <section class="p-4">
+  <section class="p-4"> 
     <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
       <div class="xl:flex xl:flex-wrap lg:flex lg:flex-wrap " >
         <FormField class="md:w-6/12 lg:w-4/12  xl:w-2/6 xl:mr-2 lg:mr-2">
@@ -118,13 +136,12 @@ const deleteItem = (id) => {
       </div>
     </div>
   </section>
-  
   <table>
     <thead>
       <tr>
         <th v-if="checkable" />
         <th>Service</th>
-        <th>Description</th>
+        <th>Created At</th>
         <th />
       </tr>
     </thead>
@@ -134,14 +151,14 @@ const deleteItem = (id) => {
         <td data-label="Title">
           {{ services.category_name }}
         </td>
-        <td data-label="Description">
-          {{ services.description }}
+        <td data-label="Created At">
+          {{ services.created_at }}
         </td>
         <td class="before:hidden lg:w-1 whitespace-nowrap">
           <BaseButtons type="justify-start lg:justify-end" no-wrap>
             <BaseButton color="info" :icon="mdiEye" small @click="showRecord(isModalActive = true, selectedRecord = services)" />
             <BaseButton color="success" :icon="mdiPencil" small :to="`/admin/edit-category/${services.id}`" />
-            <BaseButton color="danger" :icon="mdiTrashCan " small @click="deleteItem(services.id)" />
+            <BaseButton color="danger" :icon="mdiTrashCan" small @click="deleteItem(services.id)" />
           </BaseButtons>
         </td>
       </tr>
@@ -163,5 +180,4 @@ const deleteItem = (id) => {
       <small>Page {{ currentPageHuman }} of {{ numPages }}</small>
     </BaseLevel>
   </div>
-
 </template>

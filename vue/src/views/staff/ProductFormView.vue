@@ -16,6 +16,7 @@ import FormControl from '@/components/FormControl.vue'
 import UserCard from '@/components/UserCard.vue'
 
 import NotificationBar from '@/components/NotificationBar.vue'
+import ProductEditor from "@/mycomponents/editor/ProductEditor.vue";
 
 const notificationSettingsModel = ref([])
 const notificationsOutline = computed(() => notificationSettingsModel.value.indexOf('outline') > -1)
@@ -58,7 +59,6 @@ const selected = computed(() => store.state.selectedProduct);
 
 // next
 
-import ProductEditor from "@/mycomponents/editor/ProductEditor.vue";
 
 
 function addService(index) {

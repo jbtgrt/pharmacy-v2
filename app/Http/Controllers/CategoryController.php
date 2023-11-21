@@ -21,7 +21,7 @@ class CategoryController extends Controller
         $categories = Category::all();
 
         return response([
-            'data' => $categories
+            'data' => CategoryResource::collection($categories)
         ]);
     }
 
@@ -32,11 +32,27 @@ class CategoryController extends Controller
     {
         $data = $request->validated();
 
+        // $saveData = [];
+
+        // foreach ($data['records'] as $service) {
+        //     $serviceData = $this->createCategory($service);
+
+        //     $saveData[] = $serviceData;
+        // }
+
+        // Category::insert($saveData);
+
         $saveData = [];
 
         foreach ($data['records'] as $service) {
             $serviceData = $this->createCategory($service);
+            $optionsData = $service['details_data'];
 
+            if (is_array($optionsData)) {
+                $optionsData = json_encode($optionsData);
+            }
+
+            $serviceData['details_data'] = $optionsData;
             $saveData[] = $serviceData;
         }
 
@@ -46,7 +62,7 @@ class CategoryController extends Controller
 
         return response([
             'message' => 'The category was successfully added.',
-            'data' => $category
+            'data' => CategoryResource::collection($category)
         ]);
     }
 
@@ -79,7 +95,14 @@ class CategoryController extends Controller
         foreach ($data['records'] as $service) {
             $serviceData = $this->createCategory($service);
             $serviceData['id'] = $service['id'];
-            $optionsData = [];
+
+            $optionsData = $service['details_data'];
+
+            if (is_array($optionsData)) {
+                $optionsData = json_encode($optionsData);
+            }
+
+            $serviceData['details_data'] = $optionsData;
             $saveData[] = $serviceData;
         }
 
@@ -98,11 +121,11 @@ class CategoryController extends Controller
             }
         }
 
-        $services = Category::all();
+        $category = Category::all();
 
         return response([
             'message' => 'The service was successfully updated.',
-            'data' => CategoryResource::collection($services)
+            'data' => CategoryResource::collection($category)
         ]);
     }
 
@@ -134,7 +157,7 @@ class CategoryController extends Controller
     {
         $validator = Validator::make($data, [
             'category_name' => 'required|string',
-            'description' => 'nullable|string'
+            'details_data' => 'present'
         ]);
 
         return $validator->validated();

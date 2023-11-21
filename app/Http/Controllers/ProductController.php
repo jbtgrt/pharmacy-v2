@@ -214,9 +214,9 @@ class ProductController extends Controller
             'category_id' => 'exists:categories,id',
             'brand_id' => 'exists:brands,id',
             'product_name' => 'required|string|unique:products,product_name',
-            'classification' => 'required|string',
-            'product_type' => 'required|string',
-            'formulation' => 'required|string',
+            'classification' => 'nullable|string',
+            'product_type' => 'nullable|string',
+            'formulation' => 'nullable|string',
             'description' => 'nullable|string',
             'image_url' => 'present'
         ]);
@@ -230,9 +230,9 @@ class ProductController extends Controller
             'category_id' => 'exists:categories,id',
             'brand_id' => 'exists:brands,id',
             'product_name' => 'required|string|unique:products,product_name,'.$id,
-            'classification' => 'required|string',
-            'product_type' => 'required|string',
-            'formulation' => 'required|string',
+            'classification' => 'nullable|string',
+            'product_type' => 'nullable|string',
+            'formulation' => 'nullable|string',
             'description' => 'nullable|string',
             'image_url' => 'present'
         ]);

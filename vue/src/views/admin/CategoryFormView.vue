@@ -58,12 +58,12 @@ const selected = computed(() => store.state.selectedCategory);
 
 import CategoryEditor from "@/mycomponents/editor/CategoryEditor.vue";
 
-
 function addService(index) {
   const newService = {
     id: uuidv4(),
     type: "select",
     category_name: "",
+    details_data: [],
     description: '',
   };
 
@@ -107,7 +107,7 @@ const notification = computed(() => store.state.notification)
 </script>
 
 <template>
-    <SectionMain>
+    <SectionMain> 
       <SectionTitleLineWithButton :icon="mdiPlusBox " :title="route.meta.title" main>
       </SectionTitleLineWithButton>    
         <NotificationBar v-if="Object.keys(errors).length" color="danger" :icon="mdiAlertCircle" :outline="notificationsOutline">
@@ -158,7 +158,7 @@ const notification = computed(() => store.state.notification)
                 :service="service"
                 :index="index"
                 :addForm="addForm"
-
+                selectOptions
                 @change="serviceChange"
                 @addService="addService"
                 @deleteService="deleteService"

@@ -320,7 +320,7 @@
       <label
         :for="'service_description_' + model.id"
         class="block text-sm font-medium text-gray-700"
-        >Description</label
+        >Notes</label
       >
       <textarea
         :name="'service_description_' + model.id"

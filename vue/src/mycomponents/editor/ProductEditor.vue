@@ -78,12 +78,12 @@
   <div class="xl:grid gap-3 xl:grid-cols-12">
 
     <div v-if="hasOption" class="mt-3 col-span-4">
-      <label for="question_type" class="block text-sm font-medium text-gray-700"
+      <label :for="'category' + model.id" class="block text-sm font-medium text-gray-700"
         >Category</label
       >
       <select
-        id="question_type"
-        name="question_type"
+        :id="'category' + model.id"
+        :name="'category' + model.id"
         v-model="model.category_id"
         @change="typeChange"
         class="
@@ -108,12 +108,12 @@
     </div>
 
     <div v-if="hasOption" class="mt-3 col-span-4">
-      <label for="question_type" class="block text-sm font-medium text-gray-700"
+      <label :for="'brand' + model.id" class="block text-sm font-medium text-gray-700"
         >Brand Name</label
       >
       <select
-        id="question_type"
-        name="question_type"
+        :id="'brand' + model.id"
+        :name="'brand' + model.id"
         v-model="model.brand_id"
         @change="typeChange"
         class="
@@ -131,7 +131,6 @@
         "
       >
         <option value="">-- select brand --</option>
-        <option key="0" value="0"> No Brand</option>
         <option v-for="brand in brands" :key="brand.id" :value="brand.id">
           {{ upperCaseFirst(brand.brand_name) }}
         </option>
@@ -141,16 +140,16 @@
     <!-- Question -->
     <div class="mt-3 col-span-4">
       <label
-        :for="'question_text_' + model.product_name"
+        :for="'product_name' + model.id"
         class="block text-sm font-medium text-gray-700"
         >Product Name</label
       >
       <input
+        :id="'product_name' + model.id"
+        :name="'product_name' + model.id"
         type="text"
-        :name="'question_text_' + model.product_name"
         v-model="model.product_name"
         @change="dataChange"
-        :id="'question_text_' + model.product_name"
         class="
           mt-1
           focus:ring-indigo-500 focus:border-indigo-500
@@ -164,18 +163,18 @@
       />
     </div>
 
-    <div class="mt-3 col-span-4">
+    <div v-if="classification" class="mt-3 col-span-4">
       <label
-        :for="'question_text_' + model.classification"
+        :for="'classification' + model.id"
         class="block text-sm font-medium text-gray-700"
         >Classification</label
       >
       <input
+        :id="'classification' + model.id"
+        :name="'classification' + model.id"
         type="text"
-        :name="'question_text_' + model.classification"
         v-model="model.classification"
         @change="dataChange"
-        :id="'question_text_' + model.classification"
         class="
           mt-1
           focus:ring-indigo-500 focus:border-indigo-500
@@ -189,18 +188,18 @@
       />
     </div>
 
-    <div class="mt-3 col-span-4">
+    <div v-if="productType" class="mt-3 col-span-4">
       <label
-        :for="'question_text_' + model.product_type"
+        :for="'product_type' + model.id"
         class="block text-sm font-medium text-gray-700"
         >Product Type</label
       >
       <input
+        :id="'product_type' + model.id"
+        :name="'product_type' + model.id"
         type="text"
-        :name="'question_text_' + model.product_type"
         v-model="model.product_type"
         @change="dataChange"
-        :id="'question_text_' + model.product_type"
         class="
           mt-1
           focus:ring-indigo-500 focus:border-indigo-500
@@ -214,18 +213,18 @@
       />
     </div>
 
-    <div class="mt-3 col-span-4">
+    <div v-if="formulation" class="mt-3 col-span-4">
       <label
-        :for="'question_text_' + model.formulation"
+        :for="'formulation' + model.id"
         class="block text-sm font-medium text-gray-700"
         >Formulation</label
       >
       <input
+        :id="'formulation' + model.id"
+        :name="'formulation' + model.id"
         type="text"
-        :name="'question_text_' + model.formulation"
         v-model="model.formulation"
         @change="dataChange"
-        :id="'question_text_' + model.formulation"
         class="
           mt-1
           focus:ring-indigo-500 focus:border-indigo-500
@@ -241,13 +240,13 @@
 
     
 
-    <!-- <div v-if="hasOption" class="mt-3 col-span-3">
-      <label for="question_type" class="block text-sm font-medium text-gray-700"
+    <div v-if="unit" class="mt-3 col-span-3">
+      <label :for="'unit'+ model.id" class="block text-sm font-medium text-gray-700"
         >Product Unit</label
       >
       <select
-        id="question_type"
-        name="question_type"
+        :id="'unit'+ model.id"
+        :name="'unit'+ model.id"
         v-model="model.unit_id"
         @change="typeChange"
         class="
@@ -269,22 +268,22 @@
           {{ upperCaseFirst(unit.unit_name) }}
         </option>
       </select>
-    </div> -->
+    </div>
   </div>
 
   <div class="xl:grid gap-3 xl:grid-cols-12">
 
     <div class="mt-3 pb-6 col-span-6">
       <label
-        :for="'service_description_' + model.id"
+        :for="'description' + model.id"
         class="block text-sm font-medium text-gray-700"
         >Description</label
       >
       <textarea
-        :name="'service_description_' + model.id"
+        :id="'description' + model.id"
+        :name="'description' + model.id"
         v-model="model.description"
         @change="dataChange"
-        :id="'service_description_' + model.id"
         class="
           mt-1
           focus:ring-indigo-500 focus:border-indigo-500
@@ -301,7 +300,7 @@
    
     <div class="mt-3 col-span-4 overflow-hidden">
       <label
-        :for="'question_text_' + model.data"
+        
         class="block text-sm font-medium text-gray-700"
         >Image</label
       >
@@ -316,16 +315,15 @@
 
    
 
-  </div>
-
-    <BaseDivider />
+  </div> 
+  <BaseDivider  />
 </template>
 
 <script setup>
 import { v4 as uuidv4 } from "uuid";
 import { computed, ref } from "@vue/reactivity";
 import { useStore } from "vuex";
-import { watchEffect } from "vue"
+import { watchEffect, watch } from "vue"
 
 import FormField from '@/components/FormField.vue'
 import FormControl from '@/components/FormControl.vue'
@@ -341,7 +339,7 @@ function onImageChoose(ev) {
   reader.onload = () => {
     // The field to send on backend and apply validations
     model.value.image_url = reader.result;
-
+    
     // The field to display here
     model.value.image = reader.result;
     ev.target.value = "";
@@ -362,6 +360,11 @@ const props = defineProps({
 
 // Get question types from vuex
 const categories = computed(() => store.state.categoryList);
+const category_data = ref([]);
+const classification = ref(false);
+const productType = ref(false);
+const formulation = ref(false);
+const unit = ref(false);
 
 const brands = computed(() => store.state.brandList);
 const units = computed(() => store.state.unitList);
@@ -387,6 +390,10 @@ function upperCaseFirst(str) {
 
 function typeChange() {
   dataChange();
+  if(model.value.category_id){
+    const data = categories.value.find(item => item.id === model.value.category_id);
+    category_data.value = data;
+  }
 }
 
 // Emit the data change
@@ -404,6 +411,21 @@ function deleteService() {
   emit("deleteService", props.service);
 }
 
+watch(category_data, (newVal)=> {
+  // console.log(newVal.details_data)
+  updateInputs(newVal.details_data);
+});
+
+const updateInputs = (data)=> {
+  classification.value = changeCategory(data, 1);
+  productType.value = changeCategory(data, 2);
+  formulation.value = changeCategory(data, 3);
+};
+
+const changeCategory = (detailsData, id) => {
+  const result = detailsData.find(item => item == id);
+  return result !== undefined; // Returns true if 1 is found, otherwise false
+};
 </script>
 
 <style></style>

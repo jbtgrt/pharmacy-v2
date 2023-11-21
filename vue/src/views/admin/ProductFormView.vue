@@ -16,6 +16,7 @@ import FormControl from '@/components/FormControl.vue'
 import UserCard from '@/components/UserCard.vue'
 
 import NotificationBar from '@/components/NotificationBar.vue'
+import ProductEditor from "@/mycomponents/editor/ProductEditor.vue";
 
 const notificationSettingsModel = ref([])
 const notificationsOutline = computed(() => notificationSettingsModel.value.indexOf('outline') > -1)
@@ -58,9 +59,6 @@ const selected = computed(() => store.state.selectedProduct);
 
 // next
 
-import ProductEditor from "@/mycomponents/editor/ProductEditor.vue";
-
-
 function addService(index) {
   const newService = {
     id: uuidv4(),
@@ -68,7 +66,9 @@ function addService(index) {
     brand_id: '',
     unit_id: '',
     product_name: '',
-    price: '',
+    classification: '',
+    product_type: '',
+    formulation: '',
     image_url: '',
     description: '',
   };
@@ -93,14 +93,14 @@ function serviceChange(service) {
 function submit() {
  if (route.params.id) {
   store.dispatch("updateProduct", { ...model.value }).then(({ data }) => {
-    router.push({name: "staff-product"});
+    router.push({name: "admin-product"});
   })
   .catch(err => {
     errors.value = err.response.data.errors;
   });
 } else {
   store.dispatch("saveProduct", { ...model.value }).then(({ data }) => {
-    router.push({name: "staff-add-supply"});
+    router.push({name: "admin-add-supply"});
   })
   .catch(err => {
     errors.value = err.response.data.errors;
@@ -115,7 +115,7 @@ const notification = computed(() => store.state.notification)
 </script>
 
 <template>
-    <SectionMain> 
+    <SectionMain>
       <SectionTitleLineWithButton :icon="mdiPlusBox " :title="route.meta.title" main>
       </SectionTitleLineWithButton>    
         <NotificationBar v-if="Object.keys(errors).length" color="danger" :icon="mdiAlertCircle" :outline="notificationsOutline">
@@ -172,9 +172,7 @@ const notification = computed(() => store.state.notification)
               />
             </div>
           </div>
-          
 
-         
           <template #footer>
             <BaseButtons type="justify-end">
               <BaseButton type="submit" color="info" :label="formTitle" />

@@ -19,6 +19,8 @@ import UserCard from '@/components/UserCard.vue'
 
 import NotificationBar from '@/components/NotificationBar.vue'
 
+import SupplyProductEditor from "@/mycomponents/editor/SupplyProductEditor.vue";
+
 const notificationSettingsModel = ref([])
 const notificationsOutline = computed(() => notificationSettingsModel.value.indexOf('outline') > -1)
 
@@ -82,8 +84,6 @@ if (checkedProducts.value.length) {
 }
 
 // next
-
-import SupplyProductEditor from "@/mycomponents/editor/SupplyProductEditor.vue";
 
 
 function addService(index, data) {

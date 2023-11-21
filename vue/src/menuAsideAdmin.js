@@ -14,7 +14,8 @@ import {
   mdiHistory,
   mdiCalendarArrowRight,
   mdiAccountGroupOutline,
-  mdiShapeOutline
+  mdiShapeOutline,
+  mdiFileDocumentOutline 
 } from '@mdi/js'
 
 export default [
@@ -26,12 +27,27 @@ export default [
   {
     to: '/admin/user',
     icon: mdiAccountGroupOutline,
-    label: 'User'
+    label: 'Users'
   },
   {
     to: '/admin/category',
-    icon: mdiAccountGroupOutline,
-    label: 'Category'
+    icon: mdiShapeOutline ,
+    label: 'Categories'
+  },
+  {
+    to: '/admin/products',
+    icon: mdiTable  ,
+    label: 'Products'
+  },
+  {
+    to: '/admin/supplies',
+    icon: mdiTable,
+    label: 'Supplies'
+  },
+  {
+    to: '/admin/reports',
+    icon: mdiFileDocumentOutline,
+    label: 'Reports'
   },
   // {
   //   label: 'Tree View',

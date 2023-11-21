@@ -1,6 +1,42 @@
 import { createStore } from "vuex";
 import axiosClient from "../axios.js";
 
+const todaySales = 
+  {
+    "data": [
+      {
+        "id": 19,
+        "product_name": "Product 1",
+        "quantity": "25",
+        "total_price": "500",
+        "created": "Mar 3, 2023",
+        "created_mm_dd_yyyy": "03-03-2023"
+      },
+      {
+        "id": 20,
+        "product_name": "Product 2",
+        "quantity": "32",
+        "total_price": "800",
+        "created": "Mar 3, 2023",
+        "created_mm_dd_yyyy": "03-03-2023"
+      },
+      {
+        "id": 21,
+        "product_name": "Product 3",
+        "quantity": "20",
+        "total_price": "340",
+        "created": "Mar 3, 2023",
+        "created_mm_dd_yyyy": "03-03-2023"
+      },
+    ]
+  };
+
+const categoryColumns = [
+  { id: 1, col_name: 'Classification' },
+  { id: 2, col_name: 'Product Type' },
+  { id: 3, col_name: 'Formulation' }
+];
+
 const store = createStore({
   state: {
     refresh: true,
@@ -22,10 +58,13 @@ const store = createStore({
     selectedProduct: [],
     checkedProducts: [],
     productSupplyList: [],
+    currentCategory: null,
     selectedProductSupply: [],
     brandList: [],
     unitList: [],
-
+    stockList: [],
+    todaySales: todaySales.data,
+    categoryColumns: categoryColumns,
     
   },
   actions: {
@@ -144,11 +183,11 @@ const store = createStore({
         });
     },
     deleteCategory({ commit }, id) {
-        return axiosClient.delete(`/category/${id}`)
-          .then(response => {
-            commit('filterCategory', id); // Assuming you have a mutation to remove the item from the state
-          });
-      },
+      return axiosClient.delete(`/category/${id}`)
+        .then(response => {
+          commit('filterCategory', id); // Assuming you have a mutation to remove the item from the state
+        });
+    },
     // Product
     getProductList({commit}) {
       return axiosClient.get('/product').then((res) => {
@@ -184,7 +223,8 @@ const store = createStore({
     deleteProduct({ commit }, id) {
       return axiosClient.delete(`/product/${id}`)
         .then(response => {
-          commit('filterProduct', id); // Assuming you have a mutation to remove the item from the state
+          // return id;
+          //commit('filterProduct', id); // Assuming you have a mutation to remove the item from the state
         });
     },
     //  Supply
@@ -222,6 +262,43 @@ const store = createStore({
       return axiosClient.delete(`/supply/${id}`)
         .then(response => {
           commit('filterSupply', id); // Assuming you have a mutation to remove the item from the state
+        });
+    },
+    //  Stocks
+    getStockList({commit}) {
+      return axiosClient.get('/stock').then((res) => {
+        commit("setstockList", res.data);
+      });
+    },
+    saveStock({commit}, stock) {
+      return axiosClient.post("/stock", stock).then((res) => {
+          commit("setStockList", res.data);
+          return res;
+        });  
+    },
+    updateStock({ commit }, stock) {
+      return axiosClient
+        .put(`/stock/${stock.records[0].id}`, stock)
+        .then((res) => {
+          commit("setStockList", res.data);
+          return res;
+        });
+    },
+    editStock({ commit }, id) {
+      return axiosClient
+        .get(`/stock/${id}`)
+        .then((res) => {
+          commit("setSelectedStock", res.data);
+          return res;
+        })
+        .catch((err) => {
+          throw err;
+        });
+    },
+    deleteStock({ commit }, id) {
+      return axiosClient.delete(`/stock/${id}`)
+        .then(response => {
+          commit('filterStock', id); 
         });
     },
     // Brand
@@ -299,8 +376,9 @@ const store = createStore({
     setSelectedProduct: (state, product) => {
       state.selectedProduct = product.current[0];
     },
-    filterProduct(state, id) {
-      state.productList = state.productList.filter(item => item.id !== id);
+    filterProduct(state, data) {
+      state.currentCategory = data.category;
+      state.productList = state.productList.filter(item => item.id !== data.product);
     },
     setCheckProductList: (state, products) => {
       state.checkedProducts = products;
@@ -314,6 +392,10 @@ const store = createStore({
     },
     filterSupply(state, id) {
       state.productSupplyList = state.selectedProductSupply.filter(item => item.id !== id);
+    },
+    //
+    setStockList: (state, stocks) => {
+      state.stockList = stocks.data;
     },
     // Brand
     setBrandList: (state, brands) => {

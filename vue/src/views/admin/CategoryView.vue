@@ -23,7 +23,7 @@ watchEffect(()=> {
 
 <template>
 
-    <SectionMain> {{items}}
+    <SectionMain> 
       <SectionTitleLineWithButton :icon="mdiTableBorder" :title="route.meta.title" main>
         <BaseButton
           to="add-category"

@@ -14,11 +14,13 @@ import FormControl from '@/components/FormControl.vue'
 
 import SelectedProductCard from '@/mycomponents/SelectedProductCard.vue'
 
-
-
-defineProps({
-  checkable: Boolean
+const props = defineProps({
+  checkable: Boolean,
+  categoryID: Number,
+  index: Number,
 })
+
+const emit = defineEmits(["check"]);
 
 const store = useStore()
 
@@ -26,14 +28,12 @@ const isModalActive = ref(false)
 const isModalEdit = ref(false)
 const isModalDangerActive = ref(false)
 
-const items = computed(() => store.state.productList);
-
+const items = computed(() => store.state.productList.filter(product => product.category_id == props.categoryID));
 const selectedRecord = ref({});
 
 function showRecord(client) {
   
 }
-
 
 const selectOptions = [
   { id: 5, label: '5 per page' },
@@ -48,7 +48,12 @@ const selectedRows = ref('');
 const filteredItems = ref([]);
 const pageList = ref([]);
 const numPages = ref(7);
-const checkedRows = ref([])
+const checkedRows = ref([]);
+const tableData = ref([]);
+
+watch(items, ()=> {
+  checkedRows.value = [];
+});
 
 // const numPages = computed(() => Math.ceil(items.value.length / perPage.value));
 const calculateNumPages = computed(() => Math.ceil(items.value.length / perPage.value));
@@ -63,10 +68,9 @@ const pagesList = computed(() => {
   return pagesList
 })
 
-
 // Add a watcher to update the filtered items when searchQuery or selectedRole changes
 watchEffect(() => {
-
+  //tableData.value = servicesPaginated;
   // Filter items based on searchQuery and selectedRole
   filteredItems.value = items.value.filter((user) => {
     return (
@@ -86,17 +90,28 @@ watchEffect(() => {
     pageList.value.push(i);
   }
 
-
 });
+
 
 // // Update the servicesPaginated computed property to use filteredItems
 const servicesPaginated = computed(() => {
   return filteredItems.value.slice(perPage.value * currentPage.value, perPage.value * (currentPage.value + 1));
 });
 
+
+//  watchEffect(()=> {
+  //tableData.value = servicesPaginated;
+//  })
+
+
 const deleteItem = (id) => {
-      store.dispatch("deleteProduct", id);
-    }
+    store.dispatch("deleteProduct", id);
+    // .then((itemID)=> {  console.log(itemID)
+    //   const filtered =  computed(()=> servicesPaginated.value.filter(product => product.id !== itemID));
+    //   tableData.value = filtered;
+    store.commit('filterProduct', { product: id, category: props.categoryID });
+    // });
+  }
 
 const remove = (arr, cb) => {
   const newArr = []
@@ -116,10 +131,12 @@ const checked = (isChecked, client) => {
   } else {
     checkedRows.value = remove(checkedRows.value, (row) => row.id === client.id)
   }
-  store.commit("setCheckProductList", checkedRows.value);
+  if(checkedRows.value.length){
+    emit("check", {data: checkedRows.value, status: true});
+  } else {
+    emit("check", {data: checkedRows.value, status: false});
+  }
 }
-
-
 </script>
 
 <template> 
@@ -151,12 +168,12 @@ const checked = (isChecked, client) => {
         <th>Category</th>
         <th>Product Name</th>
         <th>Brand</th>
-        <!-- <th>Price</th> -->
-        <th>Classification</th>
-        <th>Product Type</th>
-        <th>Formulation</th>
+        <th v-if="servicesPaginated[0].classification">Classification</th>
+        <th v-if="servicesPaginated[0].product_type">Product Type</th>
+        <th v-if="servicesPaginated[0].formulation">Formulation</th>
         <th>Category</th>
         <th>Brand</th>
+        <th>Stocks</th>
         
         <th />
       </tr>
@@ -176,13 +193,13 @@ const checked = (isChecked, client) => {
         <td data-label="Brand">
           {{ record.brand_name }}
         </td>
-        <td data-label="Classification">
+        <td v-if="servicesPaginated[0].classification" data-label="Classification">
           {{ record.classification }}
         </td>
-        <td data-label="Product Type">
+        <td v-if="servicesPaginated[0].product_type" data-label="Product Type">
           {{ record.product_type }}
         </td>
-        <td data-label="Formulation">
+        <td v-if="servicesPaginated[0].formulation" data-label="Formulation">
           {{ record.formulation }}
         </td>
         <td data-label="Category">
@@ -190,9 +207,11 @@ const checked = (isChecked, client) => {
         </td>
         <td data-label="Brand">
           {{ record.brand_name }}
+        </td> 
+        <td data-label="Stocks" >
+          55
         </td>
         
-       
         <td class="before:hidden lg:w-1 whitespace-nowrap">
           <BaseButtons type="justify-start lg:justify-end" no-wrap>
             <BaseButton color="info" :icon="mdiEye" small @click="showRecord(isModalActive = true, selectedRecord = record)" />
@@ -201,6 +220,9 @@ const checked = (isChecked, client) => {
           </BaseButtons>
         </td>
       </tr>
+      <!-- <tr v-else>
+        <td>no records found</td>
+      </tr> -->
     </tbody>
   </table>
   <div class="p-3 lg:px-6 border-t border-gray-100 dark:border-slate-800">

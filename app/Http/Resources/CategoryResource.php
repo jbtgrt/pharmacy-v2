@@ -18,7 +18,7 @@ class CategoryResource extends JsonResource
         return [
             'id' => $this->id,
             'category_name' => $this->category_name,
-            'description' => $this->description,
+            'details_data' => json_decode($this->details_data),
             'created_at' => (new DateTime($this->created_at))->format('Y-m-d')
         ];
     }

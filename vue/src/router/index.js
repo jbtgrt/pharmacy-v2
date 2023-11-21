@@ -15,10 +15,10 @@ import UserView from '@/views/admin/UserView.vue'
 import UserForm from '@/views/admin/UserForm.vue'
 import CategoryView from '@/views/admin/CategoryView.vue'
 import CategoryFormView from '@/views/admin/CategoryFormView.vue'
-// import ProductView from '@/views/admin/ProductView.vue'
-// import ProductFormView from '@/views/admin/ProductFormView.vue'
-// import SupplyProductView from '@/views/admin/SupplyProductView.vue'
-// import SupplyProductFormView from '@/views/admin/SupplyProductFormView.vue'
+import AdProductView from '@/views/admin/ProductView.vue'
+import AdProductFormView from '@/views/admin/ProductFormView.vue'
+import AdSupplyProductView from '@/views/admin/SupplyProductView.vue'
+import AdSupplyProductFormView from '@/views/admin/SupplyProductFormView.vue'
 import ReportsView from '@/views/admin/ReportsView.vue'
 
 // Staff Dashboard
@@ -106,6 +106,56 @@ const routes = [
         path: "/admin/edit-category/:id", 
         name: "admin-edit-category", 
         component: CategoryFormView 
+      },
+      // Products
+      {
+        meta: {
+          title: 'Product',
+        },
+        path: '/admin/products',
+        name: 'admin-products',
+        component: AdProductView
+      },
+      {
+        meta: {
+          title: 'Add Product'
+        },
+        path: '/admin/add-product',
+        name: 'admin-add-product',
+        component: AdProductFormView
+      },
+      { 
+        meta: {
+          title: 'Edit Product'
+        },
+        path: "/admin/edit-product/:id", 
+        name: "admin-edit-product", 
+        component: AdProductFormView 
+      },
+      // Supply
+      {
+        meta: {
+          title: 'Supplies',
+        },
+        path: '/admin/supplies',
+        name: 'admin-supplies',
+        component: AdSupplyProductView
+      },
+      {
+        meta: {
+          title: 'Add Supply'
+        },
+        path: '/admin/add-supply',
+        name: 'admin-add-supply',
+        component: AdSupplyProductFormView
+      },
+      { 
+        meta: {
+          title: 'Edit Supply'
+        },
+        path: "/admin/edit-supply/:id", 
+        name: "admin-edit-supply", 
+        component: AdSupplyProductFormView 
       },
       {
         meta: {

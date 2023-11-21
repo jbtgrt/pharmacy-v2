@@ -2,7 +2,7 @@
   <!-- Question index -->
   <div class="flex items-center justify-between">
     <h3 class="text-lg font-bold">
-      {{ index + 1 }}. {{ model.title }}
+      {{ index + 1 }}. {{ model.category_name }}
     </h3>
     <div v-if="addForm" class="flex items-center">
       <!-- Add new question -->
@@ -75,7 +75,7 @@
 
   <div :class="[ selectOptions ? 'grid gap-3 grid-cols-12' : '' ] ">
     <!-- Question -->
-    <div class="mt-3 col-span-9">
+    <div class="mt-3 col-span-9 mb-8">
       <label
         :for="'question_text_' + model.data"
         class="block text-sm font-medium text-gray-700"
@@ -88,6 +88,8 @@
         @change="dataChange"
         :id="'question_text_' + model.data"
         class="
+          px-3 
+          py-2.5 
           mt-1
           focus:ring-indigo-500 focus:border-indigo-500
           block
@@ -100,13 +102,60 @@
       />
     </div>
     <!--/ Question -->
-    <!--/ Question Type -->
+     <div class="mt-3 col-span-3 mb-8">
+      <label for="brand_id" class="block text-sm font-medium text-gray-700">Column Names</label>
+      <div>
+        <button
+          type="button"
+          @click="toggleDropdown"
+          class="flex justify-between w-full px-3 py-2 mt-1 text-left border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+        >
+          <span v-if="selectedBrands.length === 0">-- Select Data --</span>
+          <span v-else-if="selectedBrands.length === brands.length">All Options Selected</span>
+          <span v-else>{{ selectedBrands.length }} option{{ selectedBrands.length > 1 ? 's' : '' }} selected</span>
+          <svg
+            v-if="isOpen"
+            xmlns="http://www.w3.org/2000/svg"
+            class="w-5 h-5 ml-2 -mr-1 text-gray-400"
+            viewBox="0 0 20 20"
+            fill="currentColor"
+          >
+            <path
+              fill-rule="evenodd"
+              d="M10 12a2 2 0 100-4 2 2 0 000 4z"
+              clip-rule="evenodd"
+            />
+            <path
+              fill-rule="evenodd"
+              d="M3 7a2 2 0 114 0 2 2 0 01-4 0zM13 7a2 2 0 114 0 2 2 0 01-4 0z"
+              clip-rule="evenodd"
+            />
+          </svg>
+        </button>
+      </div>
+      <div v-show="isOpen" class="absolute z-10 mt-1 bg-white border border-gray-300 rounded-md shadow-lg">
+        <div class="p-3">
+          <label class="inline-flex items-center">
+            <input type="checkbox" v-model="selectAll" @change="toggleAll">
+            <span class="ml-2">Select All</span>
+          </label>
+        </div>
+        <div v-for="data in brands" :key="data.id" class="p-3 border-t border-gray-300">
+          <label class="inline-flex items-center">
+            <input type="checkbox" :value="data.id" v-model="selectedBrands" @change="checkOption" >
+            <span class="ml-2">{{ upperCaseFirst(data.col_name) }}</span>
+          </label>
+        </div>
+      </div>
+    </div>
   </div>
 
+  <!-- <div class="mt-3 col-span-4 relative inline-block text-left">
 
+  </div> -->
 
   <!-- Question Description -->
-  <div class="mt-3 col-span-9">
+  <!-- <div class="mt-3 col-span-9">
     <label
       :for="'service_description_' + model.id"
       class="block text-sm font-medium text-gray-700"
@@ -128,7 +177,7 @@
         rounded-md
       "
     />
-  </div>
+  </div> -->
   <!--/ Question Description -->
 
   <!-- Data -->
@@ -143,7 +192,7 @@
 import { v4 as uuidv4 } from "uuid";
 import { computed, ref } from "@vue/reactivity";
 import { useStore } from "vuex";
-import { watchEffect } from "vue"
+import { watchEffect, watch } from "vue"
 
 const store = useStore();
 
@@ -160,7 +209,42 @@ const serviceTypes = computed(() => store.state.serviceTypes);
 
 const model = ref(JSON.parse(JSON.stringify(props.service)));
 
-const emit = defineEmits(["change", "addService", "deleteService"]);
+const emit = defineEmits(["update:modelValue", "change", "addService", "deleteService"]);
+
+// vue-multiselect
+const isOpen = ref(false);
+const selectAll = ref(false);
+const brands = computed(() => store.state.categoryColumns);
+
+const selectedBrands = ref([]);
+
+function toggleDropdown() {
+  isOpen.value = !isOpen.value;
+}
+
+function toggleAll() {
+  if (selectAll.value) {
+    selectedBrands.value = brands.value.map(brand => brand.id);
+    model.value.details_data = [...selectedBrands.value];
+  } else {
+    selectedBrands.value = [];
+    model.value.details_data = [];
+  }
+  dataChange();
+}
+
+function checkOption() {
+  model.value.details_data = [...selectedBrands.value];
+  dataChange();
+}
+
+selectedBrands.value = [...model.value.details_data];
+
+if(selectedBrands.value.length == brands.value.length){
+  selectAll.value = true;
+} else {
+  selectAll.value = false;
+}
 
 
 function upperCaseFirst(str) {

@@ -4,6 +4,7 @@ import { ref, computed, watch, watchEffect } from 'vue'
 import { useStore } from 'vuex'
 import { useRoute, useRouter } from "vue-router";
 import { mdiAccount, mdiMail, mdiAsterisk, mdiFormTextboxPassword, mdiGithub,mdiAccountPlusOutline,mdiAlertCircle, mdiCloseCircleOutline, mdiCheckCircle, mdiClose, mdiHomeAccount, mdiPhoneOutline, mdiAt, mdiReload,mdiAccountTie, mdiPlus,mdiPlusBox   } from '@mdi/js'
+import SupplyProductEditor from "@/mycomponents/editor/SupplyProductEditor.vue";
 
 // import { ImageBarcodeReader } from "vue-barcode-reader";
 
@@ -83,9 +84,6 @@ if (checkedProducts.value.length) {
 
 // next
 
-import SupplyProductEditor from "@/mycomponents/editor/SupplyProductEditor.vue";
-
-
 function addService(index, data) {
   const newService = {
     id: uuidv4(),
@@ -126,14 +124,14 @@ function serviceChange(service) {
 function submit() {
  if (route.params.id) {
   store.dispatch("updateSupply", { ...model.value }).then(() => {
-    router.push({name: "staff-supply"});
+    router.push({name: "admin-supplies"});
   })
   .catch(err => {
     errors.value = err.response.data.errors;
   });
 } else {
   store.dispatch("saveSupply", { ...model.value }).then(() => {
-    router.push({name: "staff-supply"});
+    router.push({name: "admin-supplies"});
   })
   .catch(err => {
     errors.value = err.response.data.errors;
@@ -226,13 +224,11 @@ const notification = computed(() => store.state.notification)
               />
             </div>
           </div>
-          
 
-         
           <template #footer>
             <BaseButtons type="justify-end">
               <BaseButton type="submit" color="info" :label="formTitle" />
-              <BaseButton color="info" to="/staff/supply" label="Cancel" outline />
+              <BaseButton color="info" to="/admin/products" label="Cancel" outline />
             </BaseButtons>
           </template>
         </CardBox>
