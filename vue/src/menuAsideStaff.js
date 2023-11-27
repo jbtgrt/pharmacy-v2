@@ -55,9 +55,9 @@ export default [
   //     }
   //   ],
   // },
-  {
-    to: '/staff/order-product',
-    icon: mdiMonitor,
-    label: 'Order Product'
-  },
+  // {
+  //   to: '/staff/order-product',
+  //   icon: mdiMonitor,
+  //   label: 'Order Product'
+  // },
 ]

@@ -20,6 +20,8 @@ import AdProductFormView from '@/views/admin/ProductFormView.vue'
 import AdSupplyProductView from '@/views/admin/SupplyProductView.vue'
 import AdSupplyProductFormView from '@/views/admin/SupplyProductFormView.vue'
 import ReportsView from '@/views/admin/ReportsView.vue'
+import ProductSellView from '@/views/ProductSellView.vue'
+import ProductSellFormView from '@/views/ProductSellFormView.vue'
 
 // Staff Dashboard
 import StaffHome from '@/views/staff/HomeView.vue'
@@ -132,6 +134,23 @@ const routes = [
         name: "admin-edit-product", 
         component: AdProductFormView 
       },
+      // Products to sell
+      {
+        meta: {
+          title: 'Product',
+        },
+        path: '/admin/sell-products',
+        name: 'admin-sell-products',
+        component: ProductSellView
+      },
+      { 
+        meta: {
+          title: 'Edit Product'
+        },
+        path: "/admin/edit-sell-products/:id", 
+        name: "admin-edit-sell-products", 
+        component: ProductSellFormView 
+      },
       // Supply
       {
         meta: {
@@ -197,7 +216,7 @@ const routes = [
         },
         path: '/staff/product',
         name: 'staff-product',
-        component: ProductView
+        component: AdProductView
       },
       {
         meta: {
@@ -205,7 +224,7 @@ const routes = [
         },
         path: '/staff/add-product',
         name: 'staff-add-product',
-        component: ProductFormView
+        component: AdProductFormView
       },
       { 
         meta: {
@@ -213,7 +232,7 @@ const routes = [
         },
         path: "/staff/edit-product/:id", 
         name: "staff-edit-product", 
-        component: ProductFormView 
+        component: AdProductFormView 
       },
       // Supply
       {
@@ -222,7 +241,7 @@ const routes = [
         },
         path: '/staff/supply',
         name: 'staff-supply',
-        component: SupplyProductView
+        component: AdSupplyProductView
       },
       {
         meta: {
@@ -230,7 +249,7 @@ const routes = [
         },
         path: '/staff/add-supply',
         name: 'staff-add-supply',
-        component: SupplyProductFormView
+        component: AdSupplyProductFormView
       },
       { 
         meta: {
@@ -238,7 +257,7 @@ const routes = [
         },
         path: "/staff/edit-supply/:id", 
         name: "staff-edit-supply", 
-        component: SupplyProductFormView 
+        component: AdSupplyProductFormView 
       },
       // {
       //   meta: {

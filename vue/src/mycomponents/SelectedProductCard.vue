@@ -1,15 +1,8 @@
 <script setup>
-import { computed, ref, watchEffect } from 'vue'
-import { useStore } from "vuex";
-import { useMainStore } from '@/stores/main'
+import { computed, ref, watch, watchEffect} from 'vue'
+import { useStore } from 'vuex'
 import { mdiCheckDecagram, mdiPhoneOutline, mdiAccountEdit  } from '@mdi/js'
-import BaseLevel from '@/components/BaseLevel.vue'
-import SelectedUserAvatar from '@/components/SelectedUserAvatar.vue'
 import CardBox from '@/components/CardBox.vue'
-import FormCheckRadio from '@/components/FormCheckRadio.vue'
-import FormCheckRadioGroup from '@/components/FormCheckRadioGroup.vue'
-import PillTag from '@/components/PillTag.vue'
-import BaseButton from '@/components/BaseButton.vue'
 
 const store = useStore();
 
@@ -17,16 +10,33 @@ const { product } = defineProps({
   product: Object,
 });
 
-const currentRecord = ref({})
+//const categories = computed(() => store.state.categoryList);
 
-// function toggleLockAccount(){
-//   currentUser.value = {
-//     id: user.value.id,
-//     locked: user.value.locked,
-//   };
-//   console.log(currentUser.value)
-//   store.dispatch('lockUser', currentUser.value);
-// }
+//const categoryData = ref([]);
+
+//const category = categories.value.find(item => item.id == product.category_id);
+//categoryData.value = category; 
+
+
+const classification = ref(true);
+const productType =  ref(true);
+const formulation =  ref(true);
+
+// watchEffect(()=> {
+//   updateCatData(categoryData.value.details_data); 
+// })
+
+
+  // classification.value = changeCategory(category.details_data, 1);
+  // productType.value = changeCategory(category.details_data, 2);
+  // formulation.value = changeCategory(category.details_data, 3);
+
+
+// const changeCategory = (detailsData, id) => {
+//   const result = detailsData.find(item => item == id);
+//   return result !== undefined; // Returns true if 1 is found, otherwise false
+// };
+
 
 </script>
 
@@ -50,12 +60,20 @@ const currentRecord = ref({})
                 <p class="mr-3">Brand: </p>
                 {{ product.brand_name }} 
               </div>
+              <div v-if="classification" class="flex">
+                <p class="mr-3">Classification: </p>
+                {{ product.classification }} 
+              </div>
+              <div v-if="productType" class="flex">
+                <p class="mr-3">Product Type: </p>
+                {{ product.product_type }} 
+              </div>
+              <div v-if="formulation" class="flex">
+                <p class="mr-3">Formulation: </p>
+                {{ product.formulation }} 
+              </div>
             </div>
-            <div class="flex justify-between">
-              <span class="title-font font-medium text-2xl text-gray-900">₱{{product.price}}</span>
-              <!-- <BaseButton  color="success" :icon="mdiAccountEdit" small :to="`/admin/edit-product/${product.id}`" /> -->
-              
-            </div>
+            
           </div>
         </div>
       </div>

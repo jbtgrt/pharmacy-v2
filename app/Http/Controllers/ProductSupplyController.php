@@ -142,15 +142,19 @@ class ProductSupplyController extends Controller
             'product_id' => 'exists:products,id',
             'category_id' => 'exists:categories,id',
             'brand_id' => 'exists:brands,id',
+            'unit_id' => 'exists:units,id',
             'supplier_id' => 'exists:users,id',
             'batch_no' => 'required|numeric',
+            'unit_quantity' => 'required|numeric',
+            'quantity_per_unit' => 'required|numeric',
             'unit_cost' => 'required|numeric',
-            'quantity' => 'required|numeric',
+            
             'total_cost' => 'required|numeric',
+            'batch_stocks' => 'required|numeric',
 
             'date_received' => 'nullable|date',
             'expires_at' => 'nullable|date',
-            'storage_location' => 'nullable|string',
+            'storage_location' => 'nullable|numeric',
             'notes' => 'nullable|string'
         ]);
 
@@ -158,44 +162,58 @@ class ProductSupplyController extends Controller
     }
 
     private function allSupplies(){
-        $users = ProductSupply::query()
-            ->join('users', 'product_supplies.supplier_id', '=', 'users.id')
+        $product = ProductSupply::query()
+            ->join('users as staff', 'product_supplies.staff_id', '=', 'staff.id')
+            ->join('users as supplier', 'product_supplies.supplier_id', '=', 'supplier.id')
             ->join('products', 'product_supplies.product_id', '=', 'products.id')
             ->join('categories', 'product_supplies.category_id', '=', 'categories.id')
             ->join('brands', 'product_supplies.brand_id', '=', 'brands.id')
-            // ->join('units', 'product_supplies.unit_id', '=', 'units.id')
+            ->join('units', 'product_supplies.unit_id', '=', 'units.id')
             ->orderBy('product_supplies.created_at', 'ASC')
             ->get([
-                    'product_supplies.*', 
-                    'categories.category_name', 
-                    'brands.brand_name', 
-                    // 'units.unit_name', 
-                    'products.product_name', 
-                    'products.description as product_description', 
-                    'products.image_url',
-                    'products.status'
-                ]);
-
-        return $users;
+                'product_supplies.*', 
+                'categories.category_name', 
+                'brands.brand_name', 
+                'units.unit_name', 
+                'products.product_name', 
+                'products.description as product_description', 
+                'products.image_url',
+                'products.status',
+                'staff.first_name as staff_fname', 
+                'staff.last_name as staff_lname', 
+                'supplier.first_name as supplier_fname',
+                'supplier.last_name as supplier_lname'
+            ]);
+    
+        return $product;
     }
 
     private function oneProduct($id) {
         $product = ProductSupply::query()
-             ->join('products', 'product_supplies.product_id', '=', 'products.id')
+            ->join('users as staff', 'product_supplies.staff_id', '=', 'staff.id')
+            ->join('users as supplier', 'product_supplies.supplier_id', '=', 'supplier.id')
+            ->join('products', 'product_supplies.product_id', '=', 'products.id')
             ->join('categories', 'product_supplies.category_id', '=', 'categories.id')
             ->join('brands', 'product_supplies.brand_id', '=', 'brands.id')
+            ->join('units', 'product_supplies.unit_id', '=', 'units.id')
             ->where('product_supplies.id', $id)
             ->orderBy('product_supplies.created_at', 'ASC')
             ->get([
-                    'product_supplies.*', 
-                    'categories.category_name', 
-                    'brands.brand_name', 
-                    'products.product_name', 
-                    'products.description as product_description', 
-                    'products.image_url',
-                    'products.status'
-                ]);
-
+                'product_supplies.*', 
+                'categories.category_name', 
+                'brands.brand_name',
+                'units.unit_name',  
+                'products.product_name', 
+                'products.description as product_description', 
+                'products.image_url',
+                'products.status',
+                'staff.first_name as staff_fname', 
+                'staff.last_name as staff_lname', 
+                'supplier.first_name as supplier_fname',
+                'supplier.last_name as supplier_lname'
+            ]);
+    
         return $product;
     }
+    
 }

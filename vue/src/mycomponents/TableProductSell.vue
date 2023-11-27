@@ -145,7 +145,7 @@ const checked = (isChecked, client) => {
     <SelectedProductCard :product="selectedRecord" class="mb-6" />
   </CardBoxModal>
 
-  <section class="p-4">
+  <section class="p-4"> 
     <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
       <div class="xl:flex xl:flex-wrap lg:flex lg:flex-wrap " >
         <FormField class="md:w-6/12 lg:w-4/12  xl:w-2/6 xl:mr-2 lg:mr-2">

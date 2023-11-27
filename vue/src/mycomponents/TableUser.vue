@@ -46,7 +46,7 @@ const roleOptions = [
   { id: '', label: 'All Roles' },
   { id: 'Admin', label: 'Admin' },
   { id: 'Staff', label: 'Staff' },
-  { id: 'Patient', label: 'Patient' }
+  { id: 'Supplier', label: 'Supplier' }
 ]
 
 

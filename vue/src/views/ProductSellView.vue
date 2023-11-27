@@ -18,8 +18,6 @@ import CardBoxComponentEmpty from '@/components/CardBoxComponentEmpty.vue'
 const route = useRoute();
 const store = useStore();
 
-store.dispatch("getProductList");
-
 const items = computed(() => store.state.productList);
 // const checkedProducts = computed(() => store.state.checkedProducts);
 const categories = computed(() => store.state.categoryList);
@@ -44,22 +42,11 @@ watchEffect(()=> {
     return { ...category, active: index === 0 };
   });
   showtable.value = items.value.length > 0 ? true : false;
-  //checkedLength.value = checkedProducts.value.length > 0 ? true : false;
 });
 
 const activeCategory = computed(()=> tabItems.value.find(item => item.active === true))
 const storeCategory = computed(()=> store.state.currentCategory);
 
-
-// watch(store.state.productList, ()=> {
-  //const catId = storeCategory != null ? storeCategory : activeCategory;
-  // changeTab(id);
-// })
-// const tableCategory = activeCategory.id;
-// console.log(activeCategory.value)
-// watchEffect(()=> {
-//   //storeCategory != 0 ? storeCategory : activeCategory.id;
-// })
 
 const changeTab = (id) => {
   const filterRecords = items.value.filter(product => product.category_id == id);

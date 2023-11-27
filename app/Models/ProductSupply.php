@@ -20,18 +20,41 @@ class ProductSupply extends Model
         'product_id',
         'category_id',
         'brand_id',
+        'unit_id',
         'batch_no',
+        'unit_quantity',
+        'quantity_per_unit',
         'unit_cost',
-        'quantity',
         'total_cost',
+        'batch_stocks',
         'date_received',
         'expires_at',
         'storage_location',
         'notes'
     ];
 
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
+
+    public function supplier()
+    {
+        return $this->belongsTo(Supplier::class);
+    }
+
     public function product()
     {
         return $this->belongsTo(Product::class);
+    }
+    
+    public function category()
+    {
+        return $this->belongsTo(Category::class);
+    }
+
+    public function brand()
+    {
+        return $this->belongsTo(Brand::class);
     }
 }

@@ -213,6 +213,7 @@ class ProductController extends Controller
         $validator = Validator::make($data, [
             'category_id' => 'exists:categories,id',
             'brand_id' => 'exists:brands,id',
+            'barcode' => 'required|string',
             'product_name' => 'required|string|unique:products,product_name',
             'classification' => 'nullable|string',
             'product_type' => 'nullable|string',
@@ -229,6 +230,7 @@ class ProductController extends Controller
         $validator = Validator::make($data, [
             'category_id' => 'exists:categories,id',
             'brand_id' => 'exists:brands,id',
+            'barcode' => 'required|string',
             'product_name' => 'required|string|unique:products,product_name,'.$id,
             'classification' => 'nullable|string',
             'product_type' => 'nullable|string',

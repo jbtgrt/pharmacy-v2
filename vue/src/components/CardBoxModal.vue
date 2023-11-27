@@ -21,6 +21,7 @@ const props = defineProps({
     default: 'Done'
   },
   hasCancel: Boolean,
+  hasFooter: Boolean,
   modelValue: {
     type: [String, Number, Boolean],
     default: null
@@ -29,6 +30,7 @@ const props = defineProps({
     type: String,
     required: true
   },
+
 })
 
 const emit = defineEmits(['update:modelValue', 'cancel', 'confirm'])
@@ -76,7 +78,7 @@ window.addEventListener('keydown', (e) => {
         <slot />
       </div>
 
-      <template #footer>
+      <template v-if="hasFooter" #footer>
         <BaseButtons>
           <BaseButton :label="buttonLabel" :color="button" @click="confirm" />
           <BaseButton v-if="hasCancel" label="Cancel" :color="button" outline @click="cancel" />

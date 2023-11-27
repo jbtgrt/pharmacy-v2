@@ -18,14 +18,17 @@ return new class extends Migration
             $table->foreignIdFor(\App\Models\Product::class, 'product_id');
             $table->foreignIdFor(\App\Models\Category::class, 'category_id');
             $table->foreignIdFor(\App\Models\Brand::class, 'brand_id');
+            $table->foreignIdFor(\App\Models\Unit::class, 'unit_id');
 
             $table->integer('batch_no');
             $table->date('date_received');
             $table->date('expires_at');
-            $table->integer('quantity');
+            $table->integer('unit_quantity');
+            $table->integer('quantity_per_unit')->default(0);
             $table->double('unit_cost');
             $table->double('total_cost');
-            $table->string('storage_location');
+            $table->integer('batch_stocks');
+            $table->string('storage_location')->nullable();
             $table->longText('notes')->nullable();
             $table->enum('product_status', ['stock', 'sold', 'expired'])->default('stock');
 

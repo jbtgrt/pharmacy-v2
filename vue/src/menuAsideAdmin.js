@@ -35,9 +35,26 @@ export default [
     label: 'Categories'
   },
   {
-    to: '/admin/products',
-    icon: mdiTable  ,
-    label: 'Products'
+    label: 'Products',
+    icon: mdiViewList,
+    menu: [
+      {
+        label: 'Products',
+        to: '/admin/products',
+      },
+      {
+        label: 'Sell Products',
+        to: '/admin/sell-products',
+      },
+      {
+        label: 'Out-Stock',
+        to: '/admin/link-2',
+      },
+      {
+        label: 'Expired',
+        to: '/admin/link-3',
+      }
+    ],
   },
   {
     to: '/admin/supplies',
@@ -45,26 +62,36 @@ export default [
     label: 'Supplies'
   },
   {
+    to: '/admin/sales',
+    icon: mdiTable,
+    label: 'Sales'
+  },
+  {
+    to: '/admin/stocks',
+    icon: mdiTable,
+    label: 'Stocks'
+  },
+  {
     to: '/admin/reports',
     icon: mdiFileDocumentOutline,
     label: 'Reports'
   },
-  // {
-  //   label: 'Tree View',
-  //   icon: mdiViewList,
-  //   menu: [
-  //     {
-  //       label: 'Link 1',
-  //       to: '/admin/link-1',
-  //     },
-  //     {
-  //       label: 'Link 2',
-  //       to: '/admin/link-2',
-  //     },
-  //     {
-  //       label: 'Link 3',
-  //       to: '/admin/link-3',
-  //     }
-  //   ],
-  // },
+  {
+    label: 'Transactions',
+    icon: mdiViewList,
+    menu: [
+      {
+        label: 'Link 1',
+        to: '/admin/link-1',
+      },
+      {
+        label: 'Link 2',
+        to: '/admin/link-2',
+      },
+      {
+        label: 'Link 3',
+        to: '/admin/link-3',
+      }
+    ],
+  },
 ]

@@ -10,6 +10,7 @@
         type="button"
         @click="addService()"
         class="
+          hidden
           flex
           items-center
           text-xs
@@ -132,11 +133,93 @@
       />
     </div>
 
+    <div v-if="hasOption" class="mt-3 col-span-4">
+      <label for="question_type" class="block text-sm font-medium text-gray-700"
+        >Unit</label
+      >
+      <select
+        id="question_type"
+        name="question_type"
+        v-model="model.unit_id"
+        @change="typeChange"
+        class="
+          mt-1
+          block
+          w-full
+          py-2
+          px-3
+          border border-gray-300
+          bg-white
+          rounded-md
+          shadow-sm
+          focus:outline-none focus:ring-indigo-500 focus:border-indigo-500
+          sm:text-sm
+        "
+      >
+        <option value="">-- select unit --</option>
+        <option v-for="unit in units" :key="unit.id" :value="unit.id">
+          {{ upperCaseFirst(unit.unit_name) }}
+        </option>
+      </select>
+    </div>
+
+     <div class="mt-3 col-span-4">
+      <label
+        :for="'qty_text_' + model.id"
+        class="block text-sm font-medium text-gray-700"
+        >Unit Quantity</label
+      >
+      <input
+        type="number"
+        :name="'qty_text_' + model.id"
+        v-model="model.unit_quantity"
+        @change="dataChange"
+        :id="'qty_text_' + model.id"
+        min="1"
+        class="
+          mt-1
+          focus:ring-indigo-500 focus:border-indigo-500
+          block
+          w-full
+          shadow-sm
+          sm:text-sm
+          border-gray-300
+          rounded-md
+        "
+      />
+    </div>
+
+    <div v-if="quantityPerUnit" class="mt-3 col-span-4">
+      <label
+        :for="'qty_text_' + model.id"
+        class="block text-sm font-medium text-gray-700"
+        >Quantity Per Unit</label
+      >
+      <input
+        type="number"
+        :name="'qty_text_' + model.id"
+        v-model="model.quantity_per_unit"
+        @change="dataChange"
+        :id="'qty_text_' + model.id"
+        min="1"
+        class="
+          mt-1
+          focus:ring-indigo-500 focus:border-indigo-500
+          block
+          w-full
+          shadow-sm
+          sm:text-sm
+          border-gray-300
+          rounded-md
+        "
+      />
+    </div>
+
     <div class="mt-3 col-span-4">
       <label
         :for="'cost_text_' + model.id"
         class="block text-sm font-medium text-gray-700"
-        >Product Cost</label
+        >Unit Cost</label
       >
       <input
         type="text"
@@ -157,31 +240,7 @@
       />
     </div>
 
-    <div class="mt-3 col-span-4">
-      <label
-        :for="'qty_text_' + model.id"
-        class="block text-sm font-medium text-gray-700"
-        >Quantity</label
-      >
-      <input
-        type="number"
-        :name="'qty_text_' + model.id"
-        v-model="model.quantity"
-        @change="dataChange"
-        :id="'qty_text_' + model.id"
-        min="1"
-        class="
-          mt-1
-          focus:ring-indigo-500 focus:border-indigo-500
-          block
-          w-full
-          shadow-sm
-          sm:text-sm
-          border-gray-300
-          rounded-md
-        "
-      />
-    </div>
+   
 
 
     <div class="mt-3 col-span-4">
@@ -287,31 +346,35 @@
       />
     </div>
 
-    <div class="mt-3 col-span-4">
-        <label
-          :for="'question_text_' + model.category_id"
-          class="block text-sm font-medium text-gray-700"
-          >Storage Location</label
-        >
-        <input
-          type="text"
-          :name="'question_text_' + model.category_id"
-          v-model="model.storage_location"
-          @change="dataChange"
-          :id="'question_text_' + model.category_id"
-          class="
-            mt-1
-            focus:ring-indigo-500 focus:border-indigo-500
-            block
-            w-full
-            shadow-sm
-            sm:text-sm
-            border-gray-300
-            rounded-md
-          "
-        />
-      </div>
-
+    <div v-if="hasStorage" class="mt-3 col-span-4">
+      <label :for="'storage_'+model.id" class="block text-sm font-medium text-gray-700"
+        >Storage Location</label
+      >
+      <select
+        :id="'storage_'+model.id"
+        :name="'storage_'+model.id"
+        v-model="model.storage_location"
+        @change="typeChange"
+        class="
+          mt-1
+          block
+          w-full
+          py-2
+          px-3
+          border border-gray-300
+          bg-white
+          rounded-md
+          shadow-sm
+          focus:outline-none focus:ring-indigo-500 focus:border-indigo-500
+          sm:text-sm
+        "
+      >
+        <option value="">-- select room --</option>
+        <option v-for="room in storage" :key="room.id" :value="room.id">
+          {{ upperCaseFirst(room.room_name) }}
+        </option>
+      </select>
+    </div>
 
   </div>
 
@@ -342,8 +405,8 @@
     </div>
   </div>
 
-  <div class="xl:grid-cols-12">
-    <div class="mt-3 pb-6 xl:w-3/12 ">
+  <div class="xl:grid gap-3 xl:grid-cols-12">
+    <div class="mt-3 pb-6 col-span-3">
         <label
           :for="'cost_text_' + model.id"
           class="block text-sm font-medium text-gray-700"
@@ -368,9 +431,32 @@
           "
         />
     </div>
+    <div class="mt-3 pb-6 col-span-3 ">
+        <label
+          :for="'batch_stocks_' + model.id"
+          class="block text-sm font-medium text-gray-700"
+          >Batch Stocks</label
+        >
+        <input
+          type="text"
+          :name="'batch_stocks_' + model.id"
+          v-model="model.batch_stocks"
+          @change="dataChange"
+          :id="'batch_stocks_' + model.id"
+          disabled
+          class="
+            mt-1
+            focus:ring-indigo-500 focus:border-indigo-500
+            block
+            w-full
+            shadow-sm
+            sm:text-sm
+            border-gray-300
+            rounded-md
+          "
+        />
+    </div>
   </div>
-
-
 
     <BaseDivider />
 </template>
@@ -411,14 +497,20 @@ const props = defineProps({
   index: Number,
   selectOptions: Boolean,
   addForm: Boolean,
-  hasOption: Boolean
+  hasOption: Boolean,
+  hasStorage: Boolean
 });
 
 const suppliers = computed(() => store.state.userList.filter(user => user.role === 'Supplier'));
+const units = computed(() => store.state.unitList);
+const storage = computed(() => store.state.storageList);
 
 const model = ref(JSON.parse(JSON.stringify(props.service)));
 
 const emit = defineEmits(["change", "addService", "deleteService"]);
+
+const quantityPerUnit = ref(false);
+const unitsData = [2,4,5];
 
 
 function upperCaseFirst(str) {
@@ -427,12 +519,22 @@ function upperCaseFirst(str) {
 
 
 function typeChange() {
+  if(model.value.unit_id) {
+    updateInputs(model.value.unit_id)
+  } else {
+    quantityPerUnit.value = false;
+  }
   dataChange();
 }
 
 // Emit the data change
 function dataChange() {
-  model.value.total_cost = model.value.unit_cost * model.value.quantity;
+  if(quantityPerUnit.value){
+    model.value.batch_stocks = model.value.unit_quantity * model.value.quantity_per_unit;
+  } else {
+    model.value.batch_stocks = model.value.unit_quantity;
+  }
+  model.value.total_cost = model.value.unit_cost * model.value.unit_quantity;
   const data = model.value;
   emit("change", data);
 }
@@ -444,6 +546,15 @@ function addService() {
 function deleteService() {
   emit("deleteService", props.service);
 }
+
+const updateInputs = (id)=> {
+  quantityPerUnit.value = changeUnit(id);
+};
+
+const changeUnit = (id) => {
+  const result = unitsData.find(item => item === id);
+  return result !== undefined; // Returns true if 1 is found, otherwise false
+};
 
 </script>
 

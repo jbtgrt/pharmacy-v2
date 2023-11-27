@@ -68,7 +68,7 @@ watchEffect(() => {
   filteredItems.value = items.value.filter((user) => {
     return (
       (user.product_name.toLowerCase().includes(searchQuery.value.toLowerCase()) ||
-       user.description.toLowerCase().includes(searchQuery.value.toLowerCase()))
+       user.category_name.toLowerCase().includes(searchQuery.value.toLowerCase()))
     );
   });
 
@@ -121,7 +121,7 @@ const servicesPaginated = computed(() => {
 
 <template>
 
-  <CardBoxModal v-model="isModalActive" title="Product Details" classValue="flex overflow-x-auto shadow-lg max-h-modal w-11/12 md:w-3/5 lg:w-2/5 xl:w-7/12 z-50" >
+  <CardBoxModal hasCancel v-model="isModalActive" title="Product Details" classValue="flex overflow-x-auto shadow-lg max-h-modal w-11/12 md:w-3/5 lg:w-2/5 xl:w-7/12 z-50" >
     <SelectedProductCard :product="selectedRecord" class="mb-6" />
   </CardBoxModal>
 
@@ -145,16 +145,14 @@ const servicesPaginated = computed(() => {
       <tr>
         <th v-if="checkable" />
         <th />
-        <th>Product Name</th>
         <th>Batch No</th>
+        <th>Product Name</th>
+        <th>Category Name</th>
+        <th>Unit Name</th>
+        <th>Unit Quantity</th>
         <th>Unit Cost</th>
-        <th>Quantity</th>
         <th>Total Cost</th>
         <th>Date Received</th>
-        <th>Expires At</th>
-        <th>Category</th>
-        <th>Brand</th>
-        
         <th></th>
 
         <th />
@@ -166,18 +164,23 @@ const servicesPaginated = computed(() => {
         <td class="border-b-0 lg:w-6 before:hidden">
           <UserAvatar :username="record.product_name" :avatar="record.image" class="w-24 h-24 mx-auto lg:w-6 lg:h-6" />
         </td>
-        <td data-label="Product Name">
-          {{ record.product_name }}
-        </td>
         <td data-label="Batch No">
           {{ record.batch_no }}
         </td>
-        <td data-label="Unit Cost">
-          {{ record.unit_cost }}
+        <td data-label="Product Name">
+          {{ record.product_name }}
         </td>
-
-        <td data-label="Quantity">
-          {{ record.quantity }}
+        <td data-label="Category">
+          {{ record.category_name }}
+        </td>
+        <td data-label="Unit">
+          {{ record.unit_name }}
+        </td>
+        <td data-label="Unit Quantity">
+          {{ record.unit_quantity }}
+        </td>
+        <td data-label="Product Cost">
+          {{ record.unit_cost }}
         </td>
         <td data-label="Total Cost">
           {{ record.total_cost }}
@@ -185,15 +188,10 @@ const servicesPaginated = computed(() => {
         <td data-label="Date Received">
           {{ record.date_received }}
         </td>
-        <td data-label="Expires At">
+        <!-- <td data-label="Expires At">
           {{ record.expires_at }}
-        </td>
-        <td data-label="Category">
-          {{ record.category_name }}
-        </td>
-         <td data-label="Brand">
-          {{ record.brand_name }}
-        </td>
+        </td> -->
+        
        
          
         <td class="before:hidden lg:w-1 whitespace-nowrap">

@@ -69,6 +69,7 @@ function addService(index) {
     classification: '',
     product_type: '',
     formulation: '',
+    barcode: '',
     image_url: '',
     description: '',
   };
@@ -93,17 +94,39 @@ function serviceChange(service) {
 function submit() {
  if (route.params.id) {
   store.dispatch("updateProduct", { ...model.value }).then(({ data }) => {
-    router.push({name: "admin-product"});
+    store.commit("notify", {
+      show: true,
+      type: "success",
+      title: 'Update Product Success!',
+      message: [],
+    });
+    router.push({name: "admin-products"});
   })
   .catch(err => {
-    errors.value = err.response.data.errors;
+    store.commit("alert", {
+      show: true,
+      type: "danger",
+      title: 'Ensure that these requirements are met:',
+      message: err.response.data.errors,
+    });
   });
 } else {
   store.dispatch("saveProduct", { ...model.value }).then(({ data }) => {
+    store.commit("notify", {
+      show: true,
+      type: "success",
+      title: 'Add Product Success!',
+      message: [],
+    });
     router.push({name: "admin-add-supply"});
   })
   .catch(err => {
-    errors.value = err.response.data.errors;
+    store.commit("alert", {
+      show: true,
+      type: "danger",
+      title: 'Ensure that these requirements are met:',
+      message: err.response.data.errors,
+    });
   });
 }
   

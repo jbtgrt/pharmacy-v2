@@ -18,6 +18,8 @@ import NavBarItemPlain from '@/components/NavBarItemPlain.vue'
 import AsideMenu from '@/components/AsideMenu.vue'
 import FooterBar from '@/components/FooterBar.vue'
 
+import CustomToaster from '@/mycomponents/CustomToast.vue'
+
 const layoutAsidePadding = 'xl:pl-60'
 
 const darkModeStore = useDarkModeStore()
@@ -113,6 +115,7 @@ watchEffect(() => {
         @aside-lg-close-click="isAsideLgActive = false"
       />
       <router-view></router-view>
+      <CustomToaster />
       <FooterBar>
         System
       </FooterBar>

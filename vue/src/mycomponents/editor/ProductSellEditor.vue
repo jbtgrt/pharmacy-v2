@@ -347,7 +347,7 @@
 import { v4 as uuidv4 } from "uuid";
 import { computed, ref } from "@vue/reactivity";
 import { useStore } from "vuex";
-import { watchEffect, watch, onMounted } from "vue"
+import { watchEffect, watch } from "vue"
 
 import FormField from '@/components/FormField.vue'
 import FormControl from '@/components/FormControl.vue'
@@ -411,20 +411,13 @@ function upperCaseFirst(str) {
   return str.charAt(0).toUpperCase() + str.slice(1);
 }
 
-onMounted(()=> {
-  if(model.value.category_id){
-    const data = categories.value.find(item => item.id === model.value.category_id);
-    category_data.value = data;
-  }
-})
-
 
 function typeChange() {
   dataChange();
   if(model.value.category_id){
     const data = categories.value.find(item => item.id === model.value.category_id);
     category_data.value = data;
-  } 
+  }
 }
 
 // Emit the data change

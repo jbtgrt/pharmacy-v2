@@ -110,7 +110,7 @@
           @click="toggleDropdown"
           class="flex justify-between w-full px-3 py-2 mt-1 text-left border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
         >
-          <span v-if="selectedBrands.length === 0">-- Select Data --</span>
+          <span v-if="selectedBrands.length === 0">-- Select an Options --</span>
           <span v-else-if="selectedBrands.length === brands.length">All Options Selected</span>
           <span v-else>{{ selectedBrands.length }} option{{ selectedBrands.length > 1 ? 's' : '' }} selected</span>
           <svg

@@ -37,12 +37,24 @@ const categoryColumns = [
   { id: 3, col_name: 'Formulation' }
 ];
 
+const units = [
+  { id: 1, col_name: 'Per Piece' },
+  { id: 2, col_name: 'Per Box' },
+];
+
+const storageRoom = [
+  { id: 1, room_name: 'Room 1' },
+  { id: 2, room_name: 'Room 2' },
+];
+
+
 const store = createStore({
   state: {
     refresh: true,
     notification: {
       show: false,
-      type: 'success',
+      type: '',
+      title: '',
       message: ''
     },
     user: {
@@ -57,12 +69,15 @@ const store = createStore({
     productList: [],
     selectedProduct: [],
     checkedProducts: [],
+    sellProductList: [],
+    selectedSellProduct: [],
     productSupplyList: [],
     currentCategory: null,
     selectedProductSupply: [],
     brandList: [],
     unitList: [],
     stockList: [],
+    storageList: storageRoom,
     todaySales: todaySales.data,
     categoryColumns: categoryColumns,
     
@@ -227,6 +242,31 @@ const store = createStore({
           //commit('filterProduct', id); // Assuming you have a mutation to remove the item from the state
         });
     },
+    // Sell Product
+    getSellProductList({commit}) {
+      return axiosClient.get('/sell-product').then((res) => {
+        commit("setSellProductList", res.data);
+      });
+    },
+    updateSellProduct({ commit }, product) {
+      return axiosClient
+        .put(`/sell-product/${product.records[0].id}`, product)
+        .then((res) => {
+          commit("setSelectedSellProduct", res.data);
+          return res;
+        });
+    },
+    editSellProduct({ commit }, id) {
+      return axiosClient
+        .get(`/sell-product/${id}`)
+        .then((res) => {
+          commit("setSellSelectedProduct", res.data);
+          return res;
+        })
+        .catch((err) => {
+          throw err;
+        });
+    },
     //  Supply
     getSupplyList({commit}) {
       return axiosClient.get('/supply').then((res) => {
@@ -383,6 +423,13 @@ const store = createStore({
     setCheckProductList: (state, products) => {
       state.checkedProducts = products;
     },
+    // Sell Product
+    setSellProductList: (state, products) => {
+      state.sellProductList = products.data;
+    },
+    setSelectedSellProduct: (state, product) => {
+      state.selectedSellProduct = product.current[0];
+    },
     // Product Supply
     setSupplyList: (state, supplies) => {
       state.productSupplyList = supplies.data;
@@ -404,6 +451,22 @@ const store = createStore({
     // Unit
     setUnitList: (state, units) => {
       state.unitList = units.data;
+    },
+
+    notify: (state, {show, message, type, title}) => {
+      state.notification.show = show;
+      state.notification.message = message;
+      state.notification.type = type;
+      state.notification.title = title;
+      setTimeout(() => {
+        state.notification.show = false;
+      }, 3000)
+    },
+    alert: (state, {show, message, type, title}) => {
+      state.notification.show = show;
+      state.notification.message = message;
+      state.notification.type = type;
+      state.notification.title = title;
     },
     
     
