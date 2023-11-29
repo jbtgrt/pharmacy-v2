@@ -47,6 +47,10 @@ const storageRoom = [
   { id: 2, room_name: 'Room 2' },
 ];
 
+const discountTypes = [
+  { id: 1, type_label: 'Percentage' },
+  { id: 2, type_label: 'Fixed' },
+];
 
 const store = createStore({
   state: {
@@ -62,18 +66,29 @@ const store = createStore({
       role: sessionStorage.getItem("ROLE"),
       token: sessionStorage.getItem("TOKEN"),
     },
-    userList: [],
+    userList: {
+      data: [],
+      loading: false,
+    },
     selectedUser: [],
     categoryList: [],
     selectedCategory: [],
     productList: [],
     selectedProduct: [],
     checkedProducts: [],
+    //sell products
     sellProductList: [],
+    checkedSellProducts: [],
     selectedSellProduct: [],
+    //supply products
     productSupplyList: [],
     currentCategory: null,
     selectedProductSupply: [],
+    // Discount
+    discountList: [],
+    discountTypeList: discountTypes,
+    selectedDiscount: [],
+    // Brand
     brandList: [],
     unitList: [],
     stockList: [],
@@ -113,11 +128,14 @@ const store = createStore({
       });
     },
     getUserList({commit}) {
+      commit("setUserListLoading", true);
       return axiosClient.get('/user').then((res) => {
         commit("setUserList", res.data);
+        commit("setUserListLoading", false);
       });
     },
     saveUser({commit}, user) {
+      // delete user.image_url;
       let response;
       if(user.id){
         response = axiosClient
@@ -203,6 +221,43 @@ const store = createStore({
           commit('filterCategory', id); // Assuming you have a mutation to remove the item from the state
         });
     },
+    // Discount
+    getDiscountList({commit}) {
+      return axiosClient.get('/discount').then((res) => {
+        commit("setDiscountList", res.data);
+      });
+    },
+    saveDiscount({commit}, discount) {
+      return axiosClient.post("/discount", discount).then((res) => {
+        commit("setDiscountList", res.data);
+        return res;
+      });
+    },
+    updateDiscount({ commit }, discount) {
+      return axiosClient
+        .put(`/discount/${discount.records[0].id}`, discount)
+        .then((res) => {
+          commit("setDiscountList", res.data);
+          return res;
+        });
+    },
+    editDiscount({ commit }, id) {
+      return axiosClient
+        .get(`/discount/${id}`)
+        .then((res) => {
+          commit("setSelectedDiscount", res.data);
+          return res;
+        })
+        .catch((err) => {
+          throw err;
+        });
+    },
+    deleteDiscount({ commit }, id) {
+      return axiosClient.delete(`/discount/${id}`)
+        .then(response => {
+          commit('filterDiscount', id); // Assuming you have a mutation to remove the item from the state
+        });
+    },
     // Product
     getProductList({commit}) {
       return axiosClient.get('/product').then((res) => {
@@ -252,7 +307,7 @@ const store = createStore({
       return axiosClient
         .put(`/sell-product/${product.records[0].id}`, product)
         .then((res) => {
-          commit("setSelectedSellProduct", res.data);
+          commit("setSellProductList", res.data);
           return res;
         });
     },
@@ -260,7 +315,7 @@ const store = createStore({
       return axiosClient
         .get(`/sell-product/${id}`)
         .then((res) => {
-          commit("setSellSelectedProduct", res.data);
+          commit("setSelectedSellProduct", res.data);
           return res;
         })
         .catch((err) => {
@@ -394,10 +449,13 @@ const store = createStore({
       sessionStorage.setItem('TOKEN', token);
     },
     setUserList: (state, users) => {
-      state.userList = users.data;
+      state.userList.data = users.data;
     },
     setSelectedUser: (state, user) => {
       state.selectedUser = user.current_user[0];
+    },
+    setUserListLoading: (state, loading) => {
+      state.userList.loading = loading;
     },
     // Category Mutation
     setCategoryList: (state, categories) => {
@@ -430,6 +488,9 @@ const store = createStore({
     setSelectedSellProduct: (state, product) => {
       state.selectedSellProduct = product.current[0];
     },
+    setCheckSellProductList: (state, products) => {
+      state.checkedSellProducts = products;
+    },
     // Product Supply
     setSupplyList: (state, supplies) => {
       state.productSupplyList = supplies.data;
@@ -440,7 +501,17 @@ const store = createStore({
     filterSupply(state, id) {
       state.productSupplyList = state.selectedProductSupply.filter(item => item.id !== id);
     },
-    //
+    // Discount Mutation
+    setDiscountList: (state, discounts) => {
+      state.discountList = discounts.data;
+    },
+    setSelectedDiscount: (state, discount) => {
+      state.selectedDiscount = discount.current;
+    },
+    filterDiscount(state, id) {
+      state.discountList = state.discountList.filter(item => item.id !== id);
+    },
+    // Stock
     setStockList: (state, stocks) => {
       state.stockList = stocks.data;
     },
@@ -453,14 +524,15 @@ const store = createStore({
       state.unitList = units.data;
     },
 
-    notify: (state, {show, message, type, title}) => {
+    notify: (state, {show, message, type, title, seconds}) => {
+      const time = seconds ? seconds : 3000;
       state.notification.show = show;
       state.notification.message = message;
       state.notification.type = type;
       state.notification.title = title;
       setTimeout(() => {
         state.notification.show = false;
-      }, 3000)
+      }, time);
     },
     alert: (state, {show, message, type, title}) => {
       state.notification.show = show;

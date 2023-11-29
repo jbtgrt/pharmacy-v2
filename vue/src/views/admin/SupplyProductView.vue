@@ -15,6 +15,10 @@ import CardBoxComponentEmpty from '@/components/CardBoxComponentEmpty.vue'
 const route = useRoute();
 const store = useStore();
 
+store.dispatch("getSupplyList");
+store.dispatch("getProductList");
+
+
 const items = computed(() => store.state.productList);
 
 const showtable = ref(true);

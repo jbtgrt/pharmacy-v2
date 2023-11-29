@@ -19,6 +19,10 @@ const route = useRoute();
 const store = useStore();
 
 store.dispatch("getProductList");
+store.dispatch("getCategoryList");
+store.dispatch("getBrandList");
+store.dispatch("getUnitList");
+
 
 const items = computed(() => store.state.productList);
 // const checkedProducts = computed(() => store.state.checkedProducts);

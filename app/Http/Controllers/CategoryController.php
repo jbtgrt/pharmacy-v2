@@ -145,14 +145,6 @@ class CategoryController extends Controller
         return response()->json(['message' => 'Item deleted'], 200);
     }
 
-    /**
-     * Create a question and return
-     *
-     * @param $data
-     * @return mixed
-     * @throws \Illuminate\Validation\ValidationException
-     * @author Jobet Guarte <jobetguartejg@gmail.com>
-     */
     private function createCategory($data)
     {
         $validator = Validator::make($data, [

@@ -43,55 +43,45 @@ export default [
         to: '/admin/products',
       },
       {
+        label: 'Stocks',
+        to: '/admin/supplies',
+      },
+      {
+        label: 'Discount',
+        to: '/admin/discounts'
+      },
+      {
         label: 'Sell Products',
         to: '/admin/sell-products',
       },
       {
         label: 'Out-Stock',
-        to: '/admin/link-2',
+        to: '/admin/out-stock',
       },
       {
         label: 'Expired',
-        to: '/admin/link-3',
+        to: '/admin/expired',
       }
     ],
-  },
-  {
-    to: '/admin/supplies',
-    icon: mdiTable,
-    label: 'Supplies'
-  },
-  {
-    to: '/admin/sales',
-    icon: mdiTable,
-    label: 'Sales'
-  },
-  {
-    to: '/admin/stocks',
-    icon: mdiTable,
-    label: 'Stocks'
-  },
-  {
-    to: '/admin/reports',
-    icon: mdiFileDocumentOutline,
-    label: 'Reports'
   },
   {
     label: 'Transactions',
     icon: mdiViewList,
     menu: [
       {
-        label: 'Link 1',
-        to: '/admin/link-1',
+        label: 'Transactions',
+        to: '/admin/transactions',
       },
       {
-        label: 'Link 2',
-        to: '/admin/link-2',
+        label: 'Transaction History',
+        to: '/admin/transaction-history',
       },
-      {
-        label: 'Link 3',
-        to: '/admin/link-3',
-      }
     ],
   },
+  {
+    to: '/admin/reports',
+    icon: mdiFileDocumentOutline,
+    label: 'Reports'
+  },
+  
 ]

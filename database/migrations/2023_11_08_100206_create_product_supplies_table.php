@@ -22,9 +22,9 @@ return new class extends Migration
 
             $table->integer('batch_no');
             $table->date('date_received');
-            $table->date('expires_at');
+            $table->date('expires_at')->nullable();
             $table->integer('unit_quantity');
-            $table->integer('quantity_per_unit')->default(0);
+            $table->integer('quantity_per_unit')->default(1);
             $table->double('unit_cost');
             $table->double('total_cost');
             $table->integer('batch_stocks');

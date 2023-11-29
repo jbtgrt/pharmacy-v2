@@ -151,6 +151,7 @@ class ProductSupplyController extends Controller
             
             'total_cost' => 'required|numeric',
             'batch_stocks' => 'required|numeric',
+            'cost_per_piece' => 'required|numeric',
 
             'date_received' => 'nullable|date',
             'expires_at' => 'nullable|date',

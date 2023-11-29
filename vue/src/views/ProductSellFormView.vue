@@ -16,7 +16,7 @@ import FormControl from '@/components/FormControl.vue'
 import UserCard from '@/components/UserCard.vue'
 
 import NotificationBar from '@/components/NotificationBar.vue'
-import ProductEditor from "@/mycomponents/editor/ProductEditor.vue";
+import ProductSellEditor from "@/mycomponents/editor/ProductSellEditor.vue";
 
 const notificationSettingsModel = ref([])
 const notificationsOutline = computed(() => notificationSettingsModel.value.indexOf('outline') > -1)
@@ -24,6 +24,8 @@ const notificationsOutline = computed(() => notificationSettingsModel.value.inde
 const route = useRoute();
 const router = useRouter();
 const store = useStore();
+
+store.dispatch("getDiscountList");
 
 // Create empty survey
 let model = ref({
@@ -35,7 +37,7 @@ let formTitle = 'Submit';
 
 // If the current component is rendered on survey update route we make a request to fetch survey
 if (route.params.id) {
-  store.dispatch("editProduct", route.params.id);
+  store.dispatch("editSellProduct", route.params.id);
   addForm.value = false;
   formTitle = 'Update';
 }
@@ -44,7 +46,7 @@ let errors = ref('');
 
 // Watch to current survey data change and when this happens we update local model
 watch(
-  () => store.state.selectedProduct,
+  () => store.state.selectedSellProduct,
   (newVal, oldVal) => {
     model.update = true ;
     model.value.records = [{
@@ -53,7 +55,7 @@ watch(
   }
 );
 
-const selected = computed(() => store.state.selectedProduct);
+const selected = computed(() => store.state.selectedSellProduct);
 
 
 
@@ -93,32 +95,14 @@ function serviceChange(service) {
 
 function submit() {
  if (route.params.id) {
-  store.dispatch("updateProduct", { ...model.value }).then(({ data }) => {
+  store.dispatch("updateSellProduct", { ...model.value }).then(({ data }) => {
     store.commit("notify", {
       show: true,
       type: "success",
-      title: 'Update Product Success!',
+      title: 'Update Success!',
       message: [],
     });
-    router.push({name: "admin-product"});
-  })
-  .catch(err => {
-    store.commit("alert", {
-      show: true,
-      type: "danger",
-      title: 'Ensure that these requirements are met:',
-      message: err.response.data.errors,
-    });
-  });
-} else {
-  store.dispatch("saveProduct", { ...model.value }).then(({ data }) => {
-    store.commit("notify", {
-      show: true,
-      type: "success",
-      title: 'Add Product Success!',
-      message: [],
-    });
-    router.push({name: "admin-add-supply"});
+    router.push({name: "admin-sell-products"});
   })
   .catch(err => {
     store.commit("alert", {
@@ -138,7 +122,7 @@ const notification = computed(() => store.state.notification)
 </script>
 
 <template>
-    <SectionMain>
+    <SectionMain>  
       <SectionTitleLineWithButton :icon="mdiPlusBox " :title="route.meta.title" main>
       </SectionTitleLineWithButton>    
         <NotificationBar v-if="Object.keys(errors).length" color="danger" :icon="mdiAlertCircle" :outline="notificationsOutline">
@@ -184,7 +168,7 @@ const notification = computed(() => store.state.notification)
               </div>
             </div>
             <div v-for="(service, index) in model.records" :key="service.id">
-              <ProductEditor
+              <ProductSellEditor
                 :service="service"
                 :index="index"
                 :addForm="addForm"

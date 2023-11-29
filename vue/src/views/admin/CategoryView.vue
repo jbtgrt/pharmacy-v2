@@ -14,6 +14,9 @@ import CardBoxComponentEmpty from '@/components/CardBoxComponentEmpty.vue'
 const route = useRoute();
 const store = useStore();
 
+store.dispatch("getCategoryList");
+
+
 const items = computed(() => store.state.categoryList);
 const showtable = ref(true);
 watchEffect(()=> {

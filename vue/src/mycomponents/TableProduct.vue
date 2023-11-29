@@ -208,7 +208,7 @@ const checked = (isChecked, client) => {
           <BaseButtons type="justify-start lg:justify-end" no-wrap>
             <BaseButton color="info" :icon="mdiEye" small @click="showRecord(isModalActive = true, selectedRecord = record)" />
             <BaseButton color="success" :icon="mdiPencil " small :to="`/admin/edit-product/${record.id}`" />
-            <BaseButton color="danger" :icon="mdiTrashCan " small @click="deleteItem(record.id)" />
+            <!-- <BaseButton color="danger" :icon="mdiTrashCan " small @click="deleteItem(record.id)" /> -->
           </BaseButtons>
         </td>
       </tr>

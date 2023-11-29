@@ -77,9 +77,9 @@
 
   <div class="xl:grid gap-3 xl:grid-cols-12">
 
-    <div v-if="hasOption" class="mt-3 col-span-4">
+   <!--  <div v-if="hasOption" class="mt-3 col-span-4">
       <label :for="'category' + model.id" class="block text-sm font-medium text-gray-700"
-        >Category</label
+        >Sale Unit</label
       >
       <select
         :id="'category' + model.id"
@@ -105,126 +105,21 @@
           {{ upperCaseFirst(category.category_name) }}
         </option>
       </select>
-    </div>
+    </div> -->
 
-    <div v-if="hasOption" class="mt-3 col-span-4">
-      <label :for="'brand' + model.id" class="block text-sm font-medium text-gray-700"
-        >Brand Name</label
-      >
-      <select
-        :id="'brand' + model.id"
-        :name="'brand' + model.id"
-        v-model="model.brand_id"
-        @change="typeChange"
-        class="
-          mt-1
-          block
-          w-full
-          py-2
-          px-3
-          border border-gray-300
-          bg-white
-          rounded-md
-          shadow-sm
-          focus:outline-none focus:ring-indigo-500 focus:border-indigo-500
-          sm:text-sm
-        "
-      >
-        <option value="">-- select brand --</option>
-        <option v-for="brand in brands" :key="brand.id" :value="brand.id">
-          {{ upperCaseFirst(brand.brand_name) }}
-        </option>
-      </select>
-    </div>
-
-    <!-- Question -->
     <div class="mt-3 col-span-4">
       <label
-        :for="'product_name' + model.id"
+        :for="'cost_text_' + model.id"
         class="block text-sm font-medium text-gray-700"
-        >Product Name</label
+        >Product Cost</label
       >
       <input
-        :id="'product_name' + model.id"
-        :name="'product_name' + model.id"
         type="text"
-        v-model="model.product_name"
+        :name="'cost_text_' + model.id"
+        disabled
+        v-model="model.cost_per_piece"
         @change="dataChange"
-        class="
-          mt-1
-          focus:ring-indigo-500 focus:border-indigo-500
-          block
-          w-full
-          shadow-sm
-          sm:text-sm
-          border-gray-300
-          rounded-md
-        "
-      />
-    </div>
-
-    <div v-if="classification" class="mt-3 col-span-4">
-      <label
-        :for="'classification' + model.id"
-        class="block text-sm font-medium text-gray-700"
-        >Classification</label
-      >
-      <input
-        :id="'classification' + model.id"
-        :name="'classification' + model.id"
-        type="text"
-        v-model="model.classification"
-        @change="dataChange"
-        class="
-          mt-1
-          focus:ring-indigo-500 focus:border-indigo-500
-          block
-          w-full
-          shadow-sm
-          sm:text-sm
-          border-gray-300
-          rounded-md
-        "
-      />
-    </div>
-
-    <div v-if="productType" class="mt-3 col-span-4">
-      <label
-        :for="'product_type' + model.id"
-        class="block text-sm font-medium text-gray-700"
-        >Product Type</label
-      >
-      <input
-        :id="'product_type' + model.id"
-        :name="'product_type' + model.id"
-        type="text"
-        v-model="model.product_type"
-        @change="dataChange"
-        class="
-          mt-1
-          focus:ring-indigo-500 focus:border-indigo-500
-          block
-          w-full
-          shadow-sm
-          sm:text-sm
-          border-gray-300
-          rounded-md
-        "
-      />
-    </div>
-
-    <div v-if="formulation" class="mt-3 col-span-4">
-      <label
-        :for="'formulation' + model.id"
-        class="block text-sm font-medium text-gray-700"
-        >Formulation</label
-      >
-      <input
-        :id="'formulation' + model.id"
-        :name="'formulation' + model.id"
-        type="text"
-        v-model="model.formulation"
-        @change="dataChange"
+        :id="'cost_text_' + model.id"
         class="
           mt-1
           focus:ring-indigo-500 focus:border-indigo-500
@@ -240,16 +135,16 @@
 
     <div class="mt-3 col-span-4">
       <label
-        :for="'code' + model.id"
+        :for="'cost_text_' + model.id"
         class="block text-sm font-medium text-gray-700"
-        >Code</label
+        >Selling Price</label
       >
       <input
-        :id="'code' + model.id"
-        :name="'code' + model.id"
         type="text"
-        v-model="model.barcode"
+        :name="'cost_text_' + model.id"
+        v-model="model.original_price"
         @change="dataChange"
+        :id="'cost_text_' + model.id"
         class="
           mt-1
           focus:ring-indigo-500 focus:border-indigo-500
@@ -261,85 +156,60 @@
           rounded-md
         "
       />
-    </div>
-    
+    </div> 
 
-    <div v-if="unit" class="mt-3 col-span-3">
-      <label :for="'unit'+ model.id" class="block text-sm font-medium text-gray-700"
-        >Product Unit</label
-      >
-      <select
-        :id="'unit'+ model.id"
-        :name="'unit'+ model.id"
-        v-model="model.unit_id"
-        @change="typeChange"
-        class="
-          mt-1
-          block
-          w-full
-          py-2
-          px-3
-          border border-gray-300
-          bg-white
-          rounded-md
-          shadow-sm
-          focus:outline-none focus:ring-indigo-500 focus:border-indigo-500
-          sm:text-sm
-        "
-      >
-        <option value="">-- select unit --</option>
-        <option v-for="unit in units" :key="unit.id" :value="unit.id">
-          {{ upperCaseFirst(unit.unit_name) }}
-        </option>
-      </select>
+    <!-- <div :class="[ selectOptions ? 'grid gap-3 grid-cols-12' : '' ] "> -->
+ 
+     <div class="mt-3 col-span-4 mb-8">
+      <label for="brand_id" class="block text-sm font-medium text-gray-700">Column Names</label>
+      <div>
+        <button
+          type="button"
+          @click="toggleDropdown"
+          class="flex justify-between w-full px-3 py-2 mt-1 text-left border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+        >
+          <span v-if="selectedDiscounts.length === 0">-- Select Discount --</span>
+          <span v-else-if="selectedDiscounts.length === discountData.length">All Options Selected</span>
+          <span v-else>{{ selectedDiscounts.length }} option{{ selectedDiscounts.length > 1 ? 's' : '' }} selected</span>
+          <svg
+            v-if="isOpen"
+            xmlns="http://www.w3.org/2000/svg"
+            class="w-5 h-5 ml-2 -mr-1 text-gray-400"
+            viewBox="0 0 20 20"
+            fill="currentColor"
+          >
+            <path
+              fill-rule="evenodd"
+              d="M10 12a2 2 0 100-4 2 2 0 000 4z"
+              clip-rule="evenodd"
+            />
+            <path
+              fill-rule="evenodd"
+              d="M3 7a2 2 0 114 0 2 2 0 01-4 0zM13 7a2 2 0 114 0 2 2 0 01-4 0z"
+              clip-rule="evenodd"
+            />
+          </svg>
+        </button>
+      </div>
+      <div v-show="isOpen" class="absolute z-10 mt-1 bg-white border border-gray-300 rounded-md shadow-lg">
+        <div class="p-3">
+          <label class="inline-flex items-center">
+            <input type="checkbox" v-model="selectAll" @change="toggleAll">
+            <span class="ml-2">Select All</span>
+          </label>
+        </div>
+        <div v-for="data in discountData" :key="data.id" class="p-3 border-t border-gray-300">
+          <label class="inline-flex items-center">
+            <input type="checkbox" :value="data.id" v-model="selectedDiscounts" @change="checkOption" >
+            <span class="ml-2">{{ upperCaseFirst(data.label) }} ({{getDiscount(data.amount, data.type)}}) {{getMinimum(data.pur_qty)}}</span>
+          </label>
+        </div>
+      </div>
     </div>
+  <!-- </div> -->
   </div>
 
-  <div class="xl:grid gap-3 xl:grid-cols-12">
 
-    <div class="mt-3 pb-6 col-span-6">
-      <label
-        :for="'description' + model.id"
-        class="block text-sm font-medium text-gray-700"
-        >Description</label
-      >
-      <textarea
-        :id="'description' + model.id"
-        :name="'description' + model.id"
-        v-model="model.description"
-        @change="dataChange"
-        class="
-          mt-1
-          focus:ring-indigo-500 focus:border-indigo-500
-          block
-          w-full
-          h-full
-          shadow-sm
-          sm:text-sm
-          border-gray-300
-          rounded-md
-        "
-      />
-    </div>
-   
-    <div class="mt-3 col-span-4 overflow-hidden">
-      <label
-        
-        class="block text-sm font-medium text-gray-700"
-        >Image</label
-      >
-      <FormField help="Upload image" class="mt-1">
-        <FormFilePicker label="Upload" type="file" @change="onImageChoose" />
-      </FormField>
-      
-    </div>
-    <div  class="mt-3 col-span-2 pt-3">
-      <img v-if="model.image" class="sm:h-25" :src="model.image">
-    </div>
-
-   
-
-  </div> 
   <BaseDivider  />
 </template>
 
@@ -356,23 +226,6 @@ import BaseDivider from '@/components/BaseDivider.vue'
 
 const store = useStore();
 
-function onImageChoose(ev) {
-  const file = ev.target.files[0];
-
-  const reader = new FileReader();
-  reader.onload = () => {
-    // The field to send on backend and apply validations
-    model.value.image_url = reader.result;
-    
-    // The field to display here
-    model.value.image = reader.result;
-    ev.target.value = "";
-
-    dataChange();
-  };
-  reader.readAsDataURL(file);
-  
-}
 
 const props = defineProps({
   service: Object,
@@ -382,42 +235,81 @@ const props = defineProps({
   hasOption: Boolean
 });
 
-// Get question types from vuex
-const categories = computed(() => store.state.categoryList);
-const category_data = ref([]);
-const classification = ref(false);
-const productType = ref(false);
-const formulation = ref(false);
-const unit = ref(false);
-
-const brands = computed(() => store.state.brandList);
-const units = computed(() => store.state.unitList);
-
-const barcodeSymbology = [
-    { id: 1 , label: 'Code 128' },
-    { id: 2 , label: 'Code 39' },
-    { id: 3 , label: 'UPC (Universal Product Code):' },
-    { id: 4 , label: 'EAN (European Article Number)' },
-    { id: 5 , label: 'QR Code (Quick Response Code)' },
-    { id: 6 , label: 'Code 11' }
-  ]
 
 const model = ref(JSON.parse(JSON.stringify(props.service)));
+const discountData = computed(() => {
+  // Assuming store.state.discountList is the array of objects
+  return store.state.discountList.map(discount => ({
+    id: discount.id,
+    label: discount.label,
+    amount: discount.amount,
+    type: discount.type,
+    pur_qty: discount.purchase_quantity,
+  }));
+});
+
 
 const emit = defineEmits(["change", "addService", "deleteService"]);
+
+// Discount
+const isOpen = ref(false);
+const selectAll = ref(false);
+const selectedDiscounts = ref([]);
+
+function toggleDropdown() {
+  isOpen.value = !isOpen.value;
+}
+
+function toggleAll() {
+  if (selectAll.value) {
+    selectedDiscounts.value = discountData.value.map(brand => brand.id);
+    model.value.discount = [...selectedDiscounts.value];
+  } else {
+    selectedDiscounts.value = [];
+    model.value.discount = [];
+  }
+  dataChange();
+}
+
+
+
+
+
+
+function checkOption() {
+  model.value.discount = [...selectedDiscounts.value];
+  dataChange();
+}
+
+selectedDiscounts.value = [...model.value.discount];
+
+if(selectedDiscounts.value.length == discountData.value.length){
+  selectAll.value = true;
+} else {
+  selectAll.value = false;
+}
 
 
 function upperCaseFirst(str) {
   return str.charAt(0).toUpperCase() + str.slice(1);
 }
 
+function getDiscount(amount, type){
+  let percentageValue = parseFloat(amount);
+  let fixValue = amount;
+
+  let discount = type == "Percentage" ? `${percentageValue}%` : `₱${fixValue}`;
+  return discount;
+}
+
+function getMinimum(qty){
+  let minimum = qty <= 1 ? 'No minimum' : `Min: ${qty}`;
+  return minimum;
+}
+
 
 function typeChange() {
   dataChange();
-  if(model.value.category_id){
-    const data = categories.value.find(item => item.id === model.value.category_id);
-    category_data.value = data;
-  }
 }
 
 // Emit the data change
@@ -435,21 +327,6 @@ function deleteService() {
   emit("deleteService", props.service);
 }
 
-watch(category_data, (newVal)=> {
-  // console.log(newVal.details_data)
-  updateInputs(newVal.details_data);
-});
-
-const updateInputs = (data)=> {
-  classification.value = changeCategory(data, 1);
-  productType.value = changeCategory(data, 2);
-  formulation.value = changeCategory(data, 3);
-};
-
-const changeCategory = (detailsData, id) => {
-  const result = detailsData.find(item => item == id);
-  return result !== undefined; // Returns true if 1 is found, otherwise false
-};
 </script>
 
 <style></style>

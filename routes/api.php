@@ -10,6 +10,7 @@ use App\Http\Controllers\ProductController;
 use App\Http\Controllers\SellProductController;
 use App\Http\Controllers\BrandController;
 use App\Http\Controllers\UnitController;
+use App\Http\Controllers\DiscountController;
 use App\Http\Controllers\ProductSupplyController;
 
 /*
@@ -41,6 +42,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::resource('/brand', BrandController::class); 
     Route::resource('/unit', UnitController::class); 
     Route::resource('/supply', ProductSupplyController::class); 
+    Route::resource('/discount', DiscountController::class);
 
 
 });

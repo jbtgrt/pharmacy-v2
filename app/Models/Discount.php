@@ -5,22 +5,23 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Category extends Model
+class Discount extends Model
 {
     use HasFactory;
-    
+
     /**
      * The attributes that are mass assignable.
      *
      * @var array<int, string>
      */
     protected $fillable = [
-        'category_name',
-        'details_data'
+        'label',
+        'type',
+        'amount',
+        'start_date',
+        'end_date',
+        'purchase_quantity',
+        'purchase_amount',
     ];
 
-    public function product()
-    {
-        return $this->hasMany(Product::class);
-    }
 }

@@ -28,7 +28,7 @@ const isModalActive = ref(false)
 const isModalEdit = ref(false)
 const isModalDangerActive = ref(false)
 
-const items = computed(() => store.state.productList.filter(product => product.category_id == props.categoryID));
+const items = computed(() => store.state.sellProductList.filter(product => product.category_id == props.categoryID));
 const selectedRecord = ref({});
 
 function showRecord(client) {
@@ -74,8 +74,7 @@ watchEffect(() => {
   // Filter items based on searchQuery and selectedRole
   filteredItems.value = items.value.filter((user) => {
     return (
-      (user.product_name.toLowerCase().includes(searchQuery.value.toLowerCase()) ||
-       user.description.toLowerCase().includes(searchQuery.value.toLowerCase()))
+      (user.product_name.toLowerCase().includes(searchQuery.value.toLowerCase()) )
     );
   });
 
@@ -104,14 +103,14 @@ const servicesPaginated = computed(() => {
 //  })
 
 
-const deleteItem = (id) => {
-    store.dispatch("deleteProduct", id);
-    // .then((itemID)=> {  console.log(itemID)
-    //   const filtered =  computed(()=> servicesPaginated.value.filter(product => product.id !== itemID));
-    //   tableData.value = filtered;
-    store.commit('filterProduct', { product: id, category: props.categoryID });
-    // });
-  }
+// const deleteItem = (id) => {
+//     store.dispatch("deleteProduct", id);
+//     // .then((itemID)=> {  console.log(itemID)
+//     //   const filtered =  computed(()=> servicesPaginated.value.filter(product => product.id !== itemID));
+//     //   tableData.value = filtered;
+//     store.commit('filterProduct', { product: id, category: props.categoryID });
+//     // });
+//   }
 
 const remove = (arr, cb) => {
   const newArr = []
@@ -131,18 +130,51 @@ const checked = (isChecked, client) => {
   } else {
     checkedRows.value = remove(checkedRows.value, (row) => row.id === client.id)
   }
+
   if(checkedRows.value.length){
     emit("check", {data: checkedRows.value, status: true});
   } else {
     emit("check", {data: checkedRows.value, status: false});
   }
 }
+
+function upperCaseFirst(str) {
+  return str.charAt(0).toUpperCase() + str.slice(1);
+}
+
+function getDiscount(amount, type){
+  let percentageValue = parseFloat(amount);
+  let fixValue = amount;
+
+  let discount = type == "Percentage" ? `${percentageValue}%` : `₱${fixValue}`;
+  return discount;
+}
+
+function getMinimum(qty){
+  let minimum = qty <= 1 ? 'No minimum' : `Min: ${qty}`;
+  return minimum;
+}
+
 </script>
 
 <template> 
 
-  <CardBoxModal hasCancel v-model="isModalActive" title="Product Details" classValue="flex overflow-x-auto shadow-lg max-h-modal w-11/12 md:w-3/5 lg:w-2/5 xl:w-5/12 z-50" >
-    <SelectedProductCard :product="selectedRecord" class="mb-6" />
+  <CardBoxModal hasCancel v-model="isModalActive" title="Product Sell Details" classValue="flex overflow-x-auto shadow-lg max-h-modal w-11/12 md:w-3/5 lg:w-2/5 xl:w-5/12 z-50" >
+    <div class=" mt-6 items-center pb-5 border-b-2 border-gray-100 mb-5">
+      <p class="mr-3 mb-3">Discount: </p> 
+      <!--  -->
+      <div v-if="Object(selectedRecord.discount_data).length" v-for="(record, i) of selectedRecord.discount_data" :key="i" class="ml-3 flex flex-row my-auto items-center">
+        <span class="bg-indigo-100 text-indigo-500 w-4 h-4 mr-2 rounded-full inline-flex items-center justify-center">
+          <svg fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="3" class="w-3 h-3" viewBox="0 0 24 24">
+            <path d="M20 6L9 17l-5-5"></path>
+          </svg>
+        </span> 
+        {{ upperCaseFirst(record.label) }} ({{getDiscount(record.amount, record.type)}}) {{getMinimum(record.purchase_quantity)}}
+      </div>
+      <div v-else class="ml-3 flex flex-row">
+        {{selectedRecord.discount_label}}
+      </div>
+    </div>
   </CardBoxModal>
 
   <section class="p-4"> 
@@ -166,12 +198,10 @@ const checked = (isChecked, client) => {
         <th v-if="checkable" />
         <th />
         <th>Product Name</th>
-        <th>Category</th>
-        <th>Brand</th>
-        <th v-if="servicesPaginated[0].classification">Classification</th>
-        <th v-if="servicesPaginated[0].product_type">Product Type</th>
-        <th v-if="servicesPaginated[0].formulation">Formulation</th>
-        <th>Stocks</th>
+        <th>Selling Price</th>
+        <th>Discount</th>
+        <th>Batch No</th>
+        <th>Batch Stocks</th>
         
         <th />
       </tr>
@@ -185,30 +215,23 @@ const checked = (isChecked, client) => {
          <td data-label="Product Name">
           {{ record.product_name }}
         </td>
-        <td data-label="Category">
-          {{ record.category_name }}
+        <td data-label="Selling Price">
+          {{ record.original_price }}
         </td>
-        <td data-label="Brand">
-          {{ record.brand_name }}
+        <td data-label="Discount">
+          {{ record.discount_label }}
         </td>
-        <td v-if="servicesPaginated[0].classification" data-label="Classification">
-          {{ record.classification }}
+        <td data-label="Batch No" >
+          {{ record.batch_no }}
         </td>
-        <td v-if="servicesPaginated[0].product_type" data-label="Product Type">
-          {{ record.product_type }}
-        </td>
-        <td v-if="servicesPaginated[0].formulation" data-label="Formulation">
-          {{ record.formulation }}
-        </td>
-        <td data-label="Stocks" >
-          55
+        <td data-label="Batch Stocks" >
+          {{ record.batch_stocks }}
         </td>
         
         <td class="before:hidden lg:w-1 whitespace-nowrap">
           <BaseButtons type="justify-start lg:justify-end" no-wrap>
             <BaseButton color="info" :icon="mdiEye" small @click="showRecord(isModalActive = true, selectedRecord = record)" />
-            <BaseButton color="success" :icon="mdiPencil " small :to="`/admin/edit-product/${record.id}`" />
-            <BaseButton color="danger" :icon="mdiTrashCan " small @click="deleteItem(record.id)" />
+            <BaseButton color="success" :icon="mdiPencil " small :to="`/admin/edit-sell-product/${record.id}`" />
           </BaseButtons>
         </td>
       </tr>

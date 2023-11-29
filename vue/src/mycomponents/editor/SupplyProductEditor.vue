@@ -118,6 +118,7 @@
         type="text"
         :name="'qty_text_' + model.id"
         v-model="model.batch_no"
+        disabled
         @change="dataChange"
         :id="'qty_text_' + model.id"
         class="
@@ -456,9 +457,33 @@
           "
         />
     </div>
+    <div class="mt-3 pb-6 col-span-3 ">
+        <label
+          :for="'cost_per_piece' + model.id"
+          class="block text-sm font-medium text-gray-700"
+          >Cost /Piece</label
+        >
+        <input
+          type="text"
+          :name="'cost_per_piece' + model.id"
+          v-model="model.cost_per_piece"
+          @change="dataChange"
+          :id="'cost_per_piece' + model.id"
+          disabled
+          class="
+            mt-1
+            focus:ring-indigo-500 focus:border-indigo-500
+            block
+            w-full
+            shadow-sm
+            sm:text-sm
+            border-gray-300
+            rounded-md
+          "
+        />
+    </div>
   </div>
-
-    <BaseDivider />
+  <BaseDivider />
 </template>
 
 <script setup>
@@ -529,15 +554,26 @@ function typeChange() {
 
 // Emit the data change
 function dataChange() {
+  let costPerPiece = 0;
   if(quantityPerUnit.value){
+    model.value.quantity_per_unit = model.value.unit_quantity
     model.value.batch_stocks = model.value.unit_quantity * model.value.quantity_per_unit;
+    costPerPiece = model.value.unit_cost / model.value.quantity_per_unit ;
   } else {
+    model.value.quantity_per_unit = model.value.unit_quantity;
     model.value.batch_stocks = model.value.unit_quantity;
+    costPerPiece = model.value.unit_cost;
   }
+
+  
+  model.value.cost_per_piece = costPerPiece;
   model.value.total_cost = model.value.unit_cost * model.value.unit_quantity;
+
+  
   const data = model.value;
   emit("change", data);
 }
+
 
 function addService() {
   emit("addService", props.index + 1,  model.value);

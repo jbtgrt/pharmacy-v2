@@ -2,7 +2,7 @@
 import { computed, ref, watchEffect } from 'vue'
 import { useStore } from 'vuex'
 import { useMainStore } from '@/stores/main'
-import { mdiEye, mdiTrashCan, mdiAccountEdit, mdiMagnify   } from '@mdi/js'
+import { mdiEye, mdiTrashCan, mdiAccountEdit, mdiMagnify, mdiPencil  } from '@mdi/js'
 import CardBoxModal from '@/components/CardBoxModal.vue'
 import TableCheckboxCell from '@/components/TableCheckboxCell.vue'
 import BaseLevel from '@/components/BaseLevel.vue'
@@ -16,8 +16,10 @@ import FormControl from '@/components/FormControl.vue'
 
 
 defineProps({
-  checkable: Boolean
+  checkable: Boolean,
+  role: String,
 })
+
 
 const mainStore = useMainStore()
 const store = useStore()
@@ -26,7 +28,7 @@ const isModalActive = ref(false)
 const isModalEdit = ref(false)
 const isModalDangerActive = ref(false)
 
-const items = computed(() => store.state.userList.data);
+const items = computed(() => store.state.discountList);
 
 
 const selectedRecord = ref({});
@@ -76,14 +78,10 @@ const pagesList = computed(() => {
 // Add a watcher to update the filtered items when searchQuery or selectedRole changes
 watchEffect(() => {
   // Filter items based on searchQuery and selectedRole
-  filteredItems.value = items.value.filter((user) => {
+  filteredItems.value = items.value.filter((record) => {
     return (
-      (selectedRole.value === '' || user.role == selectedRole.value) &&
-      (user.first_name.toLowerCase().includes(searchQuery.value.toLowerCase()) ||
-       user.last_name.toLowerCase().includes(searchQuery.value.toLowerCase()) ||
-       user.email.toLowerCase().includes(searchQuery.value.toLowerCase()) ||
-       user.address.toLowerCase().includes(searchQuery.value.toLowerCase()) ||
-       user.role.toLowerCase().includes(searchQuery.value.toLowerCase()))
+      (record.type.toLowerCase().includes(searchQuery.value.toLowerCase()) || 
+        record.label.toLowerCase().includes(searchQuery.value.toLowerCase()))
     );
   });
 
@@ -99,8 +97,8 @@ watchEffect(() => {
   }
 });
 
-// // Update the usersPaginated computed property to use filteredItems
-const usersPaginated = computed(() => {
+// // Update the recordsPaginated computed property to use filteredItems
+const recordsPaginated = computed(() => {
   return filteredItems.value.slice(perPage.value * currentPage.value, perPage.value * (currentPage.value + 1));
 });
 
@@ -133,36 +131,41 @@ const usersPaginated = computed(() => {
     <thead>
       <tr>
         <th v-if="checkable" />
-        <th />
-        <th>Name</th>
-        <th>Email</th>
-        <th>Address</th>
-        <th>Role</th>
+        <th>Label</th>
+        <th>Type</th>
+        <th>Discount Amount</th>
+        <th>Purchase Quantity</th>
+        
+        <th>Start Date</th>
+        <th>End Date</th>
         <th />
       </tr>
     </thead>
     <tbody>
-      <tr v-for="users in usersPaginated" :key="users.id">
-        <TableCheckboxCell v-if="checkable" @checked="checked($event, users)" />
-        <td class="border-b-0 lg:w-6 before:hidden">
-          <UserAvatar :avatar="users.image_url" :username="users.first_name" class="w-24 h-24 mx-auto lg:w-6 lg:h-6" />
+      <tr v-for="record in recordsPaginated" :key="record.id">
+        <TableCheckboxCell v-if="checkable" @checked="checked($event, record)" />
+         <td data-label="Type">
+          {{ record.label }}
         </td>
-        <td data-label="Name">
-          {{ users.first_name }} {{ users.last_name }}
+        <td data-label="Type">
+          {{ record.type }}
         </td>
-        <td data-label="Email">
-          {{ users.email }}
+        <td data-label="Discount Amount">
+          {{ record.amount }}
         </td>
-        <td data-label="Address">
-          {{ users.address }}
+        <td data-label="Purchase Quantity">
+          {{ record.purchase_quantity }}
         </td>
-        <td data-label="Role">
-          {{ users.role }}
+        <td data-label="Start Date">
+          {{ record.start_date }}
         </td>
+        <td data-label="End Date">
+          {{ record.end_date }}
+        </td>
+        
         <td class="before:hidden lg:w-1 whitespace-nowrap">
           <BaseButtons type="justify-start lg:justify-end" no-wrap>
-            <BaseButton color="info" :icon="mdiEye" small @click="showRecord(isModalActive = true, selectedRecord.value = users)" />
-            <BaseButton color="success" :icon="mdiAccountEdit" small :to="`/admin/edit-user/${users.id}`" />
+            <BaseButton color="success" :icon="mdiPencil" small :to="`/admin/edit-discount/${record.id}`" />
           </BaseButtons>
         </td>
       </tr>

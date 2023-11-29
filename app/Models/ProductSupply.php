@@ -27,6 +27,7 @@ class ProductSupply extends Model
         'unit_cost',
         'total_cost',
         'batch_stocks',
+        'cost_per_piece',
         'date_received',
         'expires_at',
         'storage_location',

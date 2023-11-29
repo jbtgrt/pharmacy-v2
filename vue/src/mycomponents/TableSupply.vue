@@ -116,6 +116,22 @@ const servicesPaginated = computed(() => {
 //   store.commit("setCheckProductList", checkedRows.value);
 // }
 
+const underConstruct = ()=> {
+  const message = [
+    "We apologize, but this feature is currently not available.",
+    "Our team is working on implementing it soon.",
+    "Thank you for your understanding!"
+  ];
+
+  store.commit("notify", {
+      show: true,
+      type: "info",
+      seconds: 5000,
+      title: 'Not available!',
+      message: [message],
+    });
+}
+
 
 </script>
 
@@ -150,8 +166,10 @@ const servicesPaginated = computed(() => {
         <th>Category Name</th>
         <th>Unit Name</th>
         <th>Unit Quantity</th>
+        <th>Quantity /Unit</th>
         <th>Unit Cost</th>
         <th>Total Cost</th>
+        <th>Batch Stocks</th>
         <th>Date Received</th>
         <th></th>
 
@@ -179,8 +197,14 @@ const servicesPaginated = computed(() => {
         <td data-label="Unit Quantity">
           {{ record.unit_quantity }}
         </td>
+        <td data-label="Unit Quantity">
+          {{ record.quantity_per_unit }}
+        </td>
         <td data-label="Product Cost">
           {{ record.unit_cost }}
+        </td>
+        <td data-label="Total Cost">
+          {{ record.batch_stocks }}
         </td>
         <td data-label="Total Cost">
           {{ record.total_cost }}
@@ -197,7 +221,7 @@ const servicesPaginated = computed(() => {
         <td class="before:hidden lg:w-1 whitespace-nowrap">
           <BaseButtons type="justify-start lg:justify-end" no-wrap>
             <BaseButton color="info" :icon="mdiEye" small @click="showRecord(isModalActive = true, selectedRecord = record)" />
-            <BaseButton color="success" :icon="mdiPencil" small :to="`/staff/edit-supply/${record.id}`" />
+            <BaseButton color="success" :icon="mdiPencil" @click="underConstruct" small /> <!-- :to="`/staff/edit-supply/${record.id}`"  -->
             <BaseButton color="danger" :icon="mdiTrashCan " small @click="deleteItem(record.id)" />
           </BaseButtons>
         </td>

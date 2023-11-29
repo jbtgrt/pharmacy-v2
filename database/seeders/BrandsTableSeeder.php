@@ -15,6 +15,9 @@ class BrandsTableSeeder extends Seeder
     public function run(): void
     {
         DB::table('brands')->insert([
+            'brand_name' => 'No Brand'
+        ]);
+        DB::table('brands')->insert([
             'brand_name' => 'Unilab'
         ]);
         DB::table('brands')->insert([

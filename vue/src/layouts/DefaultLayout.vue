@@ -27,6 +27,7 @@ const darkModeStore = useDarkModeStore()
 const store = useStore();
 const router = useRouter()
 
+const userRole = computed(()=> store.state.user.role);
 
 const isAsideMobileExpanded = ref(false)
 const isAsideLgActive = ref(false)
@@ -53,12 +54,6 @@ const menuClick = (event, item) => {
 
 if(store.state.refresh) {
   store.dispatch('getUser');
-  store.dispatch("getUserList");
-  store.dispatch("getCategoryList");
-  store.dispatch("getProductList");
-  store.dispatch("getBrandList");
-  store.dispatch("getUnitList");
-  store.dispatch("getSupplyList");
   store.commit("stopRefresh")
 }
 
@@ -114,7 +109,7 @@ watchEffect(() => {
         @menu-click="menuClick"
         @aside-lg-close-click="isAsideLgActive = false"
       />
-      <router-view></router-view>
+      <router-view :role="userRole"></router-view>
       <CustomToaster />
       <FooterBar>
         System

@@ -17,10 +17,7 @@ class UnitsTableSeeder extends Seeder
             'unit_name' => 'Piece (Each)'
         ]);
         DB::table('units')->insert([
-            'unit_name' => 'Bottle (or Vial)'
-        ]);
-        DB::table('units')->insert([
-            'unit_name' => 'Liter (L)'
+            'unit_name' => 'Box'
         ]);
         DB::table('units')->insert([
             'unit_name' => 'Case (or Carton)'

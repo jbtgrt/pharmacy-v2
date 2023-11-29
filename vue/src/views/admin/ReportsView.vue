@@ -1,5 +1,6 @@
 <script setup>
 import { ref, onMounted } from 'vue';
+import { useStore } from 'vuex';
 import { mdiTableBorder, mdiReload, mdiChartPie } from '@mdi/js';
 import SectionMain from '@/components/SectionMain.vue';
 import SectionTitleLineWithButton from '@/components/SectionTitleLineWithButton.vue';
@@ -12,6 +13,8 @@ import NotificationBar from '@/components/NotificationBar.vue';
 import TableUser from '@/mycomponents/TableUser.vue';
 
 import axiosClient from "@/axios.js";
+
+const store = useStore();
 
 import VueApexCharts from 'vue3-apexcharts';
 
@@ -160,21 +163,44 @@ onMounted(() => {
   fillChartData()
 })
 
+const underConstruct = ()=> {
+  const message = [
+    "We apologize, but this feature is currently not available.",
+    "Our team is working on implementing it soon.",
+    "Thank you for your understanding!"
+  ];
+
+  store.commit("notify", {
+      show: true,
+      type: "info",
+      seconds: 5000,
+      title: 'Not available!',
+      message: [message],
+    });
+}
+
 </script>
 
 <template>
   <SectionMain>
-    <SectionTitleLineWithButton :icon="mdiTableBorder" title="Reports" main >
-     <button @click="exportRecords">Export Records</button>
+    <SectionTitleLineWithButton :icon="mdiTableBorder" title="Reports Table" main >
+     <BaseButton
+        @click="underConstruct"
+        label="Export Records"
+        color="contrast"
+        rounded-full
+        small
+      />
     </SectionTitleLineWithButton>
     
     <CardBox class="mb-6">
-      <div id="chart">
+      <CardBoxComponentEmpty /> 
+      <!-- <div id="chart">
         <VueApexCharts type="bar" height="350" :options="chartOptions" :series="series"/>
-      </div>
+      </div> -->
     </CardBox> 
 
-    <SectionTitleLineWithButton :icon="mdiChartPie" :title="sectionTitle">
+    <SectionTitleLineWithButton :icon="mdiChartPie" :title="`Sales of ${sectionTitle}`">
       <BaseButton :icon="mdiReload" color="whiteDark" @click="fillChartData" />
     </SectionTitleLineWithButton>
 

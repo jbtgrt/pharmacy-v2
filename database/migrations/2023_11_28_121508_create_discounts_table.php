@@ -11,16 +11,15 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('sell_products', function (Blueprint $table) {
+        Schema::create('discounts', function (Blueprint $table) {
             $table->id();
-            $table->foreignIdFor(\App\Models\Product::class, 'product_id');
-
-            // $table->longText('sale_unit')->default("[]"); 
-            $table->decimal('original_price', 10, 2)->default(0);
-
-            // $table->double('wholesale_price')->default(0);
-            $table->longText('discount_data')->default("[]");
-
+            $table->string('type'); // Example: percentage, fixed, etc.
+            $table->decimal('amount', 10, 2); // The discount amount
+            $table->date('start_date');
+            $table->date('end_date');
+            $table->string('customer');
+            $table->integer('purchase_quantity');
+            $table->decimal('purchase_amount', 10, 2)->default(0);
             $table->timestamp('created_at')->default(now());
             $table->timestamp('updated_at')->nullable();
         });
@@ -31,6 +30,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('sell_products');
+        Schema::dropIfExists('discounts');
     }
 };

@@ -8,6 +8,7 @@ import ProfileView from '@/views/ProfileView.vue'
 import DefaultLayout from '@/layouts/DefaultLayout.vue'
 import GuestLayout from '@/layouts/LayoutGuest.vue'
 import LandingLayout from '@/layouts/LandingLayout.vue'
+import BlankView from '@/views/BlankView.vue'
 
 // Admin Dashboard
 import AdminHome from '@/views/admin/HomeView.vue'
@@ -22,6 +23,8 @@ import AdSupplyProductFormView from '@/views/admin/SupplyProductFormView.vue'
 import ReportsView from '@/views/admin/ReportsView.vue'
 import ProductSellView from '@/views/ProductSellView.vue'
 import ProductSellFormView from '@/views/ProductSellFormView.vue'
+import DiscountView from '@/views/DiscountView.vue'
+import DiscountFormView from '@/views/DiscountFormView.vue'
 
 // Staff Dashboard
 import StaffHome from '@/views/staff/HomeView.vue'
@@ -137,7 +140,7 @@ const routes = [
       // Products to sell
       {
         meta: {
-          title: 'Product',
+          title: 'Sell Product',
         },
         path: '/admin/sell-products',
         name: 'admin-sell-products',
@@ -145,16 +148,16 @@ const routes = [
       },
       { 
         meta: {
-          title: 'Edit Product'
+          title: 'Edit Sell Product'
         },
-        path: "/admin/edit-sell-products/:id", 
-        name: "admin-edit-sell-products", 
+        path: "/admin/edit-sell-product/:id", 
+        name: "admin-edit-sell-product", 
         component: ProductSellFormView 
       },
       // Supply
       {
         meta: {
-          title: 'Supplies',
+          title: 'Stocks',
         },
         path: '/admin/supplies',
         name: 'admin-supplies',
@@ -175,6 +178,47 @@ const routes = [
         path: "/admin/edit-supply/:id", 
         name: "admin-edit-supply", 
         component: AdSupplyProductFormView 
+      },
+      // Discount
+      {
+        meta: {
+          title: 'Discounts',
+        },
+        path: '/admin/discounts',
+        name: 'admin-discounts',
+        component: DiscountView
+      },
+      {
+        meta: {
+          title: 'Add Discount'
+        },
+        path: '/admin/add-discount',
+        name: 'admin-add-discount',
+        component: DiscountFormView
+      },
+      { 
+        meta: {
+          title: 'Edit Discount'
+        },
+        path: "/admin/edit-discount/:id", 
+        name: "admin-edit-discount", 
+        component: DiscountFormView 
+      },
+      {
+        meta: {
+          title: 'Transactions'
+        },
+        path: '/admin/transactions',
+        name: 'admin-transactions',
+        component: BlankView
+      },
+      {
+        meta: {
+          title: 'Transaction History'
+        },
+        path: '/admin/transaction-history',
+        name: 'admin-transaction-history',
+        component: BlankView
       },
       {
         meta: {

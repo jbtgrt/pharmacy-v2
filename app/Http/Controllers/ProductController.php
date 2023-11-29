@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Product;
+use App\Models\SellProduct;
 use App\Http\Requests\StoreProductRequest;
 use App\Http\Requests\UpdateProductRequest;
 use App\Http\Resources\ProductResource;
@@ -66,8 +67,6 @@ class ProductController extends Controller
             $category = $product->category;
             $brand = $product->brand;
 
-
-
             $insertedData[] = [
                 'id' => $insertedIds['id'],
                 'batch_no' => 1,
@@ -80,6 +79,10 @@ class ProductController extends Controller
                 'quantity' => 1,
                 'total_cost' => 0
             ];
+
+            $sellProduct = SellProduct::create([
+                'product_id' => $insertedIds['id'],
+            ]);
         }
 
         $products = $this->allProducts();
